@@ -92,62 +92,26 @@ namespace SVNManagerLib
 		private string _AdminUserName = string.Empty;
 		private string _AdminUserPassword = string.Empty;
         private Hashtable _files = new Hashtable();
+	    private string _serverCommandsPath = string.Empty;
 
 		#endregion
 
 		#region Constructors
 
-		/// <summary>
-        /// Creates a new instance of the <see cref="SVNRepository"/> class without 
-        /// any internal initializations.
-		/// </summary>
-		public SVNRepository()
-		{
-			_repositoryConfiguration = new SVNRepoConfig();
-		}
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SVNRepository"/> class.
         /// </summary>
         /// <param name="RepositoryPath">The repository path.</param>
-		public SVNRepository( string RepositoryPath )
+		/// <param name="ServerCommandPath">Path to where the Subversion commands are located.</param>
+		public SVNRepository( string RepositoryPath, string ServerCommandPath )
 		{
+            _serverCommandsPath = ServerCommandPath;
             LoadConfig( RepositoryPath );
 		}
 
 		#endregion
 
 		#region Properties
-
-		/// <summary>
-		/// The administrator's account user name.
-		/// </summary>
-		public string AdminUserName
-		{
-			get
-			{
-				return _AdminUserName;
-			}
-			set
-			{
-				_AdminUserName = value;
-			}
-		}
-
-		/// <summary>
-		/// The administrator's account password.
-		/// </summary>
-		public string AdminUserPassword
-		{
-			get
-			{
-				return _AdminUserPassword;
-			}
-			set
-			{
-				_AdminUserPassword = value;
-			}
-		}
 
 		/// <summary>
         /// Holds what <see cref="RepositoryAuthorization">rights</see> do the anonymous users have
@@ -293,6 +257,18 @@ namespace SVNManagerLib
             }
         }
 
+        /// <summary>
+        /// Gets the sever commands path.
+        /// </summary>
+        /// <value>The sever commands path.</value>
+	    public string SeverCommandsPath
+	    {
+	        get
+	        {
+	            return _serverCommandsPath;
+	        }
+	    }
+
 		#endregion
 
 		#region Public Members
@@ -336,7 +312,7 @@ namespace SVNManagerLib
 		public bool DeleteRepository()
 		{
 			bool retval;
-			string formatFilePath = _fullPath + Common.GetPathSeparator() + "format";
+            string formatFilePath = _fullPath + Path.PathSeparator + "format";
 
             // TODO: Make sure that this file exists.
 
@@ -449,7 +425,7 @@ namespace SVNManagerLib
                 }
             }
 
-		    cmdResult = Common.ExecuteSvnCommand( Common.GetWellFormedSVNCommand("svnadmin"), arg.ToString(), out lines, out errors );
+		    cmdResult = Common.ExecuteSvnCommand( Common.GetWellFormedSVNCommand( "svnadmin" ), arg.ToString(), out lines, out errors );
 
 		    return cmdResult;
 		}
@@ -460,7 +436,7 @@ namespace SVNManagerLib
         /// <param name="directoryName">This includes the current directory plus the new name. This is a directory fragment and not a full path.</param>
         /// <param name="message">The "svn mkdir" command commits immediately and it requires a comment.</param>
         /// <returns>Returns whether or not the command was successful.</returns>
-        public bool CreateDirectory(string directoryName, string message)
+        public bool CreateDirectory( string directoryName, string message )
         {
             bool cmdResult;
             string lines;
@@ -471,14 +447,14 @@ namespace SVNManagerLib
             string tmp = directoryName;
 
             pathUrl.Append( _repositoryConfiguration.RepositoryRootDirectory );
-            if ( !_repositoryConfiguration.RepositoryRootDirectory.EndsWith( Common.GetPathSeparator() ) )
+            if (!_repositoryConfiguration.RepositoryRootDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
             {
-                pathUrl.Append( Common.GetPathSeparator() );
+                pathUrl.Append( Path.DirectorySeparatorChar.ToString() );
             }
 
-            if ( tmp.StartsWith( Common.GetPathSeparator() ) )
+            if ( tmp.StartsWith( Path.DirectorySeparatorChar.ToString() ))
             {
-                int pos = tmp.IndexOf( Common.GetPathSeparator() );
+                int pos = tmp.IndexOf( Path.DirectorySeparatorChar.ToString() );
                 tmp = tmp.Substring( pos );
 
             }
@@ -515,14 +491,14 @@ namespace SVNManagerLib
             string tmp = directoryPath;
 
             pathUrl.Append( _repositoryConfiguration.RepositoryRootDirectory );
-            if ( !_repositoryConfiguration.RepositoryRootDirectory.EndsWith( Common.GetPathSeparator() ) )
+            if (!_repositoryConfiguration.RepositoryRootDirectory.EndsWith(Path.DirectorySeparatorChar.ToString()))
             {
-                pathUrl.Append( Common.GetPathSeparator() );
+                pathUrl.Append(Path.DirectorySeparatorChar.ToString());
             }
 
-            if ( tmp.StartsWith( Common.GetPathSeparator() ) )
+            if (tmp.StartsWith(Path.DirectorySeparatorChar.ToString()))
             {
-                int pos = tmp.IndexOf( Common.GetPathSeparator() );
+                int pos = tmp.IndexOf( Path.DirectorySeparatorChar.ToString() );
                 tmp = tmp.Substring( pos );
 
             }
@@ -549,16 +525,18 @@ namespace SVNManagerLib
         private void LoadConfig( string RepositoryPath )
         {
             _repositoryConfiguration = new SVNRepoConfig( RepositoryPath );
+            string rootDir = _repositoryConfiguration.RepositoryRootDirectory;
+
             GetUsers(RepositoryPath);
 
-            _files = Common.GetFileList( _repositoryConfiguration.RepositoryRootDirectory );
+            _files = Common.GetFileList( rootDir, _serverCommandsPath );
         }
 
 		private bool CreateRepository( string repoName )
 		{
 			bool retval;
-			SVNServerConfig serverConfig = new SVNServerConfig();
-			string newRepoPath = Common.GetCorrectedPath( serverConfig.RepositoryRootDirectory, true ) + repoName;
+
+            string newRepoPath = Common.GetCorrectedPath( _repositoryConfiguration.RepositoryRootDirectory, true ) + repoName;
 			string svnCommand;
 			string fileOptions = " --fs-type ";
 			string svnBDB = "bdb";
@@ -658,9 +636,9 @@ namespace SVNManagerLib
 			StreamReader reader;
 			StreamWriter writer;
 			string lineString = string.Empty;
-			string confPath;	
+			string confPath;
 
-			confPath = Common.GetCorrectedPath( newRepoPath, true ) + "conf" + Common.GetPathSeparator();
+            confPath = Common.GetCorrectedPath(newRepoPath, true) + "conf" + Path.PathSeparator;
 
 			reader = new StreamReader( confPath + "svnserve.conf" );
 

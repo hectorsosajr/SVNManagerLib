@@ -42,7 +42,7 @@ namespace SVNManagerLib
 			{
 				LoadServerConfiguration();
 			}
-			catch (Exception ex)
+			catch ( Exception ex )
 			{
 				Console.WriteLine(ex.Message);
 			}
@@ -53,15 +53,15 @@ namespace SVNManagerLib
 		/// This allows for a different configuration file.
 		/// </summary>
 		/// <param name="ConfigFilePath">The path to the user selected config file.</param>
-		public SVNServerConfig(string ConfigFilePath)
+		public SVNServerConfig( string ConfigFilePath )
 		{
 			try
 			{
-				LoadServerConfiguration(ConfigFilePath);
+				LoadServerConfiguration( ConfigFilePath );
 			}
-			catch (Exception ex)
+			catch ( Exception ex )
 			{
-				Console.WriteLine(ex.Message);
+				Console.WriteLine( ex.Message );
 			}
 		}
 
@@ -159,7 +159,7 @@ namespace SVNManagerLib
             catch ( NullReferenceException )
             {
                 FileInfo fi = new FileInfo( System.Reflection.Assembly.GetExecutingAssembly().FullName );
-                string path = fi.DirectoryName + Common.GetPathSeparator() + _defaultConfigFileName;
+                string path = fi.DirectoryName + Path.PathSeparator + _defaultConfigFileName;
 
                 StreamWriter configWriter = new StreamWriter(path);
                 configWriter.WriteLine( "[subversion]" );
@@ -188,11 +188,12 @@ namespace SVNManagerLib
 
 		private void LoadServerConfiguration()
 		{
-            _config = new IniConfigSource(_defaultConfigFileName);
+            _config = new IniConfigSource( _defaultConfigFileName );
 
 			_repositoryRootDirectory = _config.Configs["subversion"].GetString("reporoot");
 			_serverRootDirectory =  _config.Configs["subversion"].GetString("serverdir");
 			_commandRootDirectory = _config.Configs["subversion"].GetString("commanddir");
+		    _configFileName = _defaultConfigFileName;
 		}
 
 		private void LoadServerConfiguration( string configFileName )
@@ -202,6 +203,7 @@ namespace SVNManagerLib
 			_repositoryRootDirectory = _config.Configs["subversion"].GetString("reporoot");
 			_serverRootDirectory =  _config.Configs["subversion"].GetString("serverdir");
 			_commandRootDirectory = _config.Configs["subversion"].GetString("commanddir");
+		    _configFileName = configFileName;
 		}
 
 		#endregion

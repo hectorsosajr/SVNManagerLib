@@ -74,7 +74,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Nini, Version=1.0.0.0, Culture=neutral, PublicKeyToken=691faec150a7fa7b">
+    <Reference Include="Nini, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\Nini.dll</HintPath>
     </Reference>
@@ -120,7 +120,6 @@
     <Compile Include="SVNUserProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="SVNManagerLib.cd" />
     <None Include="svnmanagerlib.ini" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

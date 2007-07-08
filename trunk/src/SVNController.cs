@@ -114,27 +114,29 @@ namespace SVNManagerLib
 
 		private void LoadRepositories()
 		{
-			string repoRoot;
-
-		    repoRoot = _serverConfiguration.RepositoryRootDirectory;
-
-            try
+		    if ( !Equals( _serverConfiguration, null ) )
             {
-                DirectoryInfo rootRepoInfo;
-                rootRepoInfo = new DirectoryInfo(repoRoot);
+                string repoRoot;
+                repoRoot = _serverConfiguration.RepositoryRootDirectory;
 
-                // Get an array of DirectoryInfo objects. These objects represent
-                // the roots for each repository. One root directory is a repository.
-                DirectoryInfo[] childrenRepo;
-                childrenRepo = rootRepoInfo.GetDirectories();
-
-                foreach (DirectoryInfo childRepo in childrenRepo)
+                try
                 {
-                    ProcessRepository(childRepo);
+                    DirectoryInfo rootRepoInfo;
+                    rootRepoInfo = new DirectoryInfo( repoRoot );
+
+                    // Get an array of DirectoryInfo objects. These objects represent
+                    // the roots for each repository. One root directory is a repository.
+                    DirectoryInfo[] childrenRepo;
+                    childrenRepo = rootRepoInfo.GetDirectories();
+
+                    foreach ( DirectoryInfo childRepo in childrenRepo )
+                    {
+                        ProcessRepository( childRepo );
+                    }
                 }
+                catch ( ArgumentException )
+                {}
             }
-            catch ( ArgumentException )
-            {}
 		}
 
 		private void ProcessRepository( DirectoryInfo childRepo )
@@ -171,7 +173,7 @@ namespace SVNManagerLib
 		{
 			SVNRepository currRepo;
 			Console.WriteLine( "RepoName:" + RepoConfig.FullName );
-			currRepo = new SVNRepository( RepoConfig.FullName );
+            currRepo = new SVNRepository( RepoConfig.FullName, _serverConfiguration.CommandRootDirectory );
 			currRepo.Name = RepoConfig.Directory.Parent.Name;
 			currRepo.FullPath = RepoConfig.Directory.Parent.FullName;
 

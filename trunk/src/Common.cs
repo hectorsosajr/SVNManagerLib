@@ -96,28 +96,6 @@ namespace SVNManagerLib
 		}
 
 		/// <summary>
-		/// Gets the correct path separator for the current operating system.
-		/// </summary>
-		public static string GetPathSeparator()
-		{
-			string retval;
-
-			OperatingSystem myOS = Environment.OSVersion;
-			
-			//Code Checks to see which OS is being used 128 indicates Linux
-			if( (int)myOS.Platform == 128 )
-			{
-				retval = "/";
-			}
-			else
-			{
-				retval = "\\";			
-			}
-
-			return retval;
-		}
-
-		/// <summary>
 		/// Gets the path for the file with the correct path separators for the
 		/// current operating system.
 		/// </summary>
@@ -160,8 +138,7 @@ namespace SVNManagerLib
         /// </summary>
         public static string GetWellFormedSVNCommand( string command )
         {
-            SVNServerConfig serverConfig = new SVNServerConfig();
-            string svnCommand = GetCorrectedPath(serverConfig.CommandRootDirectory, true);
+            string svnCommand = GetCorrectedPath( command, true );
 
             //Code Checks to see which OS is being used 128 indicates Linux
             OperatingSystem myOS = Environment.OSVersion;
@@ -312,29 +289,31 @@ namespace SVNManagerLib
         /// <returns>Returns a hashtable with a list of files and directories under the directory that 
         /// was used for the parameter. The keys are the file/directory name without a path, the value
         /// is the full path to this directory or file.</returns>
-        public static Hashtable GetFileList( string currentDirectory )
+        /// <param name="serverCmdPath">Path to where the Subversion command folder resides.</param>
+        public static Hashtable GetFileList( string currentDirectory, string serverCmdPath )
         {
             bool cmdResult;
             string lines;
             string errors;
             Hashtable fileList = new Hashtable();
             string parsedDir;
+            string fullCmdPath = Path.Combine( serverCmdPath, "svn" );
 
             parsedDir = PathToFileUrl( currentDirectory );
 
-            cmdResult = ExecuteSvnCommand( GetWellFormedSVNCommand( "svn" ), "list " + parsedDir, out lines, out errors );
+            cmdResult = ExecuteSvnCommand( fullCmdPath, "list " + parsedDir, out lines, out errors );
 
-            if (cmdResult)
+            if ( cmdResult )
             {
                 string[] files;
-                files = ParseOutputIntoLines(lines);
+                files = ParseOutputIntoLines( lines );
 
                 string fullPath;
                 fullPath = currentDirectory;
 
-                if (!fullPath.EndsWith(GetPathSeparator()))
+                if (!fullPath.EndsWith(Path.DirectorySeparatorChar.ToString()))
                 {
-                    fullPath += GetPathSeparator();
+                    fullPath += Path.DirectorySeparatorChar.ToString();
                 }
 
                 if (files != null)
@@ -385,9 +364,11 @@ namespace SVNManagerLib
             StringBuilder arg = new StringBuilder();
 
             parsedDir = pathToConvert.Replace( "\\", "/" );
-
-            arg.Append( "file:///" );
+            
+			arg.Append( "file:///" );
+			arg.Append( (char)34 ); 
             arg.Append( parsedDir );
+			arg.Append( (char)34 ); 
 
             return arg.ToString();
         }
