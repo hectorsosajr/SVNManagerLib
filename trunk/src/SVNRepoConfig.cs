@@ -309,7 +309,7 @@ namespace SVNManagerLib
 
             fixedPath = Common.GetCorrectedPath( _RepositoryRootDirectory, true );
 
-            typeFile = fixedPath + "db" + Common.GetPathSeparator() + "fs-type";
+            typeFile = fixedPath + "db" + Path.PathSeparator + "fs-type";
 
             try
             {
@@ -344,7 +344,7 @@ namespace SVNManagerLib
 
             fixedPath = Common.GetCorrectedPath( _RepositoryRootDirectory, true );
 
-            uuidFile = fixedPath + "db" + Common.GetPathSeparator() + "uuid";
+            uuidFile = fixedPath + "db" + Path.PathSeparator + "uuid";
 
             try
             {
