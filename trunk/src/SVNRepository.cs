@@ -229,15 +229,36 @@ namespace SVNManagerLib
 		{
 			get
 			{
-				switch( _repositoryConfiguration.RepositoryType )
-				{
-					case "fsfs":
-						return RepositoryTypes.FileSystem;
-					case "bdb":
-						return RepositoryTypes.BerkeleyDatabase;
-					default:
-						return RepositoryTypes.FileSystem;
-				}
+			    RepositoryTypes repoType;
+
+                if ( Equals( null, _repositoryConfiguration ) )
+                {
+                    repoType = _createRepoType;
+                }
+                else
+                {
+                    if ( _repositoryConfiguration.RepositoryType.Length == 0 && _createRepoType != 0 )
+                    {
+                        repoType = _createRepoType;
+                    }
+                    else
+                    {
+                        switch ( _repositoryConfiguration.RepositoryType )
+                        {
+                            case "fsfs":
+                                repoType = RepositoryTypes.FileSystem;
+                                break;
+                            case "bdb":
+                                repoType = RepositoryTypes.BerkeleyDatabase;
+                                break;
+                            default:
+                                repoType = RepositoryTypes.FileSystem;
+                                break;
+                        }
+                    }
+                }
+
+                return repoType;
 			}
 		}
 
@@ -328,6 +349,11 @@ namespace SVNManagerLib
 
 			retval = CreateRepository( repoName );
 
+            if ( Equals( null, _repositoryConfiguration ) )
+            {
+                _repositoryConfiguration.RepositoryType = "bdb";
+            }
+
 			return retval;
 		}
 
@@ -342,7 +368,12 @@ namespace SVNManagerLib
 
 			_createRepoType = RepositoryTypes.FileSystem;
 
-			retval = CreateRepository( repoName );
+            retval = CreateRepository(repoName);
+
+            if ( Equals( null, _repositoryConfiguration ) )
+            {
+                _repositoryConfiguration.RepositoryType = "fsfs";
+            }
 
 			return retval;
 		}
