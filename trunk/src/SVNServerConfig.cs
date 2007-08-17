@@ -23,6 +23,7 @@ namespace SVNManagerLib
 		private string _repositoryRootDirectory = string.Empty;
 		private string _serverRootDirectory = string.Empty;
 		private string _commandRootDirectory = string.Empty;
+	    private string _repoMode = string.Empty;
         private string _configFileName = string.Empty;
         private string _defaultConfigFileName = "svnmanagerlib.ini";
 		private IConfigSource _config;
@@ -136,6 +137,23 @@ namespace SVNManagerLib
             }
         }
 
+        /// <summary>
+        /// Gets or sets the repository mode.
+        /// </summary>
+        /// <value>This will contain the word "root" for all the repositories under one
+        /// directory, and the word "custom" for each repository in a different directory.</value>
+        public string RepositoryMode
+        {
+            get
+            {
+                return _repoMode;
+            }
+            set
+            {
+                _repoMode = value;
+            }
+        }
+
 		#endregion
 
 		#region Public Members
@@ -151,8 +169,9 @@ namespace SVNManagerLib
 			try
 			{
 				_config.Configs["subversion"].Set( "serverdir", _serverRootDirectory );
-				_config.Configs["subversion"].Set( "reporoot", _repositoryRootDirectory );
-				_config.Configs["subversion"].Set( "commanddir", _commandRootDirectory );
+                _config.Configs["subversion"].Set( "commanddir", _commandRootDirectory );
+                _config.Configs["repositories"].Set( "reporoot", _repositoryRootDirectory );
+                _config.Configs["repositories"].Set( "mode", _repoMode );
 				_config.Save();
 				retval = true;
 			}
@@ -162,13 +181,19 @@ namespace SVNManagerLib
                 string path = fi.DirectoryName + Path.PathSeparator + _defaultConfigFileName;
 
                 StreamWriter configWriter = new StreamWriter(path);
-                configWriter.WriteLine( "[subversion]" );
+
+                configWriter.WriteLine( "[subversion]");
                 configWriter.WriteLine( "; This is the root directory for the Subversion installation." );
                 configWriter.WriteLine( "serverdir = " + _serverRootDirectory );
-                configWriter.WriteLine( "; This is the root directory for the repositories" );
-                configWriter.WriteLine( "reporoot = " + _repositoryRootDirectory );
-                configWriter.WriteLine( "; This is where the actual command executables are" );
+                configWriter.WriteLine( "; This is the actual directory where the command line executables are." );
                 configWriter.WriteLine( "commanddir = " + _commandRootDirectory );
+                configWriter.WriteLine( "[repositories]" );
+                configWriter.WriteLine( "; This is a flag to tell what mode the repositories are setup." );
+                configWriter.WriteLine( "; root = all repositories are under one directory" );
+                configWriter.WriteLine( "; custom = each repository is in a separate directory" );
+                configWriter.WriteLine( "mode = " + _repoMode );
+                configWriter.WriteLine( "; This is the root directory for the repositories." );
+                configWriter.WriteLine( "reporoot = " + _repositoryRootDirectory );
 
                 configWriter.Close();
 
@@ -189,23 +214,25 @@ namespace SVNManagerLib
 		private void LoadServerConfiguration()
 		{
             _config = new IniConfigSource( _defaultConfigFileName );
-
-			_repositoryRootDirectory = _config.Configs["subversion"].GetString("reporoot");
-			_serverRootDirectory =  _config.Configs["subversion"].GetString("serverdir");
-			_commandRootDirectory = _config.Configs["subversion"].GetString("commanddir");
+            
+			_serverRootDirectory =  _config.Configs["subversion"].GetString( "serverdir" );
+			_commandRootDirectory = _config.Configs["subversion"].GetString( "commanddir" );
+            _repositoryRootDirectory = _config.Configs["repositories"].GetString( "reporoot" );
+            _repoMode = _config.Configs["repositories"].GetString( "mode" );
 		    _configFileName = _defaultConfigFileName;
 		}
 
 		private void LoadServerConfiguration( string configFileName )
 		{
-			_config = new IniConfigSource( configFileName );
+            _config = new IniConfigSource(configFileName);
 
-			_repositoryRootDirectory = _config.Configs["subversion"].GetString("reporoot");
-			_serverRootDirectory =  _config.Configs["subversion"].GetString("serverdir");
-			_commandRootDirectory = _config.Configs["subversion"].GetString("commanddir");
+            _serverRootDirectory = _config.Configs["subversion"].GetString( "serverdir" );
+            _commandRootDirectory = _config.Configs["subversion"].GetString( "commanddir" );
+            _repositoryRootDirectory = _config.Configs["repositories"].GetString( "reporoot" );
+            _repoMode = _config.Configs["repositories"].GetString( "mode" );
 		    _configFileName = configFileName;
 		}
 
 		#endregion
-	}
+    }
 }
