@@ -7,6 +7,7 @@
 
 using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace SVNManagerLib
 {
@@ -53,6 +54,18 @@ namespace SVNManagerLib
         {
             _serverConfiguration = config;
             LoadRepositories();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SVNController"/> class.
+        /// </summary>
+        /// <param name="RepositoryPaths">A list of repository paths.</param>
+        /// <param name="CommandPath">The command path to the Subversion command-line utilities.</param>
+        public SVNController( List<string> RepositoryPaths, string CommandPath )
+        {
+            _serverConfiguration = new SVNServerConfig();
+            _serverConfiguration.CommandRootDirectory = CommandPath;
+            LoadRepositories( RepositoryPaths );
         }
 
 		#endregion
@@ -137,7 +150,21 @@ namespace SVNManagerLib
                 catch ( ArgumentException )
                 {}
             }
-		}
+        }
+
+        private void LoadRepositories( List<string> RepositoryPaths )
+        {
+            try
+            {
+                foreach( string repoPath in RepositoryPaths )
+                {
+                    DirectoryInfo currRepo = new DirectoryInfo( repoPath );
+                    ProcessRepository( currRepo );
+                }
+            }
+            catch ( ArgumentException )
+            {}
+        }
 
 		private void ProcessRepository( DirectoryInfo childRepo )
 		{
@@ -145,24 +172,24 @@ namespace SVNManagerLib
 
 			repoDirs = childRepo.GetDirectories();
 
-			foreach ( DirectoryInfo repo in repoDirs )
+			foreach ( DirectoryInfo repoDir in repoDirs )
 			{
-				if ( repo.Name == "conf" )
+				if ( repoDir.Name == "conf" )
 				{
-					ProcessConfigFiles( repo );
+					ProcessConfigFiles( repoDir );
 				}
 			}
 		}
 
-		private void ProcessConfigFiles( DirectoryInfo currRepo )
+		private void ProcessConfigFiles( DirectoryInfo currRepoDir )
 		{
 			FileInfo[] configFiles;
 
-			configFiles = currRepo.GetFiles();
+			configFiles = currRepoDir.GetFiles();
 
 			foreach ( FileInfo config in configFiles )
 			{
-				if(config.Name == "svnserve.conf")
+				if( config.Name == "svnserve.conf" )
 				{
 					ProcessRepoConfig( config );
 				}
@@ -171,9 +198,7 @@ namespace SVNManagerLib
 
 		private void ProcessRepoConfig( FileInfo RepoConfig )
 		{
-			SVNRepository currRepo;
-			Console.WriteLine( "RepoName:" + RepoConfig.FullName );
-            currRepo = new SVNRepository( RepoConfig.FullName, _serverConfiguration.CommandRootDirectory );
+            SVNRepository currRepo = new SVNRepository(RepoConfig.FullName, _serverConfiguration.CommandRootDirectory);
 			currRepo.Name = RepoConfig.Directory.Parent.Name;
 			currRepo.FullPath = RepoConfig.Directory.Parent.FullName;
 
