@@ -115,7 +115,7 @@ namespace SVNManagerLib
 
         #endregion
 
-        #region Public Members
+        #region Public Members 
 
         /// <summary>
         /// Loads the information for this file or folder.
