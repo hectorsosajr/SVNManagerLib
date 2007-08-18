@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="SVNManagerLib.Common" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Common.cs</FileName>
+      <HashCode>EAAAACAAAAAAAAAAAAAABAEACAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVNManagerLib.Repositories" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Repositories.cs</FileName>
+      <HashCode>AAIAAEAAAAAAAAAACAAABAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVNManagerLib.SVNController" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>SVNController.cs</FileName>
+      <HashCode>AIAAARIAAgCAAAAAAgAAgAQAAgIBIAAIAAAAABAAAEA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="SVNManagerLib.SVNRepoConfig" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="2.75" />
+    <TypeIdentifier>
+      <FileName>SVNRepoConfig.cs</FileName>
+      <HashCode>EAAAAAAAAyAAkQCAABQAgEgAACADAAAASARAQBAAAAg=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="SVNManagerLib.SVNRepository" Collapsed="true">
+    <Position X="6" Y="1.75" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>SVNRepository.cs</FileName>
+      <HashCode>KAAAKDAAIAYAEDBIggAAAEQAFACFEICEAgBABAAAAAg=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="SVNManagerLib.SVNServerConfig" Collapsed="true">
+    <Position X="4" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>SVNServerConfig.cs</FileName>
+      <HashCode>AAAIAMgAAAAAQAAAAAQAAAAAAAAAIAAAAAABAAAAAAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVNManagerLib.SVNUser" Collapsed="true">
+    <Position X="0.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>SVNUser.cs</FileName>
+      <HashCode>AABAAIAAAABAAEEEAAIBAAAACQEAACACA0ABAQARAYA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="SVNManagerLib.SVNUserCollection" Collapsed="true">
+    <Position X="2.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>SVNUserCollection.cs</FileName>
+      <HashCode>AAIAAEAAAAAAAAAACAAABAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVNManagerLib.SVNUserProvider" Collapsed="true">
+    <Position X="4" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>SVNUserProvider.cs</FileName>
+      <HashCode>QAIAAIEAAAAAAEAEAAIAAAAIAAEEACAiAQAAAAEAAQA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Enum Name="SVNManagerLib.RepositoryAuthentication" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Common.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAEAAAA=</HashCode>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SVNManagerLib.RepositoryTypes" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Common.cs</FileName>
+      <HashCode>AAAAAACAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Enum>
+</ClassDiagram>
