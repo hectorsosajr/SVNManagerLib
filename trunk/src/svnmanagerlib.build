@@ -24,7 +24,7 @@
 	</script>
 
 	<property name="datename" value="${svn::filenamefromdate()}" />
-	<property name="version"  value="0.5.0" />
+	<property name="version"  value="0.5.3" />
 	<property name="project.name" value="SVNManagerLib"/>
 	<property name="project.bin" value="..\Bin"/>
 	<property name="project.src" value="."/>
@@ -32,14 +32,6 @@
 
 	<target name="build">
 		<call target="build-dotnet-2.0" />
-	</target>
-
-	<target name="build-dotnet-1.1">
-		<property name="build-version" value="NET_1_1" />
-		<property name="runtime-name" value="DotNet" />
-		<property name="current.runtime.config" value="net" />
-		<property name="current.runtime.version" value="1.1" />
-		<call target="run-build" />	
 	</target>
 	
 	<target name="build-dotnet-2.0">
@@ -65,11 +57,6 @@
 	</target>
 	
 	<target name="build-version" description="Compiles the project DLL">
-		<copy todir="C:\Projects\SourceForge\SVNManagerLib\src">
-    		<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\bin\Debug">
-        		<include name="*.xml" />
-    		</fileset>
-		</copy>
 		<csc target="library" doc="SVNManagerLib.xml"
 			define="${build-version};${use-strong}"
 			output="${build.bin}\${project.name}.dll" debug="${debug}">
@@ -79,136 +66,9 @@
 			<references>
 				<include asis="true" name="System.dll"/>
 				<include asis="true" name="System.Xml.dll"/>
-				<include asis="true" name="..\dependencies\Nini.dll"/>
+				<include asis="true" name="..\..\dependencies\Nini.dll"/>
 			</references>
 		</csc>
 	</target>
-
-	<copy todir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\doc">
-        	<include name="*.chm" />
-    	</fileset>
-	</copy>
-
-	<zip includeemptydirs="true" verbose="true" zipfile="Help_CHM_${version}.zip">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-        	<include name="*.*" />
-    	</fileset>
-	</zip>
-
-	<delete>
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-        	<include name="*.*" />
-    	</fileset>
-	</delete>
-
-	<copy todir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\doc\ndoc_msdn_temp">
-        	<include name="*.html" />
-        	<include name="*.gif" />
-        	<include name="*.css" />
-        	<include name="*.js" />
-    	</fileset>
-	</copy>
-	
-	<zip includeemptydirs="true" verbose="true" zipfile="Help_HTML_${version}.zip">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-        	<include name="*.*" />
-    	</fileset>
-	</zip>
-
-	<delete>
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-        	<include name="*.*" />
-    	</fileset>
-	</delete>
-
-	<copy todir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src">
-        	<include name="*.cs" />
-        	<include name="*.txt" />
-        	<include name="*.sln" />
-        	<include name="*.ini" />
-        	<include name="*.csproj" />
-    	</fileset>
-	</copy>
-
-	<copy todir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\dependencies">
-        	<include name="nini.dll" />
-    	</fileset>
-	</copy>
-	
-	<zip includeemptydirs="true" verbose="true" zipfile="SVNManagerLib_${version}_src.zip">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-        	<include name="*.*" />
-    	</fileset>
-	</zip>
-
-	<delete>
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-        	<include name="*.*" />
-    	</fileset>
-	</delete>
-
-	<copy todir="C:\Projects\SourceForge\SVNManagerLib\Bin">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src">
-        	<include name="*.txt" />
-    	</fileset>
-	</copy>
-
-	<copy todir="C:\Projects\SourceForge\SVNManagerLib\Bin\DotNet\2.0\Release">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\dependencies">
-        	<include name="nini.dll" />
-    	</fileset>
-	</copy>
-
-	<copy todir="C:\Projects\SourceForge\SVNManagerLib\Bin\DotNet\2.0\Debug">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\dependencies">
-        	<include name="nini.dll" />
-    	</fileset>
-	</copy>
-	
-	<zip includeemptydirs="true" verbose="true" zipfile="SVNManagerLib_${version}_binaries.zip">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\Bin">
-        	<include name="*.*" />
-        	<include name="DotNet\*.*" />
-        	<include name="DotNet\2.0\*.*" />
-        	<include name="DotNet\2.0\Release\*.*" />
-        	<include name="DotNet\2.0\Debug\*.*" />
-    	</fileset>
-	</zip>
-
-	<delete>
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-        	<include name="*.*" />
-    	</fileset>
-	</delete>
-
-	<copy todir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\Windows\UICore\bin\Debug">
-        	<include name="*.ini" />
-        	<include name="*.dll" />
-        	<include name="svncore.exe" />
-    	</fileset>
-	</copy>
-
-	<copy todir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\dependencies">
-        	<include name="nini.dll" />
-    	</fileset>
-	</copy>
-	
-	<zip includeemptydirs="true" verbose="true" zipfile="svnUI_${datename}.zip">
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-    		<include name="**/*" />
-    	</fileset>
-	</zip>
-
-	<delete>
-    	<fileset basedir="C:\Projects\SourceForge\SVNManagerLib\src\Build\tmp">
-        	<include name="*.*" />
-    	</fileset>
-	</delete>
 
 </project>
