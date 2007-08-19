@@ -50,7 +50,7 @@ namespace TestHarness
             this.cboRepos.Location = new System.Drawing.Point(12, 212);
             this.cboRepos.Name = "cboRepos";
             this.cboRepos.Size = new System.Drawing.Size(243, 21);
-            this.cboRepos.TabIndex = 0;
+            this.cboRepos.TabIndex = 7;
             // 
             // txtServer
             // 
@@ -65,7 +65,7 @@ namespace TestHarness
             this.txtCommands.Location = new System.Drawing.Point(12, 65);
             this.txtCommands.Name = "txtCommands";
             this.txtCommands.Size = new System.Drawing.Size(374, 20);
-            this.txtCommands.TabIndex = 2;
+            this.txtCommands.TabIndex = 3;
             this.txtCommands.Leave += new System.EventHandler(this.txtCommands_Leave);
             // 
             // txtRepoDir
@@ -73,7 +73,7 @@ namespace TestHarness
             this.txtRepoDir.Location = new System.Drawing.Point(13, 109);
             this.txtRepoDir.Name = "txtRepoDir";
             this.txtRepoDir.Size = new System.Drawing.Size(374, 20);
-            this.txtRepoDir.TabIndex = 3;
+            this.txtRepoDir.TabIndex = 5;
             this.txtRepoDir.Leave += new System.EventHandler(this.txtRepoDir_Leave);
             this.txtRepoDir.TextChanged += new System.EventHandler(this.txtRepoDir_TextChanged);
             // 
@@ -82,7 +82,7 @@ namespace TestHarness
             this.btnRoot.Location = new System.Drawing.Point(403, 24);
             this.btnRoot.Name = "btnRoot";
             this.btnRoot.Size = new System.Drawing.Size(45, 23);
-            this.btnRoot.TabIndex = 4;
+            this.btnRoot.TabIndex = 2;
             this.btnRoot.Text = "...";
             this.btnRoot.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnRoot.UseVisualStyleBackColor = true;
@@ -129,7 +129,7 @@ namespace TestHarness
             this.btnCommands.Location = new System.Drawing.Point(403, 64);
             this.btnCommands.Name = "btnCommands";
             this.btnCommands.Size = new System.Drawing.Size(45, 23);
-            this.btnCommands.TabIndex = 9;
+            this.btnCommands.TabIndex = 4;
             this.btnCommands.Text = "...";
             this.btnCommands.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnCommands.UseVisualStyleBackColor = true;
@@ -140,7 +140,7 @@ namespace TestHarness
             this.btnRepos.Location = new System.Drawing.Point(403, 108);
             this.btnRepos.Name = "btnRepos";
             this.btnRepos.Size = new System.Drawing.Size(45, 23);
-            this.btnRepos.TabIndex = 10;
+            this.btnRepos.TabIndex = 6;
             this.btnRepos.Text = "...";
             this.btnRepos.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnRepos.UseVisualStyleBackColor = true;
@@ -152,7 +152,7 @@ namespace TestHarness
             this.btnLoad.Location = new System.Drawing.Point(167, 158);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(134, 23);
-            this.btnLoad.TabIndex = 11;
+            this.btnLoad.TabIndex = 6;
             this.btnLoad.Text = "Load Server Objects";
             this.btnLoad.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnLoad.UseVisualStyleBackColor = true;
@@ -162,7 +162,7 @@ namespace TestHarness
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(460, 339);
+            this.ClientSize = new System.Drawing.Size(460, 280);
             this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.btnRepos);
             this.Controls.Add(this.btnCommands);
