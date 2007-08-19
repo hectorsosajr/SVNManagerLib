@@ -74,9 +74,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Nini, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Nini, Version=1.1.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Nini.dll</HintPath>
+      <HintPath>..\..\..\dependencies\Nini.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
