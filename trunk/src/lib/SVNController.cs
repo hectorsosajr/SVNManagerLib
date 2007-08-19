@@ -27,21 +27,18 @@ namespace SVNManagerLib
 
 		#region Constructors
 
-		/// <summary>
-		/// Default empty constructor
-		/// </summary>
-		public SVNController()
-		{
-			_serverConfiguration = new SVNServerConfig();
-			LoadRepositories();
-		}
-
         /// <summary>
-        /// Load settings from the specified path.
+        /// Initializes a new instance of the <see cref="SVNController"/> class.
         /// </summary>
-        public SVNController( string serverRootPath )
+        /// <param name="serverRootPath">The server root path.</param>
+        /// <param name="severCommandPath">The sever command path.</param>
+        /// <param name="serverRepositoriesPath">The server repositories path.</param>
+        public SVNController( string serverRootPath, string severCommandPath, string serverRepositoriesPath )
         {
             _serverConfiguration = new SVNServerConfig( serverRootPath );
+            _serverConfiguration.CommandRootDirectory = severCommandPath;
+            _serverConfiguration.RepositoryRootDirectory = serverRepositoriesPath;
+
             LoadRepositories();
         }
 
