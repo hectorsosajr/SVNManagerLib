@@ -173,14 +173,17 @@ namespace SVNManagerLib
 
 		    parsedLines = Common.ParseOutputIntoLines( lines );
 
-		    foreach ( string s in parsedLines )
-		    {
-		        string[] data;
+            if ( !Equals( parsedLines,null ) )
+            {
+                foreach ( string s in parsedLines )
+                {
+                    string[] data;
 
-		        data = s.Split( ':' );
+                    data = s.Split( ':' );
 
-                _information.Add( data[0], data[1] );
-		    }
+                    _information.Add( data[0], data[1] );
+                } 
+            }
 
 			return retval;
 		}
@@ -208,17 +211,20 @@ namespace SVNManagerLib
 
             parsedLines = Common.ParseOutputIntoLines( lines );
 
-            foreach ( string s in parsedLines )
+            if ( !Equals( parsedLines,null ) )
             {
-                string[] data;
-                string key;
-                string value;
+                foreach ( string s in parsedLines )
+                {
+                    string[] data;
+                    string key;
+                    string value;
 
-                data = s.Split(':');
-                key = data[0] + data[1];
-                value = data[2];
+                    data = s.Split( ':' );
+                    key = data[0] + data[1];
+                    value = data[2];
 
-                _properties.Add(key, value);
+                    _properties.Add( key, value );
+                } 
             }
 
             return retval;
