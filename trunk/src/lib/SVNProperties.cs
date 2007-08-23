@@ -1,3 +1,10 @@
+//**********************************************************
+// Project Name:	SVNManagerLib.csproj
+// File Name:		SVNProperties.cs
+// Author:			Hector Sosa, Jr
+// Date:			8/23/2007
+//**********************************************************
+
 using System.Collections.Generic;
 
 namespace SVNManagerLib
