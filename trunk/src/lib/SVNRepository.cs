@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -93,6 +94,7 @@ namespace SVNManagerLib
 		private string _AdminUserPassword = string.Empty;
         private Hashtable _files = new Hashtable();
 	    private string _serverCommandsPath = string.Empty;
+        private List<SVNFileSystemEntity> _entities = new List<SVNFileSystemEntity>();
 
 		#endregion
 
@@ -220,7 +222,23 @@ namespace SVNManagerLib
 			{
 				return _admins;
 			}
-		}
+        }
+
+        /// <summary>
+        /// Gets or sets the repository file entities.
+        /// </summary>
+        /// <value>The repository file entities.</value>
+        public List<SVNFileSystemEntity> RepositoryFileEntities
+        {
+            get
+            {
+                return _entities;
+            }
+            set
+            {
+                _entities = value;
+            }
+        }
 
 		/// <summary>
 		/// Holds the back end that this repository is using.
@@ -260,7 +278,7 @@ namespace SVNManagerLib
 
                 return repoType;
 			}
-		}
+        }
 
         /// <summary>
         /// Holds the Universal Unique IDentifier (UUID) for this repository.
@@ -603,6 +621,21 @@ namespace SVNManagerLib
             GetUsers( RepositoryPath );
 
             _files = Common.GetFileList( rootDir, _serverCommandsPath );
+
+            LoadFileEntities();
+        }
+
+        private void LoadFileEntities()
+        {
+            foreach (object pkey in _files.Keys)
+            {
+                string fileName = pkey.ToString();
+                string filePath = _files[pkey].ToString();
+
+                SVNFileSystemEntity entity = new SVNFileSystemEntity(filePath, fileName);
+
+                _entities.Add(entity);
+            }
         }
 
 		private bool CreateRepository( string repoName )
@@ -783,5 +816,5 @@ namespace SVNManagerLib
 		}
 
 	    #endregion
-	}
+    }
 }
