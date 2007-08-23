@@ -103,6 +103,7 @@
     </Compile>
     <Compile Include="SVNFileSystemEntity.cs" />
     <Compile Include="SVNHook.cs" />
+    <Compile Include="SVNProperties.cs" />
     <Compile Include="SVNRepoConfig.cs">
       <SubType>Code</SubType>
     </Compile>
