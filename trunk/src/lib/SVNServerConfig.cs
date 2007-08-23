@@ -25,6 +25,7 @@ namespace SVNManagerLib
 		private string _commandRootDirectory = string.Empty;
 	    private string _repoMode = string.Empty;
         private string _configFileName = string.Empty;
+        private string _configFilePath = string.Empty;
         private string _defaultConfigFileName = "svnmanagerlib.ini";
 		private IConfigSource _config;
 
@@ -137,6 +138,18 @@ namespace SVNManagerLib
             }
         }
 
+        public string ConfigFilePath
+        {
+            get
+            {
+                return _configFilePath;
+            }
+            set
+            {
+                _configFilePath = value;
+            }
+        }
+
         /// <summary>
         /// Gets or sets the repository mode.
         /// </summary>
@@ -177,8 +190,18 @@ namespace SVNManagerLib
 			}
             catch ( NullReferenceException )
             {
-                FileInfo fi = new FileInfo( System.Reflection.Assembly.GetExecutingAssembly().FullName );
-                string path = fi.DirectoryName + Path.PathSeparator + _defaultConfigFileName;
+                FileInfo fi;
+                string path;
+
+                if ( _configFilePath.Length > 0 && _configFileName.Length > 0 )
+                {
+                    path = Path.Combine( _configFilePath, _configFileName );
+                }
+                else
+                {
+                    fi = new FileInfo( System.Reflection.Assembly.GetExecutingAssembly().FullName );
+                    path = Path.Combine( fi.DirectoryName, _defaultConfigFileName );
+                }
 
                 StreamWriter configWriter = new StreamWriter(path);
 
