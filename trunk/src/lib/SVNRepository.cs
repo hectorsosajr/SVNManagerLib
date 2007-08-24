@@ -95,6 +95,7 @@ namespace SVNManagerLib
         private Hashtable _files = new Hashtable();
 	    private string _serverCommandsPath = string.Empty;
         private List<SVNFileSystemEntity> _entities = new List<SVNFileSystemEntity>();
+	    private RepositoryHooks _repoHooks = null;
 
 		#endregion
 
@@ -115,11 +116,24 @@ namespace SVNManagerLib
             _serverCommandsPath = ServerCommandPath;
             _fullPath = RepositoryPath;
             LoadConfig( RepositoryPath );
+            _repoHooks = new RepositoryHooks( _repositoryConfiguration.RepositoryRootDirectory );
         }
 
 		#endregion
 
 		#region Properties
+
+        /// <summary>
+        /// Gets the hook files for this repository.
+        /// </summary>
+        /// <value>The hook files.</value>
+	    public List<SVNHook> HookScriptFiles
+	    {
+            get
+            {
+                return _repoHooks.HookFiles;
+            }
+	    }
 
 		/// <summary>
         /// Holds what <see cref="RepositoryAuthorization">rights</see> do the anonymous users have
