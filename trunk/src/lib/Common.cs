@@ -311,16 +311,16 @@ namespace SVNManagerLib
                 string fullPath;
                 fullPath = currentDirectory;
 
-                if (!fullPath.EndsWith(Path.DirectorySeparatorChar.ToString()))
+                if ( !fullPath.EndsWith( Path.DirectorySeparatorChar.ToString() ) )
                 {
                     fullPath += Path.DirectorySeparatorChar.ToString();
                 }
 
                 if (files != null)
                 {
-                    foreach (string file in files)
+                    foreach ( string file in files )
                     {
-                        fileList.Add(file, fullPath + file);
+                        fileList.Add( file, fullPath + file );
                     }
                 }
             }

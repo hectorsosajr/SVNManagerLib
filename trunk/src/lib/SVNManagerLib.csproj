@@ -98,6 +98,7 @@
     <Compile Include="Repositories.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RepositoryHooks.cs" />
     <Compile Include="SVNController.cs">
       <SubType>Code</SubType>
     </Compile>
