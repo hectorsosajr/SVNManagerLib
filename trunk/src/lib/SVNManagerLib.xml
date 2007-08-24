@@ -4,6 +4,102 @@
         <name>SVNManagerLib</name>
     </assembly>
     <members>
+        <member name="T:SVNManagerLib.SVNRepoConfig">
+            <summary>
+            This class provides read/write access to repository-wide configuration
+            settings. This uses the Nini configuration library at
+            http://nini.sourceforge.net/
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepoConfig.#ctor">
+            <summary>
+            Empty constructor
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepoConfig.#ctor(System.String)">
+            <summary>
+            Loads a repository configuration information.
+            </summary>
+            <param name="RepositoryPath">The path to the repository.</param>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepoConfig.UpdateAuthorization">
+            <summary>
+            Updates the repository authorization settings in the svnserve.conf file.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepoConfig.ConvertStringToAuth(System.String)">
+            <summary>
+            Converts a string to RepositoryAuthorization enum.
+            </summary>
+            <param name="authenticationString">The authentication string to convert.</param>
+            <returns></returns>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepoConfig.UserDatabaseFileName">
+            <summary>
+            The file that contains the user accounts.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepoConfig.RepositoryRootDirectory">
+            <summary>
+            The root directory for this repository.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepoConfig.AnonymousAccess">
+            <summary>
+            Gets or sets the anonymous access.
+            </summary>
+            <value>The anonymous access.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepoConfig.AuthorizedAccess">
+            <summary>
+            Gets or sets the authorized access.
+            </summary>
+            <value>The authorized access.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepoConfig.RepositoryType">
+            <summary>
+            Holds the string contained in the fs-type file
+            inside the db folder.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepoConfig.RepositoryUUID">
+            <summary>
+            Holds the UUID (Universal Unique IDentifier) for this repository.
+            </summary>
+            <remarks>
+            This seems to be in GUID format.
+            </remarks>
+        </member>
+        <member name="T:SVNManagerLib.SVNHook">
+            <summary>
+             Represents a single Subversion hook file.
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNHook.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNHook"/> class.
+            </summary>
+            <param name="hookPath">The hook file's path.</param>
+        </member>
+        <member name="P:SVNManagerLib.SVNHook.Contents">
+            <summary>
+            Gets or sets the contents.
+            </summary>
+            <value>The contents.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNHook.FileName">
+            <summary>
+            Gets or sets the name of the file.
+            </summary>
+            <value>The name of the file.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNHook.FilePath">
+            <summary>
+            Gets the file path to this hook script.
+            </summary>
+            <value>The file path.</value>
+        </member>
         <member name="T:SVNManagerLib.RepositoryAuthorization">
             <summary>
             A list of possible authorization modes for a
@@ -163,390 +259,6 @@
             Gets the <see cref="T:SVNManagerLib.SVNRepository"/> with the specified repo name.
             </summary>
             <value></value>
-        </member>
-        <member name="T:SVNManagerLib.SVNController">
-            <summary>
-            This class controls actions in SVNManagerLib. This is the top
-            level class/object in this namespace.
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNController.#ctor(System.String,System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNController"/> class.
-            </summary>
-            <param name="serverRootPath">The server root path.</param>
-            <param name="severCommandPath">The sever command path.</param>
-            <param name="serverRepositoriesPath">The server repositories path.</param>
-        </member>
-        <member name="M:SVNManagerLib.SVNController.#ctor(SVNManagerLib.SVNServerConfig)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNController"/> class
-            using a <see cref="T:SVNManagerLib.SVNServerConfig"/> object.
-            </summary>
-            <param name="config">The configuration object for the server.</param>
-        </member>
-        <member name="M:SVNManagerLib.SVNController.#ctor(System.Collections.Generic.List{System.String},System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNController"/> class.
-            </summary>
-            <param name="RepositoryPaths">A list of repository paths.</param>
-            <param name="CommandPath">The command path to the Subversion command-line utilities.</param>
-        </member>
-        <member name="P:SVNManagerLib.SVNController.ServerConfiguration">
-            <summary>
-            Holds a <see cref="T:SVNManagerLib.SVNServerConfig"/> object for this server.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNController.RepositoryCollection">
-            <summary>
-            Holds a collection of SVNRepsitory objects, one
-            for each repository in this server.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNController.AdminUsers">
-            <summary>
-            Holds a list of <see cref="T:SVNManagerLib.SVNUser"/> objects that have administrative rights.
-            </summary>
-            <remarks>This is not part of the default Subversion functionality. This is a function
-            of this library. This will be used to synchronize users between user silos in
-            external systems such as Active Directory, LADP, etc.</remarks>
-        </member>
-        <member name="T:SVNManagerLib.SVNFileSystemEntity">
-            <summary>
-            Represents a file or folder inside a Subversion repository.
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNFileSystemEntity.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNFileSystemEntity"/> class.
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNFileSystemEntity.#ctor(System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNFileSystemEntity"/> class.
-            </summary>
-            <param name="pathToEntity">The path to entity.</param>
-            <param name="entityName">Name of the entity.</param>
-        </member>
-        <member name="M:SVNManagerLib.SVNFileSystemEntity.LoadInfo(System.String)">
-            <summary>
-            Loads the information for this file or folder.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNFileSystemEntity.LoadProperties(System.String)">
-            <summary>
-            Loads the properties for this file or folder.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:SVNManagerLib.SVNFileSystemEntity.FullPath">
-            <summary>
-            Gets or sets the full path.
-            </summary>
-            <value>The full path.</value>
-        </member>
-        <member name="P:SVNManagerLib.SVNFileSystemEntity.EntityName">
-            <summary>
-            Gets or sets the name of the file system entity.
-            </summary>
-            <value>The name of the file or folder.</value>
-        </member>
-        <member name="P:SVNManagerLib.SVNFileSystemEntity.Information">
-            <summary>
-            Gets or sets the information.
-            </summary>
-            <value>The information.</value>
-        </member>
-        <member name="P:SVNManagerLib.SVNFileSystemEntity.Properties">
-            <summary>
-            Gets or sets the properties.
-            </summary>
-            <value>The properties.</value>
-        </member>
-        <member name="T:SVNManagerLib.SVNHook">
-            <summary>
-             Represents a single Subversion hook file.
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNHook.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNHook"/> class.
-            </summary>
-        </member>
-        <member name="T:SVNManagerLib.SVNRepoConfig">
-            <summary>
-            This class provides read/write access to repository-wide configuration
-            settings. This uses the Nini configuration library at
-            http://nini.sourceforge.net/
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepoConfig.#ctor">
-            <summary>
-            Empty constructor
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepoConfig.#ctor(System.String)">
-            <summary>
-            Loads a repository configuration information.
-            </summary>
-            <param name="RepositoryPath">The path to the repository.</param>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepoConfig.UpdateAuthorization">
-            <summary>
-            Updates the repository authorization settings in the svnserve.conf file.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepoConfig.ConvertStringToAuth(System.String)">
-            <summary>
-            Converts a string to RepositoryAuthorization enum.
-            </summary>
-            <param name="authenticationString">The authentication string to convert.</param>
-            <returns></returns>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepoConfig.UserDatabaseFileName">
-            <summary>
-            The file that contains the user accounts.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepoConfig.RepositoryRootDirectory">
-            <summary>
-            The root directory for this repository.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepoConfig.AnonymousAccess">
-            <summary>
-            Gets or sets the anonymous access.
-            </summary>
-            <value>The anonymous access.</value>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepoConfig.AuthorizedAccess">
-            <summary>
-            Gets or sets the authorized access.
-            </summary>
-            <value>The authorized access.</value>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepoConfig.RepositoryType">
-            <summary>
-            Holds the string contained in the fs-type file
-            inside the db folder.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepoConfig.RepositoryUUID">
-            <summary>
-            Holds the UUID (Universal Unique IDentifier) for this repository.
-            </summary>
-            <remarks>
-            This seems to be in GUID format.
-            </remarks>
-        </member>
-        <member name="T:SVNManagerLib.CreateRepositoryArgs">
-            <summary>
-            Arguments for the "svnadmin create" command.
-            </summary>
-        </member>
-        <member name="F:SVNManagerLib.CreateRepositoryArgs.RepositoryType">
-            <summary>
-            The type of back end this repository will be using. This
-            uses one of the types in <see cref="T:SVNManagerLib.RepositoryTypes"/>.
-            </summary>
-        </member>
-        <member name="F:SVNManagerLib.CreateRepositoryArgs.RepositoryName">
-            <summary>
-            The name of the new repository. This will also be the folder
-            name under the repository root folder.
-            </summary>
-        </member>
-        <member name="T:SVNManagerLib.DumpArgs">
-            <summary>
-            Arguments for the "svnadmin dump" command.
-            </summary>
-        </member>
-        <member name="F:SVNManagerLib.DumpArgs.RevisionArg">
-            <summary>
-            The revision number to dump. This can also be
-            a range in the X:Y format.
-            </summary>
-        </member>
-        <member name="F:SVNManagerLib.DumpArgs.DumpFileName">
-            <summary>
-            The name that will be given to this dump file.
-            </summary>
-        </member>
-        <member name="F:SVNManagerLib.DumpArgs.UseIncremental">
-            <summary>
-            Whether or not to use an incremental dump.
-            </summary>
-        </member>
-        <member name="F:SVNManagerLib.DumpArgs.UseQuiet">
-            <summary>
-            Whether or not to show progress. Also known as verbose.
-            </summary>
-        </member>
-        <member name="F:SVNManagerLib.DumpArgs.RepositoryName">
-            <summary>
-            The name of the new repository. This will also be the folder
-            name under the repository root folder.
-            </summary>
-        </member>
-        <member name="T:SVNManagerLib.HotCopyArgs">
-            <summary>
-            Arguments for the "svnadmin hotcopy" command.
-            </summary>
-        </member>
-        <member name="F:SVNManagerLib.HotCopyArgs.DestinationPath">
-            <summary>
-            The destination folder for the hot copy.
-            </summary>
-        </member>
-        <member name="F:SVNManagerLib.HotCopyArgs.UseCleanLogs">
-            <summary>
-            Whether or not to remove the redundant log files
-            from the source repository. This only works for
-            BerkeleyDB repositories.
-            </summary>
-        </member>
-        <member name="T:SVNManagerLib.SVNRepository">
-            <summary>
-            This represents a single repository in the current Subversion server.
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepository.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNRepository"/> class.
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepository.#ctor(System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNRepository"/> class.
-            </summary>
-            <param name="RepositoryPath">The repository path.</param>
-            <param name="ServerCommandPath">Path to where the Subversion commands are located.</param>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepository.CreateBerkeleyDbRepository(System.String)">
-            <summary>
-            Creates a repository with a Berkeley database backend.
-            </summary>
-            <param name="repoName">The name of the desired new repository.</param>
-            <returns>Whether or not this operation was successful.</returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepository.CreateFSFSRepository(System.String)">
-            <summary>
-            Creates a repository with the OS filesystem as the backend.
-            </summary>
-            <param name="repoName">The name of the desired new repository.</param>
-            <returns>Whether or not this operation was successful.</returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepository.DeleteRepository">
-            <summary>
-            Deletes the repository and all its subfolders from the hard drive.
-            </summary>
-            <returns>Whether or not this operation was successful.</returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepository.DumpRepository(SVNManagerLib.DumpArgs)">
-            <summary>
-            Creates a dumpfile portable format of this repository.
-            </summary>
-            <param name="args">An instance of <see cref="T:SVNManagerLib.DumpArgs"/>.</param>
-            <returns>Whether or not this operation was successful.</returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepository.HotCopyRepository(SVNManagerLib.HotCopyArgs)">
-            <summary>
-            Creates an exact copy of the repository to a different folder.
-            </summary>
-            <param name="args">An instance of <see cref="T:SVNManagerLib.HotCopyArgs"/>.</param>
-            <returns>Whether or not this operation was successful.</returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepository.CreateDirectory(System.String,System.String)">
-            <summary>
-            Creates a new directory using the "svn mkdir" command.
-            </summary>
-            <param name="directoryName">This includes the current directory plus the new name. This is a directory fragment and not a full path.</param>
-            <param name="message">The "svn mkdir" command commits immediately and it requires a comment.</param>
-            <returns>Returns whether or not the command was successful.</returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepository.DeleteDirectory(System.String,System.String)">
-            <summary>
-            Deletes a directory or file using the "svn delete" command.
-            </summary>
-            <param name="directoryPath">The full path to a directory or file.</param>
-            <param name="message">The "svn delete" command commits immediately and it requires a comment.</param>
-            <returns>Returns whether or not the command was successful.</returns>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.AnonymousAccess">
-            <summary>
-            Holds what <see cref="T:SVNManagerLib.RepositoryAuthorization">rights</see> do the anonymous users have
-            for this repository.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.AuthorizedAccess">
-            <summary>
-            Holds what <see cref="T:SVNManagerLib.RepositoryAuthorization">rights</see> do the authenticated users have 
-            for this repository.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.FullPath">
-            <summary>
-            The full path to this repository.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.Name">
-            <summary>
-            The name of this repository. This is usually the root folder
-            name of the repository
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.RepositoryConfiguration">
-            <summary>
-            The <see cref="T:SVNManagerLib.SVNRepoConfig"/> managing this repository's
-            configuration settings.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.Users">
-            <summary>
-            A list of <see cref="T:SVNManagerLib.SVNUser"/> that are associated with
-            this repository.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.Administrators">
-            <summary>
-            A list of <see cref="T:SVNManagerLib.SVNUser"/> that are associated with
-            this repository and have administrative rights.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.RepositoryType">
-            <summary>
-            Holds the back end that this repository is using.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.RepositoryUUID">
-            <summary>
-            Holds the Universal Unique IDentifier (UUID) for this repository.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.Files">
-            <summary>
-            Holds a list of files and folders for this repository
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.SeverCommandsPath">
-            <summary>
-            Gets the sever commands path.
-            </summary>
-            <value>The sever commands path.</value>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.FirstRepoUserName">
-            <summary>
-            Gets or sets the name of the first repo user.
-            </summary>
-            <value>The name of the first repo user.</value>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepository.FirstRepoUserPassword">
-            <summary>
-            Gets or sets the first repo user password.
-            </summary>
-            <value>The first repo user password.</value>
         </member>
         <member name="T:SVNManagerLib.SVNServerConfig">
             <summary>
@@ -710,6 +422,126 @@
             </summary>
             <value>The user database path.</value>
         </member>
+        <member name="T:SVNManagerLib.SVNProperty">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNProperty.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNProperty.Value">
+            <summary>
+            Gets or sets the value.
+            </summary>
+            <value>The value.</value>
+        </member>
+        <member name="T:SVNManagerLib.SVNProperties">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:SVNManagerLib.SVNFileSystemEntity">
+            <summary>
+            Represents a file or folder inside a Subversion repository.
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNFileSystemEntity.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNFileSystemEntity"/> class.
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNFileSystemEntity.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNFileSystemEntity"/> class.
+            </summary>
+            <param name="pathToEntity">The path to entity.</param>
+            <param name="entityName">Name of the entity.</param>
+        </member>
+        <member name="M:SVNManagerLib.SVNFileSystemEntity.LoadInfo(System.String)">
+            <summary>
+            Loads the information for this file or folder.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNFileSystemEntity.LoadProperties(System.String)">
+            <summary>
+            Loads the properties for this file or folder.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:SVNManagerLib.SVNFileSystemEntity.FullPath">
+            <summary>
+            Gets or sets the full path.
+            </summary>
+            <value>The full path.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNFileSystemEntity.EntityName">
+            <summary>
+            Gets or sets the name of the file system entity.
+            </summary>
+            <value>The name of the file or folder.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNFileSystemEntity.Information">
+            <summary>
+            Gets or sets the information.
+            </summary>
+            <value>The information.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNFileSystemEntity.Properties">
+            <summary>
+            Gets or sets the properties.
+            </summary>
+            <value>The properties.</value>
+        </member>
+        <member name="T:SVNManagerLib.SVNController">
+            <summary>
+            This class controls actions in SVNManagerLib. This is the top
+            level class/object in this namespace.
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNController.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNController"/> class.
+            </summary>
+            <param name="serverRootPath">The server root path.</param>
+            <param name="severCommandPath">The sever command path.</param>
+            <param name="serverRepositoriesPath">The server repositories path.</param>
+        </member>
+        <member name="M:SVNManagerLib.SVNController.#ctor(SVNManagerLib.SVNServerConfig)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNController"/> class
+            using a <see cref="T:SVNManagerLib.SVNServerConfig"/> object.
+            </summary>
+            <param name="config">The configuration object for the server.</param>
+        </member>
+        <member name="M:SVNManagerLib.SVNController.#ctor(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNController"/> class.
+            </summary>
+            <param name="RepositoryPaths">A list of repository paths.</param>
+            <param name="CommandPath">The command path to the Subversion command-line utilities.</param>
+        </member>
+        <member name="P:SVNManagerLib.SVNController.ServerConfiguration">
+            <summary>
+            Holds a <see cref="T:SVNManagerLib.SVNServerConfig"/> object for this server.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNController.RepositoryCollection">
+            <summary>
+            Holds a collection of SVNRepsitory objects, one
+            for each repository in this server.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNController.AdminUsers">
+            <summary>
+            Holds a list of <see cref="T:SVNManagerLib.SVNUser"/> objects that have administrative rights.
+            </summary>
+            <remarks>This is not part of the default Subversion functionality. This is a function
+            of this library. This will be used to synchronize users between user silos in
+            external systems such as Active Directory, LADP, etc.</remarks>
+        </member>
         <member name="T:SVNManagerLib.SVNUserCollection">
             <summary>
             This represents a list of <see cref="T:SVNManagerLib.SVNUser"/> objects.
@@ -828,6 +660,242 @@
             <summary>
             The physical path to the repository where this account resides.
             </summary>
+        </member>
+        <member name="T:SVNManagerLib.CreateRepositoryArgs">
+            <summary>
+            Arguments for the "svnadmin create" command.
+            </summary>
+        </member>
+        <member name="F:SVNManagerLib.CreateRepositoryArgs.RepositoryType">
+            <summary>
+            The type of back end this repository will be using. This
+            uses one of the types in <see cref="T:SVNManagerLib.RepositoryTypes"/>.
+            </summary>
+        </member>
+        <member name="F:SVNManagerLib.CreateRepositoryArgs.RepositoryName">
+            <summary>
+            The name of the new repository. This will also be the folder
+            name under the repository root folder.
+            </summary>
+        </member>
+        <member name="T:SVNManagerLib.DumpArgs">
+            <summary>
+            Arguments for the "svnadmin dump" command.
+            </summary>
+        </member>
+        <member name="F:SVNManagerLib.DumpArgs.RevisionArg">
+            <summary>
+            The revision number to dump. This can also be
+            a range in the X:Y format.
+            </summary>
+        </member>
+        <member name="F:SVNManagerLib.DumpArgs.DumpFileName">
+            <summary>
+            The name that will be given to this dump file.
+            </summary>
+        </member>
+        <member name="F:SVNManagerLib.DumpArgs.UseIncremental">
+            <summary>
+            Whether or not to use an incremental dump.
+            </summary>
+        </member>
+        <member name="F:SVNManagerLib.DumpArgs.UseQuiet">
+            <summary>
+            Whether or not to show progress. Also known as verbose.
+            </summary>
+        </member>
+        <member name="F:SVNManagerLib.DumpArgs.RepositoryName">
+            <summary>
+            The name of the new repository. This will also be the folder
+            name under the repository root folder.
+            </summary>
+        </member>
+        <member name="T:SVNManagerLib.HotCopyArgs">
+            <summary>
+            Arguments for the "svnadmin hotcopy" command.
+            </summary>
+        </member>
+        <member name="F:SVNManagerLib.HotCopyArgs.DestinationPath">
+            <summary>
+            The destination folder for the hot copy.
+            </summary>
+        </member>
+        <member name="F:SVNManagerLib.HotCopyArgs.UseCleanLogs">
+            <summary>
+            Whether or not to remove the redundant log files
+            from the source repository. This only works for
+            BerkeleyDB repositories.
+            </summary>
+        </member>
+        <member name="T:SVNManagerLib.SVNRepository">
+            <summary>
+            This represents a single repository in the current Subversion server.
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepository.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNRepository"/> class.
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepository.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNRepository"/> class.
+            </summary>
+            <param name="RepositoryPath">The repository path.</param>
+            <param name="ServerCommandPath">Path to where the Subversion commands are located.</param>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepository.CreateBerkeleyDbRepository(System.String)">
+            <summary>
+            Creates a repository with a Berkeley database backend.
+            </summary>
+            <param name="repoName">The name of the desired new repository.</param>
+            <returns>Whether or not this operation was successful.</returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepository.CreateFSFSRepository(System.String)">
+            <summary>
+            Creates a repository with the OS filesystem as the backend.
+            </summary>
+            <param name="repoName">The name of the desired new repository.</param>
+            <returns>Whether or not this operation was successful.</returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepository.DeleteRepository">
+            <summary>
+            Deletes the repository and all its subfolders from the hard drive.
+            </summary>
+            <returns>Whether or not this operation was successful.</returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepository.DumpRepository(SVNManagerLib.DumpArgs)">
+            <summary>
+            Creates a dumpfile portable format of this repository.
+            </summary>
+            <param name="args">An instance of <see cref="T:SVNManagerLib.DumpArgs"/>.</param>
+            <returns>Whether or not this operation was successful.</returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepository.HotCopyRepository(SVNManagerLib.HotCopyArgs)">
+            <summary>
+            Creates an exact copy of the repository to a different folder.
+            </summary>
+            <param name="args">An instance of <see cref="T:SVNManagerLib.HotCopyArgs"/>.</param>
+            <returns>Whether or not this operation was successful.</returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepository.CreateDirectory(System.String,System.String)">
+            <summary>
+            Creates a new directory using the "svn mkdir" command.
+            </summary>
+            <param name="directoryName">This includes the current directory plus the new name. This is a directory fragment and not a full path.</param>
+            <param name="message">The "svn mkdir" command commits immediately and it requires a comment.</param>
+            <returns>Returns whether or not the command was successful.</returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepository.DeleteDirectory(System.String,System.String)">
+            <summary>
+            Deletes a directory or file using the "svn delete" command.
+            </summary>
+            <param name="directoryPath">The full path to a directory or file.</param>
+            <param name="message">The "svn delete" command commits immediately and it requires a comment.</param>
+            <returns>Returns whether or not the command was successful.</returns>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.HookScriptFiles">
+            <summary>
+            Gets the hook files for this repository.
+            </summary>
+            <value>The hook files.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.AnonymousAccess">
+            <summary>
+            Holds what <see cref="T:SVNManagerLib.RepositoryAuthorization">rights</see> do the anonymous users have
+            for this repository.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.AuthorizedAccess">
+            <summary>
+            Holds what <see cref="T:SVNManagerLib.RepositoryAuthorization">rights</see> do the authenticated users have 
+            for this repository.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.FullPath">
+            <summary>
+            The full path to this repository.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.Name">
+            <summary>
+            The name of this repository. This is usually the root folder
+            name of the repository
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.RepositoryConfiguration">
+            <summary>
+            The <see cref="T:SVNManagerLib.SVNRepoConfig"/> managing this repository's
+            configuration settings.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.Users">
+            <summary>
+            A list of <see cref="T:SVNManagerLib.SVNUser"/> that are associated with
+            this repository.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.Administrators">
+            <summary>
+            A list of <see cref="T:SVNManagerLib.SVNUser"/> that are associated with
+            this repository and have administrative rights.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.RepositoryFileEntities">
+            <summary>
+            Gets or sets the repository file entities.
+            </summary>
+            <value>The repository file entities.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.RepositoryType">
+            <summary>
+            Holds the back end that this repository is using.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.RepositoryUUID">
+            <summary>
+            Holds the Universal Unique IDentifier (UUID) for this repository.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.Files">
+            <summary>
+            Holds a list of files and folders for this repository
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.SeverCommandsPath">
+            <summary>
+            Gets the sever commands path.
+            </summary>
+            <value>The sever commands path.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.FirstRepoUserName">
+            <summary>
+            Gets or sets the name of the first repo user.
+            </summary>
+            <value>The name of the first repo user.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepository.FirstRepoUserPassword">
+            <summary>
+            Gets or sets the first repo user password.
+            </summary>
+            <value>The first repo user password.</value>
+        </member>
+        <member name="T:SVNManagerLib.RepositoryHooks">
+            <summary>
+             This represents a list of hook scripts in the current Subversion repository.
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.RepositoryHooks.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SVNManagerLib.RepositoryHooks"/> class.
+            </summary>
+            <param name="repositoryPath">The repository path.</param>
+        </member>
+        <member name="P:SVNManagerLib.RepositoryHooks.HookFiles">
+            <summary>
+            Gets or sets the hook files.
+            </summary>
+            <value>The hook files.</value>
         </member>
     </members>
 </doc>
