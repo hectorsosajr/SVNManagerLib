@@ -264,11 +264,21 @@ namespace SVNManagerLib
 
 			_ServerConfig = new IniConfigSource( iniDoc );
 
-			_UserDatabaseFileName = Common.GetPathFromFile( fullPath );
+			_UserDatabaseFileName = Path.GetFileName( fullPath );
 			
 			try
 			{
-				_UserDatabaseFileName += _ServerConfig.Configs["general"].GetString( "password-db" );
+                string fileName = _ServerConfig.Configs["general"].GetString( "password-db" );
+
+                if ( fileName.Length > 0 )
+                {
+                    _UserDatabaseFileName += fileName;
+                }
+                else
+                {
+                    _UserDatabaseFileName = "";
+                }
+
 			}
 			catch
 			{

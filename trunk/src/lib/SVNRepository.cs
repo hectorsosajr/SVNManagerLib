@@ -76,6 +76,14 @@ namespace SVNManagerLib
 		public bool UseCleanLogs;
 	}
 
+    ///<summary>
+    /// Arguments for the "svnadmin load" command.
+    ///</summary>
+    public struct LoadDumpFileArgs
+    {
+        public string DumpFilePath;
+    }
+
 	/// <summary>
 	/// This represents a single repository in the current Subversion server.
 	/// </summary>
@@ -306,7 +314,8 @@ namespace SVNManagerLib
         }
 
         /// <summary>
-        /// Holds a list of files and folders for this repository
+        /// Holds a list of files and folders for this repository,
+        /// as a list of text items.
         /// </summary>
         public Hashtable Files
         {
@@ -400,7 +409,7 @@ namespace SVNManagerLib
 
 			_createRepoType = RepositoryTypes.FileSystem;
 
-            retval = CreateRepository(repoName);
+            retval = CreateRepository( repoName );
 
             if ( Equals( null, _repositoryConfiguration ) )
             {
@@ -417,9 +426,7 @@ namespace SVNManagerLib
 		public bool DeleteRepository()
 		{
 			bool retval;
-            string formatFilePath = _fullPath + Path.DirectorySeparatorChar + "format";
-
-            // TODO: Make sure that this file exists.
+            string formatFilePath = Path.Combine( _fullPath, "format" );
 
 			// The "format" file was set to read only. Need to remove
 			// that file attribute in order for the directory delete
@@ -454,7 +461,7 @@ namespace SVNManagerLib
             arg.Append( _fullPath );
 
             // Processing struct arguments for command-line switches
-            if (Equals(args, null))
+            if ( Equals( args, null ) )
             {
                 return false;
             }
@@ -479,7 +486,9 @@ namespace SVNManagerLib
                 arg.Append( " --quiet" );
             }
 
-            cmdResult = Common.ExecuteWritesToDiskSvnCommand( Common.GetWellFormedSVNCommand( "svnadmin" ), arg.ToString(), args.DumpFileName, out errors );
+            string svnCommand = Path.Combine( _serverCommandsPath, "svnadmin" );
+
+            cmdResult = Common.ExecuteWritesToDiskSvnCommand( svnCommand, arg.ToString(), args.DumpFileName, out errors );
 
             return cmdResult;
 		}
@@ -530,7 +539,9 @@ namespace SVNManagerLib
                 }
             }
 
-		    cmdResult = Common.ExecuteSvnCommand( Common.GetWellFormedSVNCommand( "svnadmin" ), arg.ToString(), out lines, out errors );
+            string svnCommand = Path.Combine( _serverCommandsPath, "svnadmin" );
+
+            cmdResult = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
 
 		    return cmdResult;
 		}
@@ -541,7 +552,8 @@ namespace SVNManagerLib
         /// <param name="directoryName">This includes the current directory plus the new name. This is a directory fragment and not a full path.</param>
         /// <param name="message">The "svn mkdir" command commits immediately and it requires a comment.</param>
         /// <returns>Returns whether or not the command was successful.</returns>
-        public bool CreateDirectory( string directoryName, string message )
+        /// <param name="errorMessages">This will contain the error text from the Subversion command, if any.</param>
+        public bool CreateDirectory( string directoryName, string message, out string errorMessages )
         {
             bool cmdResult;
             string lines;
@@ -574,7 +586,11 @@ namespace SVNManagerLib
             args.Append( " " );
             args.Append( url );
 
-            cmdResult = Common.ExecuteSvnCommand( Common.GetWellFormedSVNCommand( "svn" ), args.ToString(), out lines, out errors );
+            string svnCommand = Path.Combine( _serverCommandsPath, "svn" );
+
+            cmdResult = Common.ExecuteSvnCommand( svnCommand, args.ToString(), out lines, out errors );
+
+            errorMessages = errors;
 
             return cmdResult;
         }
@@ -585,7 +601,8 @@ namespace SVNManagerLib
         /// <param name="directoryPath">The full path to a directory or file.</param>
         /// <param name="message">The "svn delete" command commits immediately and it requires a comment.</param>
         /// <returns>Returns whether or not the command was successful.</returns>
-        public bool DeleteDirectory( string directoryPath, string message )
+        /// <param name="errorMessages">This will contain the error text from the Subversion command, if any.</param>
+        public bool DeleteDirectory( string directoryPath, string message, out string errorMessages )
         {
             bool cmdResult;
             string lines;
@@ -616,9 +633,35 @@ namespace SVNManagerLib
             args.Append( message );
             args.Append( ((Char)34).ToString() );
             args.Append( " " );
-            args.Append( url );
+            args.Append(url); 
+            
+            string svnCommand = Path.Combine( _serverCommandsPath, "svn" );
 
-            cmdResult = Common.ExecuteSvnCommand( Common.GetWellFormedSVNCommand("svn"), args.ToString(), out lines, out errors );
+            cmdResult = Common.ExecuteSvnCommand( svnCommand, args.ToString(), out lines, out errors );
+
+            errorMessages = errors;
+
+            return cmdResult;
+        }
+
+        /// <summary>
+        /// Loads a Subversion dump file.
+        /// </summary>
+        /// <param name="args">This is the <see cref="LoadDumpFileArgs"/> struct with valid information for this action.</param>
+        /// <param name="errorMessages">The error messages that come from the "svnadmin load" command.</param>
+        /// <returns></returns>
+        public bool LoadDumpFile( LoadDumpFileArgs args, out string errorMessages )
+        {
+            StringBuilder cmdArgs = new StringBuilder();
+            bool cmdResult;
+            string lines;
+            string errors;
+
+            string svnCommand = Path.Combine( _serverCommandsPath, "svnadmin" );
+
+            cmdResult = Common.ExecuteSvnCommand(svnCommand, cmdArgs.ToString(), out lines, out errors);
+
+            errorMessages = errors;
 
             return cmdResult;
         }
@@ -641,14 +684,14 @@ namespace SVNManagerLib
 
         private void LoadFileEntities()
         {
-            foreach (object pkey in _files.Keys)
+            foreach ( object pkey in _files.Keys )
             {
                 string fileName = pkey.ToString();
                 string filePath = _files[pkey].ToString();
 
-                SVNFileSystemEntity entity = new SVNFileSystemEntity(filePath, fileName);
+                SVNFileSystemEntity entity = new SVNFileSystemEntity( _serverCommandsPath, filePath, fileName );
 
-                _entities.Add(entity);
+                _entities.Add( entity );
             }
         }
 
@@ -701,41 +744,45 @@ namespace SVNManagerLib
 
 		private void GetUsers( string RepositoryPath  )
 		{
-		    string userDbFullPath;
 		    FileInfo repo = new FileInfo( RepositoryPath );
-			string root;
 
-			root = repo.DirectoryName;
-			Common.GetCorrectedPath( root, false );
+		    if ( _repositoryConfiguration.UserDatabaseFileName.Length > 0 )
+            {
+                string root;
+                root = repo.DirectoryName;
 
-			userDbFullPath = _repositoryConfiguration.UserDatabaseFileName;
+                Common.GetCorrectedPath( root, false );
 
-			if( userDbFullPath != "" )
-			{
-			    StreamReader userRead;
-			    userRead = File.OpenText( userDbFullPath );
-	
-				while (userRead.Peek() != -1)
-				{
-				    string currLine;
-				    currLine = userRead.ReadLine();
-	
-					switch(currLine.ToUpper().Trim())
-					{
-						case "[USERS]":
-							break;
-						case "":
-							break;
-						default:
-							SVNUser newUser;
-							newUser = GetUserData( currLine );
-							_users.Add( newUser );
-							break;
-					}
-				}
-	
-				userRead.Close();				
-			}
+                string userDbFullPath;
+                userDbFullPath = _repositoryConfiguration.UserDatabaseFileName;
+
+                if ( userDbFullPath != "" )
+                {
+                    StreamReader userRead;
+                    userRead = File.OpenText( userDbFullPath );
+
+                    while ( userRead.Peek() != -1 )
+                    {
+                        string currLine;
+                        currLine = userRead.ReadLine();
+
+                        switch ( currLine.ToUpper().Trim() )
+                        {
+                            case "[USERS]":
+                                break;
+                            case "":
+                                break;
+                            default:
+                                SVNUser newUser;
+                                newUser = GetUserData( currLine );
+                                _users.Add( newUser );
+                                break;
+                        }
+                    }
+
+                    userRead.Close();
+                }
+            }
 		}
 
 		private SVNUser GetUserData( string CurrentLine )

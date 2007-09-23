@@ -96,65 +96,6 @@ namespace SVNManagerLib
 		}
 
 		/// <summary>
-		/// Gets the path for the file with the correct path separators for the
-		/// current operating system.
-		/// </summary>
-		/// <param name="FullPath">The file to verify.</param>
-		public static string GetPathFromFile( string FullPath )
-		{
-			string Result;
-			FileInfo currFile;
-
-			currFile = new FileInfo( FullPath );
-
-			Result = currFile.DirectoryName;
-
-			OperatingSystem myOS = Environment.OSVersion;
-			
-			//Code Checks to see which OS is being used 128 indicates Linux
-			if( (int)myOS.Platform == 128 )
-			{			
-				if (!Result.EndsWith("/"))
-				{
-					Result += "/";
-				}
-				
-				return Result;			
-			}
-			else
-			{
-				if (!Result.EndsWith("\\"))
-				{
-					Result += "\\";
-				}
-	
-				return Result;			
-			}
-		}
-
-        /// <summary>
-        /// Gets the correct path to the command being passed in. This
-        /// takes into consideration which OS it is running on.
-        /// </summary>
-        public static string GetWellFormedSVNCommand( string command )
-        {
-            string svnCommand = GetCorrectedPath( command, true );
-
-            //Code Checks to see which OS is being used 128 indicates Linux
-            OperatingSystem myOS = Environment.OSVersion;
-            if ((int)myOS.Platform == 128)
-            {
-                svnCommand += command;
-            }
-            else
-            {
-                svnCommand += command;
-            }
-
-            return svnCommand;
-        }
-
-		/// <summary>
 		/// Executes a well formed Subversion command against a command-line
 		/// program.
 		/// </summary>

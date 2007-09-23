@@ -138,6 +138,10 @@ namespace SVNManagerLib
             }
         }
 
+        /// <summary>
+        /// Gets or sets the config file path.
+        /// </summary>
+        /// <value>The config file path.</value>
         public string ConfigFilePath
         {
             get
@@ -190,7 +194,6 @@ namespace SVNManagerLib
 			}
             catch ( NullReferenceException )
             {
-                FileInfo fi;
                 string path;
 
                 if ( _configFilePath.Length > 0 && _configFileName.Length > 0 )
@@ -199,6 +202,7 @@ namespace SVNManagerLib
                 }
                 else
                 {
+                    FileInfo fi;
                     fi = new FileInfo( System.Reflection.Assembly.GetExecutingAssembly().FullName );
                     path = Path.Combine( fi.DirectoryName, _defaultConfigFileName );
                 }

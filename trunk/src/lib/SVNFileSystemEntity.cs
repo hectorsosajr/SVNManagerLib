@@ -6,6 +6,7 @@
 //**********************************************************
 
 using System.Collections;
+using System.IO;
 using System.Text;
 
 namespace SVNManagerLib
@@ -21,6 +22,7 @@ namespace SVNManagerLib
         private Hashtable _information = new Hashtable();
         private string _entityName;        
         private string _fullPath;
+	    private string _serverCommandsPath;
  
 	    #endregion
 
@@ -35,10 +37,12 @@ namespace SVNManagerLib
         /// <summary>
         /// Initializes a new instance of the <see cref="SVNFileSystemEntity"/> class.
         /// </summary>
+        /// <param name="serverCommandsPath">The path to the Subversion command line programs.</param>
         /// <param name="pathToEntity">The path to entity.</param>
         /// <param name="entityName">Name of the entity.</param>
-        public SVNFileSystemEntity( string pathToEntity, string entityName )
+        public SVNFileSystemEntity( string serverCommandsPath, string pathToEntity, string entityName )
         {
+            _serverCommandsPath = serverCommandsPath;
 			_fullPath = pathToEntity;
 			_entityName = entityName;
             LoadEntityInfo();
@@ -161,9 +165,9 @@ namespace SVNManagerLib
 		    string[] parsedLines;
             StringBuilder arg = new StringBuilder();
 
-		    convPath = Common.PathToFileUrl( _fullPath );
+            convPath = Common.PathToFileUrl( _fullPath );
 
-            svnCommand = Common.GetWellFormedSVNCommand( "svn" );
+            svnCommand = Path.Combine( _serverCommandsPath, "svn" );
 
             // Start setting up the svn command
             arg.Append( "info " );
@@ -200,7 +204,7 @@ namespace SVNManagerLib
 
             convPath = Common.PathToFileUrl( _fullPath );
 
-            svnCommand = Common.GetWellFormedSVNCommand( "svn" );
+            svnCommand = Path.Combine( _serverCommandsPath, "svn" );
 
             // Start setting up the svn command
             arg.Append( "proplist " );
