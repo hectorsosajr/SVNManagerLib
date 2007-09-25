@@ -264,7 +264,7 @@ namespace SVNManagerLib
 
 			_ServerConfig = new IniConfigSource( iniDoc );
 
-			_UserDatabaseFileName = Path.GetFileName( fullPath );
+			_UserDatabaseFileName = Path.GetDirectoryName( fullPath );
 			
 			try
 			{
@@ -272,8 +272,8 @@ namespace SVNManagerLib
 
                 if ( fileName.Length > 0 )
                 {
-                    _UserDatabaseFileName += fileName;
-                }
+                    _UserDatabaseFileName = Path.Combine( _UserDatabaseFileName, fileName );
+                } 
                 else
                 {
                     _UserDatabaseFileName = "";
