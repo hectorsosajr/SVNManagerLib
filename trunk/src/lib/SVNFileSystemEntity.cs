@@ -181,11 +181,13 @@ namespace SVNManagerLib
             {
                 foreach ( string s in parsedLines )
                 {
-                    string[] data;
+                    if ( s != "" )
+                    {
+                        string[] data;
+                        data = s.Split(':');
 
-                    data = s.Split( ':' );
-
-                    _information.Add( data[0], data[1] );
+                        _information.Add(data[0], data[1]);
+                    }
                 } 
             }
 
