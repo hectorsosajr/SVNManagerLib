@@ -7,9 +7,8 @@
 
 using System;
 using System.Collections;
-using System.IO;
 using System.Diagnostics;
-using System.Text;
+using System.IO;
 
 namespace SVNManagerLib
 {
@@ -301,17 +300,9 @@ namespace SVNManagerLib
         /// <returns></returns>
         public static string PathToFileUrl( string pathToConvert )
         {
-            string parsedDir;
-            StringBuilder arg = new StringBuilder();
+            UriBuilder fileURL = new UriBuilder( pathToConvert );
 
-            parsedDir = pathToConvert.Replace( "\\", "/" );
-            
-			arg.Append( "file:///" );
-			arg.Append( (char)34 ); 
-            arg.Append( parsedDir );
-			arg.Append( (char)34 ); 
-
-            return arg.ToString();
+            return fileURL.ToString();
         }
 	}
 }
