@@ -139,6 +139,11 @@ namespace SVNManagerLib
 	    {
             get
             {
+                if ( Equals( _repoHooks,null ) )
+                {
+                    _repoHooks = new RepositoryHooks( _repositoryConfiguration.RepositoryRootDirectory );
+                }
+
                 return _repoHooks.HookFiles;
             }
 	    }
