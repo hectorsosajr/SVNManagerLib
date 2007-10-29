@@ -569,7 +569,7 @@ namespace SVNManagerLib
             string tmp = directoryName;
 
             pathUrl.Append( _repositoryConfiguration.RepositoryRootDirectory );
-            if (!_repositoryConfiguration.RepositoryRootDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ))
+            if ( !_repositoryConfiguration.RepositoryRootDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ) )
             {
                 pathUrl.Append( Path.DirectorySeparatorChar.ToString() );
             }
@@ -577,7 +577,7 @@ namespace SVNManagerLib
             if ( tmp.StartsWith( Path.DirectorySeparatorChar.ToString() ) )
             {
                 int pos = tmp.IndexOf( Path.DirectorySeparatorChar.ToString() );
-                tmp = tmp.Substring( pos );
+                tmp = tmp.Substring( pos + 1 );
 
             }
             pathUrl.Append( tmp );
@@ -626,7 +626,7 @@ namespace SVNManagerLib
             if ( tmp.StartsWith( Path.DirectorySeparatorChar.ToString() ) )
             {
                 int pos = tmp.IndexOf( Path.DirectorySeparatorChar.ToString() );
-                tmp = tmp.Substring( pos );
+                tmp = tmp.Substring( pos + 1 );
 
             }
             pathUrl.Append( tmp );
