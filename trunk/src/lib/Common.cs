@@ -300,9 +300,40 @@ namespace SVNManagerLib
         /// <returns></returns>
         public static string PathToFileUrl( string pathToConvert )
         {
-            UriBuilder fileURL = new UriBuilder( pathToConvert );
+            string fileURL = "";
+            bool isUNC;
+            UriBuilder fileURI = null;
 
-            return fileURL.ToString();
+            // This is to capture whether the incoming path is
+            // an UNC path or not.
+            if ( pathToConvert.StartsWith( @"\\" ) )
+            {
+                isUNC = true;
+            }
+            else
+            {
+                isUNC = false;
+            }
+
+            try
+            {
+                fileURI = new UriBuilder(pathToConvert);
+            }
+            catch( UriFormatException ex )
+            {
+                string msg = ex.Message;
+            }
+
+            if ( isUNC )
+            {
+                if ( fileURI != null ) fileURL = fileURI.ToString();
+            }
+            else
+            {
+                if ( fileURI != null ) fileURL = fileURI.ToString().Replace( "file://", "file:///" );
+            }
+
+            return fileURL;
         }
 	}
 }
