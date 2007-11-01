@@ -774,13 +774,23 @@ namespace SVNManagerLib
                         switch ( currLine.ToUpper().Trim() )
                         {
                             case "[USERS]":
-                                break;
                             case "":
                                 break;
                             default:
-                                SVNUser newUser;
-                                newUser = GetUserData( currLine );
-                                _users.Add( newUser );
+                                string start = currLine.Substring(0, 1);
+
+                                // Ignore comment lines
+                                switch( start )
+                                {
+                                    case "#":
+                                    case ";":
+                                        break;
+                                    default:
+                                        SVNUser newUser;
+                                        newUser = GetUserData( currLine );
+                                        _users.Add( newUser );
+                                        break;
+                                }
                                 break;
                         }
                     }
