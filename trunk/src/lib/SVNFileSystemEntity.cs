@@ -183,10 +183,14 @@ namespace SVNManagerLib
                 {
                     if ( s != "" )
                     {
-                        string[] data;
-                        data = s.Split(':');
+                        try
+                        {
+                            string[] data;
+                            data = s.Split( ':' );
 
-                        _information.Add(data[0], data[1]);
+                            _information.Add( data[0], data[1] );
+                        }
+                        catch {}
                     }
                 } 
             }
@@ -221,15 +225,23 @@ namespace SVNManagerLib
             {
                 foreach ( string s in parsedLines )
                 {
-                    string[] data;
-                    string key;
-                    string value;
+                    if ( s != "" )
+                    {
+                        try
+                        {
+                            string[] data;
+                            data = s.Split( ':' );
 
-                    data = s.Split( ':' );
-                    key = data[0] + data[1];
-                    value = data[2];
+                            string key;
+                            key = data[0] + data[1];
 
-                    _properties.Add( key, value );
+                            string value;
+                            value = data[2];
+
+                            _properties.Add( key, value );
+                        }
+                        catch {}
+                    }
                 } 
             }
 
