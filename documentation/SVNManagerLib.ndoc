@@ -10,24 +10,24 @@
             <property name="HtmlHelpName" value="Documentation" />
             <property name="Title" value="An NDoc documented library" />
         </documenter>
-        <documenter name="Intellisense">
-            <property name="OutputDirectory" value=".\intellisense\" />
-        </documenter>
         <documenter name="XML">
             <property name="OutputFile" value=".\doc\doc.xml" />
+        </documenter>
+        <documenter name="MSDN-CHM">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="HtmlHelpName" value="SVNManagerLib" />
+            <property name="Title" value="SVNManagerLib 0.5.5" />
+            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
+            <property name="CopyrightText" value="Copyright 2007 SystemWidgets" />
+            <property name="FeedbackEmailAddress" value="support@systemwidgets.com" />
+        </documenter>
+        <documenter name="Intellisense">
+            <property name="OutputDirectory" value=".\intellisense\" />
         </documenter>
         <documenter name="MSDN-Web">
             <property name="OutputDirectory" value=".\doc\" />
             <property name="HtmlHelpName" value="Documentation" />
             <property name="Title" value="An NDoc documented library" />
-        </documenter>
-        <documenter name="MSDN-CHM">
-            <property name="OutputDirectory" value=".\doc\" />
-            <property name="HtmlHelpName" value="SVNManagerLib" />
-            <property name="Title" value="SVNManagerLib 0.5.0" />
-            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
-            <property name="CopyrightText" value="Copyright 2007 SystemWidgets" />
-            <property name="FeedbackEmailAddress" value="support@systemwidgets.com" />
         </documenter>
     </documenters>
 </project>

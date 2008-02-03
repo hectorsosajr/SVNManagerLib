@@ -24,7 +24,7 @@
 	</script>
 
 	<property name="datename" value="${svn::filenamefromdate()}" />
-	<property name="version"  value="0.5.4" />
+	<property name="version"  value="0.5.5" />
 	<property name="project.name" value="SVNManagerLib"/>
 	<property name="project.bin" value="..\Bin"/>
 	<property name="project.src" value="."/>
