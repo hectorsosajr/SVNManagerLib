@@ -4,53 +4,6 @@
         <name>SVNManagerLib</name>
     </assembly>
     <members>
-        <member name="T:SVNManagerLib.SVNUserCollection">
-            <summary>
-            This represents a list of <see cref="T:SVNManagerLib.SVNUser"/> objects.
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserCollection.Add(SVNManagerLib.SVNUserCollection)">
-            <summary>
-            Adds the specified items.
-            </summary>
-            <param name="Items">The items.</param>
-            <returns></returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserCollection.Add(SVNManagerLib.SVNUser)">
-            <summary>
-            Adds the specified item.
-            </summary>
-            <param name="Item">The item.</param>
-            <returns></returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserCollection.Insert(System.Int32,SVNManagerLib.SVNUser)">
-            <summary>
-            Inserts the specified index.
-            </summary>
-            <param name="Index">The index.</param>
-            <param name="Item">The item.</param>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserCollection.Remove(SVNManagerLib.SVNUser)">
-            <summary>
-            Removes the specified item.
-            </summary>
-            <param name="Item">The item.</param>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserCollection.Contains(SVNManagerLib.SVNUser)">
-            <summary>
-            Determines whether [contains] [the specified item].
-            </summary>
-            <param name="Item">The item.</param>
-            <returns>
-            	<c>true</c> if [contains] [the specified item]; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="P:SVNManagerLib.SVNUserCollection.Item(System.Int32)">
-            <summary>
-            Gets the <see cref="T:SVNManagerLib.SVNUser"/> at the specified index.
-            </summary>
-            <value></value>
-        </member>
         <member name="T:SVNManagerLib.RepositoryAuthorization">
             <summary>
             A list of possible authorization modes for a
@@ -147,151 +100,56 @@
             <param name="pathToConvert">That full path that will be converted to a file url.</param>
             <returns></returns>
         </member>
-        <member name="T:SVNManagerLib.SVNProperty">
+        <member name="T:SVNManagerLib.Repositories">
             <summary>
+            This represents a list of repositories in the current Subversion server.
             </summary>
         </member>
-        <member name="P:SVNManagerLib.SVNProperty.Name">
+        <member name="M:SVNManagerLib.Repositories.Add(SVNManagerLib.SVNUserCollection)">
             <summary>
-            Gets or sets the name.
+            Adds the specified items.
             </summary>
-            <value>The name.</value>
-        </member>
-        <member name="P:SVNManagerLib.SVNProperty.Value">
-            <summary>
-            Gets or sets the value.
-            </summary>
-            <value>The value.</value>
-        </member>
-        <member name="T:SVNManagerLib.SVNProperties">
-            <summary>
-            </summary>
-        </member>
-        <member name="T:SVNManagerLib.SVNFileSystemEntity">
-            <summary>
-            Represents a file or folder inside a Subversion repository.
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNFileSystemEntity.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNFileSystemEntity"/> class.
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNFileSystemEntity.#ctor(System.String,System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNFileSystemEntity"/> class.
-            </summary>
-            <param name="serverCommandsPath">The path to the Subversion command line programs.</param>
-            <param name="pathToEntity">The path to entity.</param>
-            <param name="entityName">Name of the entity.</param>
-        </member>
-        <member name="M:SVNManagerLib.SVNFileSystemEntity.LoadInfo(System.String)">
-            <summary>
-            Loads the information for this file or folder.
-            </summary>
+            <param name="Items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:SVNManagerLib.SVNFileSystemEntity.LoadProperties(System.String)">
+        <member name="M:SVNManagerLib.Repositories.Add(SVNManagerLib.SVNRepository)">
             <summary>
-            Loads the properties for this file or folder.
+            Strongly typed Add method.
             </summary>
+            <param name="Item">An instance of <see cref="T:SVNManagerLib.SVNRepository"/> class.</param>
+            <returns>The position index where this <see cref="T:SVNManagerLib.SVNRepository"/> instance was inserted.</returns>
+        </member>
+        <member name="M:SVNManagerLib.Repositories.Insert(System.Int32,SVNManagerLib.SVNRepository)">
+            <summary>
+            Strongly typed Insert method.
+            </summary>
+            <param name="Index">The index to where this <see cref="T:SVNManagerLib.SVNRepository"/> instance should be inserted.</param>
+            <param name="Item">An instance of <see cref="T:SVNManagerLib.SVNRepository"/> class.</param>
+        </member>
+        <member name="M:SVNManagerLib.Repositories.Remove(SVNManagerLib.SVNRepository)">
+            <summary>
+            Removes a specific <see cref="T:SVNManagerLib.SVNRepository"/> instance.
+            </summary>
+            <param name="Item">An instance of <see cref="T:SVNManagerLib.SVNRepository"/> class.</param>
+        </member>
+        <member name="M:SVNManagerLib.Repositories.Contains(SVNManagerLib.SVNRepository)">
+            <summary>
+            Checks if this collection has the specified <see cref="T:SVNManagerLib.SVNRepository"/> instance.
+            </summary>
+            <param name="Item">An instance of <see cref="T:SVNManagerLib.SVNRepository"/> class.</param>
             <returns></returns>
         </member>
-        <member name="P:SVNManagerLib.SVNFileSystemEntity.FullPath">
+        <member name="P:SVNManagerLib.Repositories.Item(System.Int32)">
             <summary>
-            Gets or sets the full path.
+            Gets the <see cref="T:SVNManagerLib.SVNRepository"/> at the specified index.
             </summary>
-            <value>The full path.</value>
+            <value></value>
         </member>
-        <member name="P:SVNManagerLib.SVNFileSystemEntity.EntityName">
+        <member name="P:SVNManagerLib.Repositories.Item(System.String)">
             <summary>
-            Gets or sets the name of the file system entity.
+            Gets the <see cref="T:SVNManagerLib.SVNRepository"/> with the specified repo name.
             </summary>
-            <value>The name of the file or folder.</value>
-        </member>
-        <member name="P:SVNManagerLib.SVNFileSystemEntity.Information">
-            <summary>
-            Gets or sets the information.
-            </summary>
-            <value>The information.</value>
-        </member>
-        <member name="P:SVNManagerLib.SVNFileSystemEntity.Properties">
-            <summary>
-            Gets or sets the properties.
-            </summary>
-            <value>The properties.</value>
-        </member>
-        <member name="T:SVNManagerLib.SVNUserProvider">
-            <summary>
-            This class provides read/write access to individual user
-            settings. This uses the Nini configuration library at
-            http://nini.sourceforge.net/
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserProvider.#ctor">
-            <summary>
-            Default constructor.
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserProvider.#ctor(System.String,System.String)">
-            <summary>
-            Constructor to set the username and password.
-            </summary>
-            <param name="UserName">The user's account name.</param>
-            <param name="Password">The user's account password.</param>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserProvider.#ctor(System.String,System.String,System.String)">
-            <summary>
-            Constructor to set the username, password, and repository path.
-            </summary>
-            <param name="UserName">The user's account name.</param>
-            <param name="Password">The user's account password.</param>
-            <param name="RepositoryPath">The path to the repository where this user will be created.</param>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserProvider.Save">
-            <summary>
-            Saves this user's information to the user's database file.
-            </summary>
-            <returns>Returns whether or not the command was successful.</returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserProvider.Add">
-            <summary>
-            Adds a new user to the repository's user database.
-            </summary>
-            <returns>Returns whether or not the command was successful.</returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserProvider.Delete">
-            <summary>
-            Deletes this user from the repository's user database.
-            </summary>
-            <returns>Returns whether or not the command was successful.</returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserProvider.AddAdmin">
-            <summary>
-            Adds this user to the repository's admin user database.
-            </summary>
-            <returns>Returns whether or not the command was successful.</returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNUserProvider.DeleteAdmin">
-            <summary>
-            Deletes this user from the repository's admin user database.
-            </summary>
-            <returns>Returns whether or not the command was successful.</returns>
-        </member>
-        <member name="P:SVNManagerLib.SVNUserProvider.UserName">
-            <summary>
-            The account's user name.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNUserProvider.Password">
-            <summary>
-            The account's password.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNUserProvider.RepositoryPath">
-            <summary>
-            The physical path to the repository where this account resides.
-            </summary>
+            <value></value>
         </member>
         <member name="T:SVNManagerLib.RepositoryHooks">
             <summary>
@@ -357,6 +215,60 @@
             of this library. This will be used to synchronize users between user silos in
             external systems such as Active Directory, LADP, etc.</remarks>
         </member>
+        <member name="T:SVNManagerLib.SVNFileSystemEntity">
+            <summary>
+            Represents a file or folder inside a Subversion repository.
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNFileSystemEntity.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNFileSystemEntity"/> class.
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNFileSystemEntity.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SVNManagerLib.SVNFileSystemEntity"/> class.
+            </summary>
+            <param name="serverCommandsPath">The path to the Subversion command line programs.</param>
+            <param name="pathToEntity">The path to entity.</param>
+            <param name="entityName">Name of the entity.</param>
+        </member>
+        <member name="M:SVNManagerLib.SVNFileSystemEntity.LoadInfo(System.String)">
+            <summary>
+            Loads the information for this file or folder.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNFileSystemEntity.LoadProperties(System.String)">
+            <summary>
+            Loads the properties for this file or folder.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:SVNManagerLib.SVNFileSystemEntity.FullPath">
+            <summary>
+            Gets or sets the full path.
+            </summary>
+            <value>The full path.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNFileSystemEntity.EntityName">
+            <summary>
+            Gets or sets the name of the file system entity.
+            </summary>
+            <value>The name of the file or folder.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNFileSystemEntity.Information">
+            <summary>
+            Gets or sets the information.
+            </summary>
+            <value>The information.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNFileSystemEntity.Properties">
+            <summary>
+            Gets or sets the properties.
+            </summary>
+            <value>The properties.</value>
+        </member>
         <member name="T:SVNManagerLib.SVNHook">
             <summary>
              Represents a single Subversion hook file.
@@ -391,6 +303,93 @@
             Gets a value indicating whether this instance is binary.
             </summary>
             <value><c>true</c> if this instance is binary; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="T:SVNManagerLib.SVNProperty">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNProperty.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNProperty.Value">
+            <summary>
+            Gets or sets the value.
+            </summary>
+            <value>The value.</value>
+        </member>
+        <member name="T:SVNManagerLib.SVNProperties">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:SVNManagerLib.SVNRepoConfig">
+            <summary>
+            This class provides read/write access to repository-wide configuration
+            settings. This uses the Nini configuration library at
+            http://nini.sourceforge.net/
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepoConfig.#ctor">
+            <summary>
+            Empty constructor
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepoConfig.#ctor(System.String)">
+            <summary>
+            Loads a repository configuration information.
+            </summary>
+            <param name="RepositoryPath">The path to the repository.</param>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepoConfig.UpdateAuthorization">
+            <summary>
+            Updates the repository authorization settings in the svnserve.conf file.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNRepoConfig.ConvertStringToAuth(System.String)">
+            <summary>
+            Converts a string to RepositoryAuthorization enum.
+            </summary>
+            <param name="authenticationString">The authentication string to convert.</param>
+            <returns></returns>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepoConfig.UserDatabaseFileName">
+            <summary>
+            The file that contains the user accounts.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepoConfig.RepositoryRootDirectory">
+            <summary>
+            The root directory for this repository.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepoConfig.AnonymousAccess">
+            <summary>
+            Gets or sets the anonymous access.
+            </summary>
+            <value>The anonymous access.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepoConfig.AuthorizedAccess">
+            <summary>
+            Gets or sets the authorized access.
+            </summary>
+            <value>The authorized access.</value>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepoConfig.RepositoryType">
+            <summary>
+            Holds the string contained in the fs-type file
+            inside the db folder.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNRepoConfig.RepositoryUUID">
+            <summary>
+            Holds the UUID (Universal Unique IDentifier) for this repository.
+            </summary>
+            <remarks>
+            This seems to be in GUID format.
+            </remarks>
         </member>
         <member name="T:SVNManagerLib.CreateRepositoryArgs">
             <summary>
@@ -795,123 +794,124 @@
             </summary>
             <value>The user database path.</value>
         </member>
-        <member name="T:SVNManagerLib.SVNRepoConfig">
+        <member name="T:SVNManagerLib.SVNUserCollection">
             <summary>
-            This class provides read/write access to repository-wide configuration
-            settings. This uses the Nini configuration library at
-            http://nini.sourceforge.net/
+            This represents a list of <see cref="T:SVNManagerLib.SVNUser"/> objects.
             </summary>
         </member>
-        <member name="M:SVNManagerLib.SVNRepoConfig.#ctor">
-            <summary>
-            Empty constructor
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepoConfig.#ctor(System.String)">
-            <summary>
-            Loads a repository configuration information.
-            </summary>
-            <param name="RepositoryPath">The path to the repository.</param>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepoConfig.UpdateAuthorization">
-            <summary>
-            Updates the repository authorization settings in the svnserve.conf file.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:SVNManagerLib.SVNRepoConfig.ConvertStringToAuth(System.String)">
-            <summary>
-            Converts a string to RepositoryAuthorization enum.
-            </summary>
-            <param name="authenticationString">The authentication string to convert.</param>
-            <returns></returns>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepoConfig.UserDatabaseFileName">
-            <summary>
-            The file that contains the user accounts.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepoConfig.RepositoryRootDirectory">
-            <summary>
-            The root directory for this repository.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepoConfig.AnonymousAccess">
-            <summary>
-            Gets or sets the anonymous access.
-            </summary>
-            <value>The anonymous access.</value>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepoConfig.AuthorizedAccess">
-            <summary>
-            Gets or sets the authorized access.
-            </summary>
-            <value>The authorized access.</value>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepoConfig.RepositoryType">
-            <summary>
-            Holds the string contained in the fs-type file
-            inside the db folder.
-            </summary>
-        </member>
-        <member name="P:SVNManagerLib.SVNRepoConfig.RepositoryUUID">
-            <summary>
-            Holds the UUID (Universal Unique IDentifier) for this repository.
-            </summary>
-            <remarks>
-            This seems to be in GUID format.
-            </remarks>
-        </member>
-        <member name="T:SVNManagerLib.Repositories">
-            <summary>
-            This represents a list of repositories in the current Subversion server.
-            </summary>
-        </member>
-        <member name="M:SVNManagerLib.Repositories.Add(SVNManagerLib.SVNUserCollection)">
+        <member name="M:SVNManagerLib.SVNUserCollection.Add(SVNManagerLib.SVNUserCollection)">
             <summary>
             Adds the specified items.
             </summary>
             <param name="Items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:SVNManagerLib.Repositories.Add(SVNManagerLib.SVNRepository)">
+        <member name="M:SVNManagerLib.SVNUserCollection.Add(SVNManagerLib.SVNUser)">
             <summary>
-            Strongly typed Add method.
+            Adds the specified item.
             </summary>
-            <param name="Item">An instance of <see cref="T:SVNManagerLib.SVNRepository"/> class.</param>
-            <returns>The position index where this <see cref="T:SVNManagerLib.SVNRepository"/> instance was inserted.</returns>
-        </member>
-        <member name="M:SVNManagerLib.Repositories.Insert(System.Int32,SVNManagerLib.SVNRepository)">
-            <summary>
-            Strongly typed Insert method.
-            </summary>
-            <param name="Index">The index to where this <see cref="T:SVNManagerLib.SVNRepository"/> instance should be inserted.</param>
-            <param name="Item">An instance of <see cref="T:SVNManagerLib.SVNRepository"/> class.</param>
-        </member>
-        <member name="M:SVNManagerLib.Repositories.Remove(SVNManagerLib.SVNRepository)">
-            <summary>
-            Removes a specific <see cref="T:SVNManagerLib.SVNRepository"/> instance.
-            </summary>
-            <param name="Item">An instance of <see cref="T:SVNManagerLib.SVNRepository"/> class.</param>
-        </member>
-        <member name="M:SVNManagerLib.Repositories.Contains(SVNManagerLib.SVNRepository)">
-            <summary>
-            Checks if this collection has the specified <see cref="T:SVNManagerLib.SVNRepository"/> instance.
-            </summary>
-            <param name="Item">An instance of <see cref="T:SVNManagerLib.SVNRepository"/> class.</param>
+            <param name="Item">The item.</param>
             <returns></returns>
         </member>
-        <member name="P:SVNManagerLib.Repositories.Item(System.Int32)">
+        <member name="M:SVNManagerLib.SVNUserCollection.Insert(System.Int32,SVNManagerLib.SVNUser)">
             <summary>
-            Gets the <see cref="T:SVNManagerLib.SVNRepository"/> at the specified index.
+            Inserts the specified index.
+            </summary>
+            <param name="Index">The index.</param>
+            <param name="Item">The item.</param>
+        </member>
+        <member name="M:SVNManagerLib.SVNUserCollection.Remove(SVNManagerLib.SVNUser)">
+            <summary>
+            Removes the specified item.
+            </summary>
+            <param name="Item">The item.</param>
+        </member>
+        <member name="M:SVNManagerLib.SVNUserCollection.Contains(SVNManagerLib.SVNUser)">
+            <summary>
+            Determines whether [contains] [the specified item].
+            </summary>
+            <param name="Item">The item.</param>
+            <returns>
+            	<c>true</c> if [contains] [the specified item]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="P:SVNManagerLib.SVNUserCollection.Item(System.Int32)">
+            <summary>
+            Gets the <see cref="T:SVNManagerLib.SVNUser"/> at the specified index.
             </summary>
             <value></value>
         </member>
-        <member name="P:SVNManagerLib.Repositories.Item(System.String)">
+        <member name="T:SVNManagerLib.SVNUserProvider">
             <summary>
-            Gets the <see cref="T:SVNManagerLib.SVNRepository"/> with the specified repo name.
+            This class provides read/write access to individual user
+            settings. This uses the Nini configuration library at
+            http://nini.sourceforge.net/
             </summary>
-            <value></value>
+        </member>
+        <member name="M:SVNManagerLib.SVNUserProvider.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:SVNManagerLib.SVNUserProvider.#ctor(System.String,System.String)">
+            <summary>
+            Constructor to set the username and password.
+            </summary>
+            <param name="UserName">The user's account name.</param>
+            <param name="Password">The user's account password.</param>
+        </member>
+        <member name="M:SVNManagerLib.SVNUserProvider.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructor to set the username, password, and repository path.
+            </summary>
+            <param name="UserName">The user's account name.</param>
+            <param name="Password">The user's account password.</param>
+            <param name="RepositoryPath">The path to the repository where this user will be created.</param>
+        </member>
+        <member name="M:SVNManagerLib.SVNUserProvider.Save">
+            <summary>
+            Saves this user's information to the user's database file.
+            </summary>
+            <returns>Returns whether or not the command was successful.</returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNUserProvider.Add">
+            <summary>
+            Adds a new user to the repository's user database.
+            </summary>
+            <returns>Returns whether or not the command was successful.</returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNUserProvider.Delete">
+            <summary>
+            Deletes this user from the repository's user database.
+            </summary>
+            <returns>Returns whether or not the command was successful.</returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNUserProvider.AddAdmin">
+            <summary>
+            Adds this user to the repository's admin user database.
+            </summary>
+            <returns>Returns whether or not the command was successful.</returns>
+        </member>
+        <member name="M:SVNManagerLib.SVNUserProvider.DeleteAdmin">
+            <summary>
+            Deletes this user from the repository's admin user database.
+            </summary>
+            <returns>Returns whether or not the command was successful.</returns>
+        </member>
+        <member name="P:SVNManagerLib.SVNUserProvider.UserName">
+            <summary>
+            The account's user name.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNUserProvider.Password">
+            <summary>
+            The account's password.
+            </summary>
+        </member>
+        <member name="P:SVNManagerLib.SVNUserProvider.RepositoryPath">
+            <summary>
+            The physical path to the repository where this account resides.
+            </summary>
         </member>
     </members>
 </doc>

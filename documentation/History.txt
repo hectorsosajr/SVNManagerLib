@@ -1,5 +1,20 @@
 SVNManagerLib History
 
+0.5.5 - Feb 3, 2008
+
+FIX - Fixed MANY issues with repositories that were upgraded from
+      pre-1.3.0 versions of Subversion.
+NEW - Added classes to represent Hook scripts.
+NEW - Created a class hiearchy to represent properties in files
+      and directories.
+
+0.5.4 - Aug 19, 2007
+
+NEW - Synchronizing releases with CodePlex.
+NEW - Repository objects now have a list of SVN properties.
+NEW - Fixed the constructors for SVNController to allow for this object to be
+      instanciated in a valid state.
+
 0.5.1 - June 11, 2007
 
 FIX - Exception when an empty svnmanagerlib.ini 

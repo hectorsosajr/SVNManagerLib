@@ -66,9 +66,37 @@
 			<references>
 				<include asis="true" name="System.dll"/>
 				<include asis="true" name="System.Xml.dll"/>
-				<include asis="true" name="..\..\..\dependencies\Nini.dll"/>
+				<include asis="false" name="..\..\..\dependencies\Nini.dll"/>
 			</references>
 		</csc>
 	</target>
+
+	<copy todir="C:\Projects\CodePlex\SVNManagerLib\trunk\src\Bin\DotNet\2.0\Debug">
+    	<fileset basedir="C:\Projects\CodePlex\SVNManagerLib\trunk\src\lib\bin\Debug">
+        	<include name="Nini.dll" />
+        	<include name="*.xml" />
+    	</fileset>
+	</copy>
+
+	<copy todir="C:\Projects\CodePlex\SVNManagerLib\trunk\src\Bin\DotNet\2.0\Release">
+    	<fileset basedir="C:\Projects\CodePlex\SVNManagerLib\trunk\src\lib\bin\Debug">
+        	<include name="Nini.dll" />
+        	<include name="*.xml" />
+    	</fileset>
+	</copy>
+
+	<copy todir="C:\Projects\CodePlex\SVNManagerLib\trunk\src\Bin\DotNet\2.0\Debug">
+    	<fileset basedir="C:\Projects\CodePlex\SVNManagerLib\trunk\src\TestHarness\bin\Debug">
+        	<include name="TestHarness.exe" />
+        	<include name="TestHarness.pdb" />
+    	</fileset>
+	</copy>
+
+	<copy todir="C:\Projects\CodePlex\SVNManagerLib\trunk\src\Bin\DotNet\2.0\Release">
+    	<fileset basedir="C:\Projects\CodePlex\SVNManagerLib\trunk\src\TestHarness\bin\Release">
+        	<include name="TestHarness.exe" />
+        	<include name="TestHarness.pdb" />
+    	</fileset>
+	</copy>
 
 </project>
