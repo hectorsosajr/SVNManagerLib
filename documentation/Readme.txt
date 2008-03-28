@@ -4,7 +4,9 @@ This library is now only provided in .NET 2.0 format only.
 
 Please feel free to add your suggestions and feature requests on the forums or email me directly.
 
-Project URL: https://sourceforge.net/projects/svnmanagerlib/
+Get the latest source code here:
+SourceForge URL: https://sourceforge.net/projects/svnmanagerlib/
+CodePlex URL: https://tfs04.codeplex.com/svnmanagerlib
 
 
 Hector Sosa, Jr
