@@ -20,7 +20,7 @@ namespace SVNManagerLib
 	/// </summary>
 	public class SVNRepoConfig
 	{
-		#region Member Variables
+        #region Member Variables
 
 		private string _UserDatabaseFileName;
 		private IniConfigSource _ServerConfig;
@@ -31,7 +31,10 @@ namespace SVNManagerLib
 		private string _AuthAcc;
 		private string _repositoryType;
         private string _repositoryUUID;
-	    private string _fullPathToConfFile;
+        private string _fullPathToConfFile;
+        private string _authorizationRulesFile;
+        private string _repositoryRealm;
+
 
 		#endregion
 
@@ -148,6 +151,41 @@ namespace SVNManagerLib
             }
         }
 
+        ///<summary>
+        /// This stores the realm this repository belongs to.
+        /// </summary>
+        public string RepositoryRealm
+        {
+            get
+            {
+                return _repositoryRealm;
+            }
+            set
+            {
+                _repositoryRealm = value;
+            }
+        }
+
+        ///<summary>
+        /// This holds the path to the authorization file that contain rules 
+        /// for path-based access control.
+        /// </summary>
+        ///<remarks>The default file name is authz. This uses the same format 
+        /// as the authz file from the Apache setups.
+        /// </remarks>
+        public string AuthorizationRulesFile
+        {
+            get
+            {
+                return _authorizationRulesFile;
+            }
+            set
+            {
+                _authorizationRulesFile = value;
+            }
+        }
+
+
 		#endregion
 		
 		#region Public Members
@@ -162,11 +200,8 @@ namespace SVNManagerLib
             string anon = _AnonymousAccess.ToString().ToLower();
             string auth = _AuthorizedAccess.ToString().ToLower();
 
-            IniDocument iniDoc;
-            IniConfigSource source;
-
-            iniDoc = new IniDocument( _fullPathToConfFile, IniFileType.SambaStyle );
-            source = new IniConfigSource(iniDoc);
+            IniDocument iniDoc = new IniDocument( _fullPathToConfFile, IniFileType.SambaStyle );
+            IniConfigSource source = new IniConfigSource(iniDoc);
 
             source.Configs["general"].Set( "anon-access", anon );
             source.Configs["general"].Set( "auth-access", auth );
@@ -224,43 +259,52 @@ namespace SVNManagerLib
 
 		private void LoadServerConfigs( string RepositoryPath )
 		{
-			IniDocument iniDoc;
-			string fullPath;
-
-			fullPath = RepositoryPath;
+		    string fullPath = RepositoryPath;
 			
-			OperatingSystem myOS = Environment.OSVersion;
+            //OperatingSystem myOS = Environment.OSVersion;
 			
-			//Code Checks to see which OS is being used 128 indicates Linux
-			if( (int)myOS.Platform == 128 )
-			{				
-				if ( !fullPath.EndsWith( "/conf/svnserve.conf" ) )
-				{
-					_RepositoryRootDirectory = fullPath;
-					fullPath += "/conf/svnserve.conf";
-				}
-				else
-				{
-					_RepositoryRootDirectory += RepositoryPath.Replace( "conf/svnserve.conf", "" );
+            ////Code Checks to see which OS is being used 128 indicates Linux
+            //if( (int)myOS.Platform == 128 )
+            //{				
+            //    if ( !fullPath.EndsWith( "/conf/svnserve.conf" ) )
+            //    {
+            //        _RepositoryRootDirectory = fullPath;
+            //        fullPath += "/conf/svnserve.conf";
+            //    }
+            //    else
+            //    {
+            //        _RepositoryRootDirectory += RepositoryPath.Replace( "conf/svnserve.conf", "" );
 
-				}				
-			}
-			else
-			{			
-				if (!fullPath.EndsWith( "\\conf\\svnserve.conf" ))
-				{
-					_RepositoryRootDirectory = fullPath;
-					fullPath += "\\conf\\svnserve.conf";
-				}
-				else
-				{
-					_RepositoryRootDirectory += RepositoryPath.Replace( "conf\\svnserve.conf", string.Empty );
-				}				
-			}
+            //    }				
+            //}
+            //else
+            //{			
+            //    if (!fullPath.EndsWith( "\\conf\\svnserve.conf" ))
+            //    {
+            //        _RepositoryRootDirectory = fullPath;
+            //        fullPath += "\\conf\\svnserve.conf";
+            //    }
+            //    else
+            //    {
+            //        _RepositoryRootDirectory += RepositoryPath.Replace( "conf\\svnserve.conf", string.Empty );
+            //    }				
+            //}
+
+            string confPart = Path.DirectorySeparatorChar + "conf" + Path.DirectorySeparatorChar + "svnserve.conf";
+
+            if ( !fullPath.EndsWith( confPart ) )
+            {
+                _RepositoryRootDirectory = fullPath;
+                fullPath = Path.Combine( fullPath, confPart );
+            }
+            else
+            {
+                _RepositoryRootDirectory += RepositoryPath.Replace( confPart, "" );
+            }	
 
 		    _fullPathToConfFile = fullPath;
 
-			iniDoc = new IniDocument( fullPath, IniFileType.SambaStyle );
+			IniDocument iniDoc = new IniDocument( fullPath, IniFileType.SambaStyle );
 
 			_ServerConfig = new IniConfigSource( iniDoc );
 
@@ -307,6 +351,24 @@ namespace SVNManagerLib
 				_AuthorizedAccess = ConvertStringToAuth( _AuthAcc );
 			}
 
+		    try
+		    {
+		        _authorizationRulesFile = _ServerConfig.Configs["general"].GetString( "authz-db" );
+		    }
+		    catch
+		    {
+		        _authorizationRulesFile = "";
+		    }
+
+		    try
+		    {
+		        _repositoryRealm = _ServerConfig.Configs["general"].GetString( "realm" );
+		    }
+		    catch
+		    {
+		        _repositoryRealm = "";
+		    }
+
 			_repositoryType = GetRepositoryType();
             _repositoryUUID = GetRepositoryUUID();
 		}
@@ -314,17 +376,14 @@ namespace SVNManagerLib
 	    private string GetRepositoryType()
 		{
 		    string lineString;
-			string typeFile;
-            string fixedPath;
 
-            fixedPath = Common.GetCorrectedPath( _RepositoryRootDirectory, true );
+	        string fixedPath = Common.GetCorrectedPath( _RepositoryRootDirectory, true );
 
-            typeFile = fixedPath + "db" + Path.DirectorySeparatorChar + "fs-type";
+            string typeFile = fixedPath + "db" + Path.DirectorySeparatorChar + "fs-type";
 
             try
             {
-                StreamReader reader;
-                reader = new StreamReader( typeFile );
+                StreamReader reader = new StreamReader( typeFile );
 
 			    try
 			    {
@@ -349,17 +408,14 @@ namespace SVNManagerLib
         private string GetRepositoryUUID()
         {
             string lineString;
-            string uuidFile;
-            string fixedPath;
 
-            fixedPath = Common.GetCorrectedPath( _RepositoryRootDirectory, true );
+            string fixedPath = Common.GetCorrectedPath( _RepositoryRootDirectory, true );
 
-            uuidFile = fixedPath + "db" + Path.DirectorySeparatorChar + "uuid";
+            string uuidFile = fixedPath + "db" + Path.DirectorySeparatorChar + "uuid";
 
             try
             {
-                StreamReader reader;
-                reader = new StreamReader(uuidFile);
+                StreamReader reader = new StreamReader(uuidFile);
 
                 try
                 {
