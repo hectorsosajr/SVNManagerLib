@@ -319,10 +319,8 @@ namespace SVNManagerLib
             {
                 fileURI = new UriBuilder(pathToConvert);
             }
-            catch( UriFormatException ex )
-            {
-                string msg = ex.Message;
-            }
+            catch( UriFormatException )
+            {}
 
             if ( isUNC )
             {

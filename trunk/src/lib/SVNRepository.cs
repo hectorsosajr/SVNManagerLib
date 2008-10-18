@@ -81,7 +81,14 @@ namespace SVNManagerLib
     ///</summary>
     public struct LoadDumpFileArgs
     {
+        /// <summary>
+        /// The path to the dump file.
+        /// </summary>
         public string DumpFilePath;
+        /// <summary>
+        /// The destination folder for the dump file.
+        /// </summary>
+        public string DestinationPath;
     }
 
 	/// <summary>
@@ -93,11 +100,11 @@ namespace SVNManagerLib
 
 		private SVNRepoConfig _repositoryConfiguration;
 		private string _name = string.Empty;
-		private SVNUserCollection _users = new SVNUserCollection();
-		private SVNUserCollection _admins = new SVNUserCollection();
+		private readonly SVNUserCollection _users = new SVNUserCollection();
+		private readonly SVNUserCollection _admins = new SVNUserCollection();
 		private string _fullPath = string.Empty;
 		private RepositoryTypes _createRepoType;		
-		private StringBuilder _NewConfFile = new StringBuilder();
+		private readonly StringBuilder _NewConfFile = new StringBuilder();
 		private string _AdminUserName = string.Empty;
 		private string _AdminUserPassword = string.Empty;
         private Hashtable _files = new Hashtable();

@@ -18,10 +18,10 @@ namespace SVNManagerLib
         #region Member Variables
 
         private string _contents = string.Empty;
-        private string _hookPath = string.Empty;
-	    private FileInfo _hookInfo = null;
-	    private bool _isBinary = false;
-        private List<string> _binaryExtensions = new List<string>();
+        private readonly string _hookPath = string.Empty;
+	    private readonly FileInfo _hookInfo;
+	    private bool _isBinary;
+        private readonly List<string> _binaryExtensions = new List<string>();
 
         #endregion
 

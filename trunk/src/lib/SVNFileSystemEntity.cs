@@ -127,11 +127,9 @@ namespace SVNManagerLib
         /// <returns></returns>
         public bool LoadInfo( string pathToEntity )
         {
-			bool retval;
+            _fullPath = pathToEntity;
 
-			_fullPath = pathToEntity;
-
-			retval = LoadEntityInfo();
+			bool retval = LoadEntityInfo();
 
 			return retval;
         }
@@ -142,11 +140,9 @@ namespace SVNManagerLib
         /// <returns></returns>
         public bool LoadProperties( string pathToEntity )
 		{
-			bool retval;
+            _fullPath = pathToEntity;
 
-			_fullPath = pathToEntity;
-
-			retval = LoadEntityProperties();
+			bool retval = LoadEntityProperties();
 
             return retval;
         } 
@@ -157,25 +153,21 @@ namespace SVNManagerLib
 
 		private bool LoadEntityInfo()
 		{
-		    bool retval;
-            string svnCommand;
-            string convPath;
-            string lines;
+		    string lines;
 		    string errors;
-		    string[] parsedLines;
-            StringBuilder arg = new StringBuilder();
+		    StringBuilder arg = new StringBuilder();
 
-            convPath = Common.PathToFileUrl( _fullPath );
+            string convPath = Common.PathToFileUrl( _fullPath );
 
-            svnCommand = Path.Combine( _serverCommandsPath, "svn" );
+            string svnCommand = Path.Combine( _serverCommandsPath, "svn" );
 
             // Start setting up the svn command
             arg.Append( "info " );
             arg.Append( convPath );
 
-            retval = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
+            bool retval = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
 
-		    parsedLines = Common.ParseOutputIntoLines( lines );
+		    string[] parsedLines = Common.ParseOutputIntoLines( lines );
 
             if ( !Equals( parsedLines,null ) )
             {
@@ -185,8 +177,7 @@ namespace SVNManagerLib
                     {
                         try
                         {
-                            string[] data;
-                            data = s.Split( ':' );
+                            string[] data = s.Split( ':' );
 
                             _information.Add( data[0], data[1] );
                         }
@@ -200,26 +191,22 @@ namespace SVNManagerLib
 
 		private bool LoadEntityProperties()
         {
-            bool retval;
-            string svnCommand;
-            string convPath;
-            string lines;
+		    string lines;
 		    string errors;
-            string[] parsedLines;
-            StringBuilder arg = new StringBuilder();
+		    StringBuilder arg = new StringBuilder();
 
-            convPath = Common.PathToFileUrl( _fullPath );
+            string convPath = Common.PathToFileUrl( _fullPath );
 
-            svnCommand = Path.Combine( _serverCommandsPath, "svn" );
+            string svnCommand = Path.Combine( _serverCommandsPath, "svn" );
 
             // Start setting up the svn command
             arg.Append( "proplist " );
 		    arg.Append( "--verbose " );
             arg.Append( convPath );
 
-            retval = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
+            bool retval = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
 
-            parsedLines = Common.ParseOutputIntoLines( lines );
+            string[] parsedLines = Common.ParseOutputIntoLines( lines );
 
             if ( !Equals( parsedLines,null ) )
             {
@@ -229,14 +216,11 @@ namespace SVNManagerLib
                     {
                         try
                         {
-                            string[] data;
-                            data = s.Split( ':' );
+                            string[] data = s.Split( ':' );
 
-                            string key;
-                            key = data[0] + data[1];
+                            string key = data[0] + data[1];
 
-                            string value;
-                            value = data[2];
+                            string value = data[2];
 
                             _properties.Add( key, value );
                         }
