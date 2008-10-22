@@ -86,9 +86,14 @@ namespace SVNManagerLib
         /// </summary>
         public string DumpFilePath;
         /// <summary>
-        /// The destination folder for the dump file.
+        /// The destination folder where the dump file will be loaded into.
         /// </summary>
         public string DestinationPath;
+        /// <summary>
+        /// This is used when the user wants to load the dump file
+        /// into another path other than the reporitory's root path.
+        /// </summary>
+        public string ParentPath;
     }
 
 	/// <summary>
@@ -110,7 +115,7 @@ namespace SVNManagerLib
         private Hashtable _files = new Hashtable();
 	    private string _serverCommandsPath = string.Empty;
         private List<SVNFileSystemEntity> _entities = new List<SVNFileSystemEntity>();
-	    private RepositoryHooks _repoHooks = null;
+	    private RepositoryHooks _repoHooks;
 
 		#endregion
 
@@ -158,10 +163,8 @@ namespace SVNManagerLib
                 {
                     return null;
                 }
-                else
-                {
-                    return _repoHooks.HookFiles;
-                }
+
+                return _repoHooks.HookFiles;
             }
 	    }
 
@@ -414,7 +417,7 @@ namespace SVNManagerLib
 
             if ( Equals( null, _repositoryConfiguration ) )
             {
-                _repositoryConfiguration.RepositoryType = "bdb";
+                if ( _repositoryConfiguration != null ) _repositoryConfiguration.RepositoryType = "bdb";
             }
 
 			return retval;
@@ -435,7 +438,7 @@ namespace SVNManagerLib
 
             if ( Equals( null, _repositoryConfiguration ) )
             {
-                _repositoryConfiguration.RepositoryType = "fsfs";
+                if (_repositoryConfiguration != null) _repositoryConfiguration.RepositoryType = "fsfs";
             }
 
 			return retval;
@@ -586,6 +589,7 @@ namespace SVNManagerLib
             string tmp = directoryName;
 
             pathUrl.Append( _repositoryConfiguration.RepositoryRootDirectory );
+
             if ( !_repositoryConfiguration.RepositoryRootDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ) )
             {
                 pathUrl.Append( Path.DirectorySeparatorChar.ToString() );
@@ -635,6 +639,7 @@ namespace SVNManagerLib
             string tmp = directoryPath;
 
             pathUrl.Append( _repositoryConfiguration.RepositoryRootDirectory );
+
             if ( !_repositoryConfiguration.RepositoryRootDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ) )
             {
                 pathUrl.Append( Path.DirectorySeparatorChar.ToString() );
@@ -644,8 +649,8 @@ namespace SVNManagerLib
             {
                 int pos = tmp.IndexOf( Path.DirectorySeparatorChar.ToString() );
                 tmp = tmp.Substring( pos + 1 );
-
             }
+
             pathUrl.Append( tmp );
 
             url = Common.PathToFileUrl( pathUrl.ToString() );
@@ -681,7 +686,16 @@ namespace SVNManagerLib
 
             string svnCommand = Path.Combine( _serverCommandsPath, "svnadmin" );
 
-            cmdResult = Common.ExecuteSvnCommand(svnCommand, cmdArgs.ToString(), out lines, out errors);
+            cmdArgs.Append( "load " );
+
+            if ( args.ParentPath.Length > 0 )
+            {
+                cmdArgs.Append( "--parent-dir " + args.ParentPath + " " );
+            }
+
+            cmdArgs.Append( args.DestinationPath + " < " + args.DumpFilePath );
+
+            cmdResult = Common.ExecuteSvnCommand( svnCommand, cmdArgs.ToString(), out lines, out errors );
 
             errorMessages = errors;
 
@@ -719,11 +733,17 @@ namespace SVNManagerLib
 
 		private bool CreateRepository( string repoName )
 		{
-			bool retval;
+		    string rootRepoDir = "";
 
-		    string rootRepoDir = Directory.GetParent( _fullPath ).ToString();
+		    try
+		    {
+                rootRepoDir = Directory.GetParent( _fullPath ).ToString();
+		    }
+		    catch
+		    {
+		    }
 
-            string newRepoPath = Common.GetCorrectedPath( rootRepoDir, true ) + repoName;
+		    string newRepoPath = Common.GetCorrectedPath( rootRepoDir, true ) + repoName;
 			string svnCommand;
 			string fileOptions = " --fs-type ";
 			string svnBDB = "bdb";
@@ -755,7 +775,7 @@ namespace SVNManagerLib
 					break;
 			}
 
-			retval = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
+			bool retval = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
 
 			ProcessNewConfFile( newRepoPath );
 

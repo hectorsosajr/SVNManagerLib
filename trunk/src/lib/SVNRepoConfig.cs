@@ -5,7 +5,6 @@
 // Date:			5/7/2005
 //**********************************************************
 
-using System;
 using System.IO;
 
 using Nini.Config;
