@@ -26,6 +26,8 @@ namespace SVNManagerLib
 	    private string _repoMode = string.Empty;
         private string _configFileName = string.Empty;
         private string _configFilePath = string.Empty;
+	    private bool _usersGlobalConfigFile;
+	    private string _globalConfigFilePath = string.Empty;
         private readonly string _defaultConfigFileName = "svnmanagerlib.ini";
 		private IConfigSource _config;
 
@@ -168,6 +170,42 @@ namespace SVNManagerLib
             set
             {
                 _repoMode = value;
+            }
+        }
+
+	    ///<summary>
+	    /// Tells whether or not the server is using a global config file.
+	    ///</summary>
+	    ///<remarks>
+	    /// This is the svnserve.conf file. This is only available on Subversion 1.5 or greater.
+	    /// </remarks>
+	    public bool UsesGlobalConfigFile
+	    {
+            get
+            {
+                return _usersGlobalConfigFile;
+            }
+            set
+            {
+                _usersGlobalConfigFile = value;
+            }
+        }
+
+        ///<summary>
+        /// Stores the path to the global configuration file.
+        ///</summary>
+        ///<remarks>
+        /// This is only available on Subversion 1.5 or greater.
+        /// </remarks>
+        public string GlobalConfigFilePath
+        {
+            get
+            {
+                return _globalConfigFilePath;
+            }
+            set
+            {
+                _globalConfigFilePath = value;
             }
         }
 

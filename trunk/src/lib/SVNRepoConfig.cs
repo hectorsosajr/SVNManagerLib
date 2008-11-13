@@ -259,55 +259,28 @@ namespace SVNManagerLib
 		private void LoadServerConfigs( string RepositoryPath )
 		{
 		    string fullPath = RepositoryPath;
-			
-            //OperatingSystem myOS = Environment.OSVersion;
-			
-            ////Code Checks to see which OS is being used 128 indicates Linux
-            //if( (int)myOS.Platform == 128 )
-            //{				
-            //    if ( !fullPath.EndsWith( "/conf/svnserve.conf" ) )
-            //    {
-            //        _RepositoryRootDirectory = fullPath;
-            //        fullPath += "/conf/svnserve.conf";
-            //    }
-            //    else
-            //    {
-            //        _RepositoryRootDirectory += RepositoryPath.Replace( "conf/svnserve.conf", "" );
+		    string newFullPath;
 
-            //    }				
-            //}
-            //else
-            //{			
-            //    if (!fullPath.EndsWith( "\\conf\\svnserve.conf" ))
-            //    {
-            //        _RepositoryRootDirectory = fullPath;
-            //        fullPath += "\\conf\\svnserve.conf";
-            //    }
-            //    else
-            //    {
-            //        _RepositoryRootDirectory += RepositoryPath.Replace( "conf\\svnserve.conf", string.Empty );
-            //    }				
-            //}
-
-            string confPart = Path.DirectorySeparatorChar + "conf" + Path.DirectorySeparatorChar + "svnserve.conf";
+            string confPart = "conf" + Path.DirectorySeparatorChar + "svnserve.conf";
 
             if ( !fullPath.EndsWith( confPart ) )
             {
                 _RepositoryRootDirectory = fullPath;
-                fullPath = Path.Combine( fullPath, confPart );
+                newFullPath = Path.Combine( fullPath, confPart );
             }
             else
             {
                 _RepositoryRootDirectory += RepositoryPath.Replace( confPart, "" );
-            }	
+                newFullPath = fullPath;
+            }
 
-		    _fullPathToConfFile = fullPath;
+            _fullPathToConfFile = newFullPath;
 
-			IniDocument iniDoc = new IniDocument( fullPath, IniFileType.SambaStyle );
+            IniDocument iniDoc = new IniDocument( newFullPath, IniFileType.SambaStyle );
 
 			_ServerConfig = new IniConfigSource( iniDoc );
 
-			_UserDatabaseFileName = Path.GetDirectoryName( fullPath );
+            _UserDatabaseFileName = Path.GetDirectoryName( newFullPath );
 			
 			try
 			{
