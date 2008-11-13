@@ -139,6 +139,14 @@ namespace SVNManagerLib
             _repoHooks = new RepositoryHooks( _repositoryConfiguration.RepositoryRootDirectory );
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SVNRepository"/> class.
+        /// </summary>
+        public SVNRepository( SVNRepoConfig RepositoryConfiguration )
+        {
+            _repositoryConfiguration = RepositoryConfiguration;
+        }
+
 		#endregion
 
 		#region Properties
@@ -709,9 +717,14 @@ namespace SVNManagerLib
         private void LoadConfig( string RepositoryPath )
         {
             _repositoryConfiguration = new SVNRepoConfig( RepositoryPath );
+            LoadConfig();
+        }
+
+        private void LoadConfig()
+        {
             string rootDir = _repositoryConfiguration.RepositoryRootDirectory;
 
-            GetUsers( RepositoryPath );
+            GetUsers( rootDir );
 
             _files = Common.GetFileList( rootDir, _serverCommandsPath );
 
@@ -743,7 +756,7 @@ namespace SVNManagerLib
 		    {
 		    }
 
-		    string newRepoPath = Common.GetCorrectedPath( rootRepoDir, true ) + repoName;
+		    string newRepoPath = Path.Combine( rootRepoDir, repoName );
 			string svnCommand;
 			string fileOptions = " --fs-type ";
 			string svnBDB = "bdb";
@@ -859,9 +872,9 @@ namespace SVNManagerLib
 			string lineString = string.Empty;
 			string confPath;
 
-            confPath = Common.GetCorrectedPath( newRepoPath, true ) + "conf" + Path.DirectorySeparatorChar;
+            confPath = Path.Combine(newRepoPath, "conf") + Path.DirectorySeparatorChar + "svnserve.conf";
 
-			reader = new StreamReader( confPath + "svnserve.conf" );
+			reader = new StreamReader( confPath );
 
 			try
 			{				
