@@ -51,8 +51,19 @@ namespace SVNManagerLib
 		/// <param name="RepositoryPath">The path to the repository.</param>
 		public SVNRepoConfig( string RepositoryPath )
 		{
-			LoadServerConfigs( RepositoryPath );
+			LoadRepositoryConfigurationSettings( RepositoryPath );
 		}
+
+        ///<summary>
+        ///</summary>
+        ///<param name="GlobalConfigFileInfo"></param>
+        ///<param name="RepositoryPath"></param>
+        public SVNRepoConfig( FileInfo GlobalConfigFileInfo, string RepositoryPath )
+        {
+            _RepositoryRootDirectory = RepositoryPath;
+
+            LoadRepositoryConfigurationSettings( GlobalConfigFileInfo );
+        }
 
 		#endregion
 
@@ -256,7 +267,7 @@ namespace SVNManagerLib
 
 		#region Private Members
 
-		private void LoadServerConfigs( string RepositoryPath )
+		private void LoadRepositoryConfigurationSettings( string RepositoryPath )
 		{
 		    string fullPath = RepositoryPath;
 		    string newFullPath;
@@ -276,7 +287,7 @@ namespace SVNManagerLib
 
             _fullPathToConfFile = newFullPath;
 
-            IniDocument iniDoc = new IniDocument( newFullPath, IniFileType.SambaStyle );
+            var iniDoc = new IniDocument( newFullPath, IniFileType.SambaStyle );
 
 			_ServerConfig = new IniConfigSource( iniDoc );
 
@@ -343,7 +354,76 @@ namespace SVNManagerLib
 
 			_repositoryType = GetRepositoryType();
             _repositoryUUID = GetRepositoryUUID();
-		}
+        }
+
+        private void LoadRepositoryConfigurationSettings( FileInfo globalConfigFileInfo )
+        {
+            var iniDoc = new IniDocument( globalConfigFileInfo.FullName, IniFileType.SambaStyle );
+
+            _ServerConfig = new IniConfigSource( iniDoc );
+
+            try
+            {
+                string fileName = _ServerConfig.Configs["general"].GetString("password-db");
+
+                if (fileName.Length > 0)
+                {
+                    _UserDatabaseFileName = fileName;
+                }
+                else
+                {
+                    _UserDatabaseFileName = "";
+                }
+
+            }
+            catch
+            {
+                _UserDatabaseFileName = "";
+            }
+
+            try
+            {
+                _AnonAcc = _ServerConfig.Configs["general"].GetString( "anon-access" );
+                _AnonymousAccess = ConvertStringToAuth(_AnonAcc);
+            }
+            catch
+            {
+                _AnonAcc = "";
+                _AnonymousAccess = ConvertStringToAuth( _AnonAcc );
+            }
+
+            try
+            {
+                _AuthAcc = _ServerConfig.Configs["general"].GetString( "auth-access" );
+                _AuthorizedAccess = ConvertStringToAuth( _AuthAcc );
+            }
+            catch
+            {
+                _AuthAcc = "";
+                _AuthorizedAccess = ConvertStringToAuth( _AuthAcc );
+            }
+
+            try
+            {
+                _authorizationRulesFile = _ServerConfig.Configs["general"].GetString( "authz-db" );
+            }
+            catch
+            {
+                _authorizationRulesFile = "";
+            }
+
+            try
+            {
+                _repositoryRealm = _ServerConfig.Configs["general"].GetString( "realm" );
+            }
+            catch
+            {
+                _repositoryRealm = "";
+            }
+
+            _repositoryType = GetRepositoryType();
+            _repositoryUUID = GetRepositoryUUID();
+        }
 
 	    private string GetRepositoryType()
 		{
@@ -355,7 +435,7 @@ namespace SVNManagerLib
 
             try
             {
-                StreamReader reader = new StreamReader( typeFile );
+                var reader = new StreamReader( typeFile );
 
 			    try
 			    {
@@ -387,7 +467,7 @@ namespace SVNManagerLib
 
             try
             {
-                StreamReader reader = new StreamReader(uuidFile);
+                var reader = new StreamReader( uuidFile );
 
                 try
                 {

@@ -142,9 +142,18 @@ namespace SVNManagerLib
         /// <summary>
         /// Initializes a new instance of the <see cref="SVNRepository"/> class.
         /// </summary>
-        public SVNRepository( SVNRepoConfig RepositoryConfiguration )
+        public SVNRepository( SVNRepoConfig RepositoryConfiguration, string ServerCommandPath )
         {
+            _serverCommandsPath = ServerCommandPath;
             _repositoryConfiguration = RepositoryConfiguration;
+
+            GetUsers( RepositoryConfiguration.UserDatabaseFileName );
+
+            _files = Common.GetFileList( RepositoryConfiguration.RepositoryRootDirectory, ServerCommandPath );
+
+            LoadFileEntities();
+
+            _repoHooks = new RepositoryHooks( _repositoryConfiguration.RepositoryRootDirectory );
         }
 
 		#endregion

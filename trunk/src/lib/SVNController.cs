@@ -159,7 +159,7 @@ namespace SVNManagerLib
             {
                 foreach( string repoPath in RepositoryPaths )
                 {
-                    DirectoryInfo currRepo = new DirectoryInfo( repoPath );
+                    var currRepo = new DirectoryInfo( repoPath );
                     ProcessRepository( currRepo );
                 }
             }
@@ -169,15 +169,22 @@ namespace SVNManagerLib
 
 		private void ProcessRepository( DirectoryInfo childRepo )
 		{
-		    DirectoryInfo[] repoDirs = childRepo.GetDirectories();
+            if ( _serverConfiguration.UsesGlobalConfigFile )
+            {
+                ProcessRepoConfig( _serverConfiguration.GlobalConfigFilePath, childRepo );
+            }
+            else
+            {
+                DirectoryInfo[] repoDirs = childRepo.GetDirectories();
 
-		    foreach ( DirectoryInfo repoDir in repoDirs )
-			{
-				if ( repoDir.Name == "conf" )
-				{
-					ProcessConfigFiles( repoDir );
-				}
-			}
+                foreach ( DirectoryInfo repoDir in repoDirs )
+                {
+                    if (repoDir.Name == "conf")
+                    {
+                        ProcessConfigFiles(repoDir);
+                    }
+                }
+            }
 		}
 
 	    private void ProcessConfigFiles( DirectoryInfo currRepoDir )
@@ -195,12 +202,24 @@ namespace SVNManagerLib
 
 	    private void ProcessRepoConfig( FileInfo RepoConfig )
 		{
-            SVNRepository currRepo = new SVNRepository(RepoConfig.FullName, _serverConfiguration.CommandRootDirectory);
+            var currRepo = new SVNRepository( RepoConfig.FullName, _serverConfiguration.CommandRootDirectory );
 			currRepo.Name = RepoConfig.Directory.Parent.Name;
 			currRepo.FullPath = RepoConfig.Directory.Parent.FullName;
 
 			_repositoryCollection.Add( currRepo );
 		}
+
+        private void ProcessRepoConfig( string pathToGlobalConfig, DirectoryInfo RepoDir )
+        {
+            var globalConfigDir = new FileInfo( pathToGlobalConfig );
+            var globalRepoConfig = new SVNRepoConfig( globalConfigDir, RepoDir.FullName );
+            var currRepo = new SVNRepository( globalRepoConfig, _serverConfiguration.CommandRootDirectory);
+
+            currRepo.Name = RepoDir.Name;
+            currRepo.FullPath = RepoDir.FullName;
+
+            _repositoryCollection.Add( currRepo );
+        }
 
 	    #endregion
 	}
