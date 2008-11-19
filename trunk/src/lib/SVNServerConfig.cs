@@ -225,9 +225,16 @@ namespace SVNManagerLib
 			{
 				_config.Configs["subversion"].Set( "serverdir", _serverRootDirectory );
                 _config.Configs["subversion"].Set( "commanddir", _commandRootDirectory );
-                _config.Configs["repositories"].Set( "reporoot", _repositoryRootDirectory );
+
+                if ( _usersGlobalConfigFile )
+                {
+                    _config.Configs["subversion"].Set( "globalconfigdir", _globalConfigFilePath );
+                }
+
+			    _config.Configs["repositories"].Set( "reporoot", _repositoryRootDirectory );
                 _config.Configs["repositories"].Set( "mode", _repoMode );
 				_config.Save();
+
 				retval = true;
 			}
             catch ( NullReferenceException )
@@ -242,16 +249,23 @@ namespace SVNManagerLib
                 {
                     FileInfo fi;
                     fi = new FileInfo( System.Reflection.Assembly.GetExecutingAssembly().FullName );
-                    if (fi.DirectoryName != null) path = Path.Combine( fi.DirectoryName, _defaultConfigFileName );
+                    if ( fi.DirectoryName != null ) path = Path.Combine( fi.DirectoryName, _defaultConfigFileName );
                 }
 
-                StreamWriter configWriter = new StreamWriter(path);
+                var configWriter = new StreamWriter(path);
 
-                configWriter.WriteLine( "[subversion]");
+                configWriter.WriteLine( "[subversion]" );
                 configWriter.WriteLine( "; This is the root directory for the Subversion installation." );
                 configWriter.WriteLine( "serverdir = " + _serverRootDirectory );
                 configWriter.WriteLine( "; This is the actual directory where the command line executables are." );
                 configWriter.WriteLine( "commanddir = " + _commandRootDirectory );
+
+                if ( _usersGlobalConfigFile )
+                {
+                    configWriter.WriteLine( "; This is the location of the global svnserve.conf file." );
+                    configWriter.WriteLine( "globalconfigdir = " + _globalConfigFilePath );
+                }
+
                 configWriter.WriteLine( "[repositories]" );
                 configWriter.WriteLine( "; This is a flag to tell what mode the repositories are setup." );
                 configWriter.WriteLine( "; root = all repositories are under one directory" );
@@ -281,7 +295,17 @@ namespace SVNManagerLib
             _config = new IniConfigSource( _defaultConfigFileName );
             
 			_serverRootDirectory =  _config.Configs["subversion"].GetString( "serverdir" );
-			_commandRootDirectory = _config.Configs["subversion"].GetString( "commanddir" );
+            _commandRootDirectory = _config.Configs["subversion"].GetString( "commanddir" );
+            _globalConfigFilePath = _config.Configs["subversion"].GetString( "globalconfigdir" );
+
+            if ( !Equals( _globalConfigFilePath, null ) )
+            {
+                if ( _globalConfigFilePath.Length > 0 )
+                {
+                    _usersGlobalConfigFile = true;
+                }
+            }
+
             _repositoryRootDirectory = _config.Configs["repositories"].GetString( "reporoot" );
             _repoMode = _config.Configs["repositories"].GetString( "mode" );
 		    _configFileName = _defaultConfigFileName;
@@ -289,11 +313,21 @@ namespace SVNManagerLib
 
 		private void LoadServerConfiguration( string configFileName )
 		{
-            _config = new IniConfigSource(configFileName);
+            _config = new IniConfigSource( configFileName );
 
             _serverRootDirectory = _config.Configs["subversion"].GetString( "serverdir" );
             _commandRootDirectory = _config.Configs["subversion"].GetString( "commanddir" );
-            _repositoryRootDirectory = _config.Configs["repositories"].GetString( "reporoot" );
+            _globalConfigFilePath = _config.Configs["subversion"].GetString( "globalconfigdir" );
+
+            if ( !Equals( _globalConfigFilePath, null ) )
+            {
+                if ( _globalConfigFilePath.Length > 0 )
+                {
+                    _usersGlobalConfigFile = true;
+                }
+            }
+
+		    _repositoryRootDirectory = _config.Configs["repositories"].GetString( "reporoot" );
             _repoMode = _config.Configs["repositories"].GetString( "mode" );
 		    _configFileName = configFileName;
 		}

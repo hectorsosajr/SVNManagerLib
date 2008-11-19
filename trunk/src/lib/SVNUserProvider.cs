@@ -6,6 +6,7 @@
 //**********************************************************
 
 using System;
+using System.IO;
 using Nini.Config;
 
 namespace SVNManagerLib
@@ -22,6 +23,7 @@ namespace SVNManagerLib
 		private string _Password;
 		private string _UserName;
 		private string _RepositoryPath;
+	    private readonly string _UserDatabaseFileName;
 
 	    #endregion
 
@@ -55,7 +57,19 @@ namespace SVNManagerLib
 			_UserName = UserName;
 			_Password = Password;
 			_RepositoryPath = RepositoryPath;
-		}
+        }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="UserName">The user's account name.</param>
+        ///<param name="Password">The user's account password</param>
+        ///<param name="UserDatabaseFileName"></param>
+        public SVNUserProvider( string UserName, string Password, FileInfo UserDatabaseFileName )
+        {
+            _UserName = UserName;
+            _Password = Password;
+            _UserDatabaseFileName = UserDatabaseFileName.FullName;
+        }
 
 		#endregion
 
@@ -118,9 +132,16 @@ namespace SVNManagerLib
 		{
 			bool result;
 
-			result = InsertUpdateUser();
+            if ( !Equals( _UserDatabaseFileName, null ) )
+            {
+                result = InsertUpdateUser( _UserDatabaseFileName );
+            }
+            else
+            {
+                result = InsertUpdateUser();
+            }
 
-			return result;
+		    return result;
 		}
 
 		/// <summary>
@@ -129,9 +150,16 @@ namespace SVNManagerLib
         /// <returns>Returns whether or not the command was successful.</returns>
 		public bool Add()
 		{
-			bool result;
+            bool result;
 
-			result = InsertUpdateUser();
+            if (!Equals(_UserDatabaseFileName, null))
+            {
+                result = InsertUpdateUser(_UserDatabaseFileName);
+            }
+            else
+            {
+                result = InsertUpdateUser();
+            }
 
 			return result;
 		}
@@ -144,9 +172,16 @@ namespace SVNManagerLib
 		{
 			bool result;
 
-			result = DeleteUser();
+            if ( !Equals( _UserDatabaseFileName, null ) )
+            {
+                result = DeleteUser( _UserDatabaseFileName );
+            }
+            else
+            {
+                result = DeleteUser();
+            }
 
-			return result;
+		    return result;
 		}
 
 		/// <summary>
@@ -181,37 +216,43 @@ namespace SVNManagerLib
 		
 		private bool InsertUpdateUser()
 		{
-			SVNRepoConfig repoConfig = new SVNRepoConfig( _RepositoryPath );
-			string userFile;
-			IniConfigSource userConfig;
-			bool result;
+			var repoConfig = new SVNRepoConfig( _RepositoryPath );
 
-			userFile = repoConfig.UserDatabaseFileName;
-			userConfig = new IniConfigSource( userFile );
+		    string userFile = repoConfig.UserDatabaseFileName;
 
-			userConfig.Configs["users"].Set( _UserName, _Password );
-
-			try
-			{
-				userConfig.Save();
-				result = true;
-			}
-			catch ( Exception )
-			{
-			    result = false;
-			}
+		    bool result = InsertUpdateUser( userFile );
 
 		    return result;
 		}
+
+        private bool InsertUpdateUser( string userFile )
+        {
+            IniConfigSource userConfig;
+            bool result;
+
+            userConfig = new IniConfigSource( userFile );
+
+            userConfig.Configs["users"].Set( _UserName, _Password );
+
+            try
+            {
+                userConfig.Save();
+                result = true;
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+
+            return result;
+        }
 		
 		private bool InsertUpdateAdminUser()
 		{
-			string userFile;
-			IniConfigSource userConfig;
-			bool result;
+		    bool result;
 
-			userFile = Common.GetCorrectedPath( _RepositoryPath, true ) + "administrators.txt";
-			userConfig = new IniConfigSource( userFile );
+			string userFile = Common.GetCorrectedPath( _RepositoryPath, true ) + "administrators.txt";
+			var userConfig = new IniConfigSource( userFile );
 
 			userConfig.Configs["users"].Set( _UserName, _Password );
 
@@ -230,28 +271,36 @@ namespace SVNManagerLib
 		
 		private bool DeleteUser()
 		{
-			SVNRepoConfig repoConfig = new SVNRepoConfig( _RepositoryPath );
-			string userFile;
-			IniConfigSource userConfig;
-			bool result;
+			var repoConfig = new SVNRepoConfig( _RepositoryPath );
+		    bool result;
 
-			userFile = repoConfig.UserDatabaseFileName;
-			userConfig = new IniConfigSource( userFile );
+			string userFile = repoConfig.UserDatabaseFileName;
 
-			userConfig.Configs["users"].Remove( _UserName );
-
-			try
-			{
-				userConfig.Save();
-				result = true;
-			}
-			catch ( Exception )
-			{
-			    result = false;
-			}
+		    result = DeleteUser( userFile );
 
 		    return result;
-		}		
+		}
+		
+        private bool DeleteUser( string userFile )
+        {
+            var userConfig = new IniConfigSource( userFile );
+
+            userConfig.Configs["users"].Remove( _UserName );
+
+            bool result;
+
+            try
+            {
+                userConfig.Save();
+                result = true;
+            }
+            catch ( Exception )
+            {
+                result = false;
+            }
+
+            return result;
+        }
 		
 		private bool DeleteAdminUser()
 		{

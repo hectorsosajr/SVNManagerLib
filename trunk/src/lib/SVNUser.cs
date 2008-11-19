@@ -6,6 +6,7 @@
 //**********************************************************
 
 using System;
+using System.IO;
 
 namespace SVNManagerLib
 {
@@ -16,14 +17,14 @@ namespace SVNManagerLib
 	{
 		#region Member Variables
 
-		private bool _IsDeleted					= false;
-		private bool _IsDirty					= false;
-		private bool _IsNew						= false;
+		private bool _IsDeleted;
+		private bool _IsDirty;
+		private bool _IsNew;
 		private string _Password				= string.Empty;
 		private string _UserName				= string.Empty;
-		private string _ParentRepositoryPath	= string.Empty;		
-		private string _UserDatabasePath		= string.Empty;
-		private bool _IsAdmin					= false;
+		private string _ParentRepositoryPath	= string.Empty;
+        private bool _IsAdmin;
+        private FileInfo _UserDatabaseFileName;
 
 		#endregion
 
@@ -43,7 +44,7 @@ namespace SVNManagerLib
         /// <param name="UserName">Name of the user.</param>
         /// <param name="Password">The password.</param>
         /// <param name="ParentRepositoryPath">The parent repository path.</param>
-		public SVNUser(string UserName, string Password, string ParentRepositoryPath)
+		public SVNUser( string UserName, string Password, string ParentRepositoryPath )
 		{
 			_UserName = UserName;
 			_Password = Password;
@@ -57,13 +58,25 @@ namespace SVNManagerLib
         /// <param name="Password">The password.</param>
         /// <param name="ParentRepositoryPath">The parent repository path.</param>
         /// <param name="IsAdmin">if set to <c>true</c> [is admin].</param>
-		public SVNUser(string UserName, string Password, string ParentRepositoryPath, bool IsAdmin)
+		public SVNUser( string UserName, string Password, string ParentRepositoryPath, bool IsAdmin )
 		{
 			_UserName = UserName;
 			_Password = Password;
 			_ParentRepositoryPath = ParentRepositoryPath;
 			_IsAdmin = IsAdmin;
 		}
+
+        ///<summary>
+        ///</summary>
+        ///<param name="UserName"></param>
+        ///<param name="Password"></param>
+        ///<param name="UserDatabaseFileName"></param>
+        public SVNUser( string UserName, string Password, FileInfo UserDatabaseFileName )
+        {
+            _UserName = UserName;
+            _Password = Password;
+            _UserDatabaseFileName = UserDatabaseFileName;
+        }
 
 		#endregion
 
@@ -195,11 +208,11 @@ namespace SVNManagerLib
 		{
 			get
 			{
-				return _UserDatabasePath;
+                return _UserDatabaseFileName.FullName;
 			}
 			set
 			{
-				_UserDatabasePath = value;
+                _UserDatabaseFileName  = new FileInfo( value );
 				_IsDirty = true;
 			}
 		}
@@ -304,9 +317,16 @@ namespace SVNManagerLib
 			bool retVal;
 			SVNUserProvider userData;
 
-			userData = new SVNUserProvider( _UserName, _Password, _ParentRepositoryPath );
+            if ( !Equals( _UserDatabaseFileName, null ) )
+            {
+                userData = new SVNUserProvider( _UserName, _Password, _UserDatabaseFileName );
+            }
+            else
+            {
+                userData = new SVNUserProvider( _UserName, _Password, _ParentRepositoryPath );
+            }
 
-			try
+		    try
 			{
 				userData.Save();
 
@@ -323,9 +343,16 @@ namespace SVNManagerLib
 		private bool DeleteUser()
 		{
 			bool retVal;
-			SVNUserProvider userData;
+            SVNUserProvider userData;
 
-			userData = new SVNUserProvider( _UserName, _Password, _ParentRepositoryPath );
+            if ( !Equals( _UserDatabaseFileName, null ) )
+            {
+                userData = new SVNUserProvider( _UserName, _Password, _UserDatabaseFileName );
+            }
+            else
+            {
+                userData = new SVNUserProvider( _UserName, _Password, _ParentRepositoryPath );
+            }
 
 			try
 			{
