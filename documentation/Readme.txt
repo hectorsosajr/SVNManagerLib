@@ -6,7 +6,7 @@ Please feel free to add your suggestions and feature requests on the forums or e
 
 Get the latest source code here:
 SourceForge URL: https://sourceforge.net/projects/svnmanagerlib/
-CodePlex URL: https://tfs04.codeplex.com/svnmanagerlib
+CodePlex URL: https://svnmanagerlib.svn.codeplex.com/svn
 
 
 Hector Sosa, Jr
