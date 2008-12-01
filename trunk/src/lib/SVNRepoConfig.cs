@@ -210,8 +210,8 @@ namespace SVNManagerLib
             string anon = _AnonymousAccess.ToString().ToLower();
             string auth = _AuthorizedAccess.ToString().ToLower();
 
-            IniDocument iniDoc = new IniDocument( _fullPathToConfFile, IniFileType.SambaStyle );
-            IniConfigSource source = new IniConfigSource(iniDoc);
+            var iniDoc = new IniDocument( _fullPathToConfFile, IniFileType.SambaStyle );
+            var source = new IniConfigSource(iniDoc);
 
             source.Configs["general"].Set( "anon-access", anon );
             source.Configs["general"].Set( "auth-access", auth );
@@ -364,7 +364,17 @@ namespace SVNManagerLib
 
             try
             {
-                string fileName = _ServerConfig.Configs["general"].GetString("password-db");
+                string fileName = _ServerConfig.Configs["general"].GetString( "password-db" );
+
+                bool passwordDbExists = File.Exists( fileName );
+
+                if ( !passwordDbExists )
+                {
+// ReSharper disable PossibleNullReferenceException
+                    string configPath = globalConfigFileInfo.Directory.ToString();
+// ReSharper restore PossibleNullReferenceException
+                    fileName = Path.Combine( configPath, fileName );
+                }
 
                 if (fileName.Length > 0)
                 {

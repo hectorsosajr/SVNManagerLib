@@ -59,14 +59,14 @@ namespace SVNManagerLib
         private void LoadHooks()
         {
             _hookPath = Path.Combine( _repoPath, "hooks" );
-            DirectoryInfo hookDir = new DirectoryInfo( _hookPath );
+            var hookDir = new DirectoryInfo( _hookPath );
             FileInfo[] hooks = hookDir.GetFiles();
 
             foreach ( FileInfo fi in hooks )
             {
                 if ( !Equals( fi, null ) )
                 {
-                    SVNHook newHook = new SVNHook( fi.FullName );
+                    var newHook = new SVNHook( fi.FullName );
 
                     _hooks.Add( newHook );
                 }

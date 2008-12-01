@@ -99,20 +99,22 @@ namespace SVNManagerLib
 	/// <summary>
 	/// This represents a single repository in the current Subversion server.
 	/// </summary>
+    [ObsoleteAttribute("SVNRepository has been deprecated. Please use classes that inherit from SubversionRepositoryBase instead.")]
 	public class SVNRepository
 	{
 		#region Member Variables
 
 		private SVNRepoConfig _repositoryConfiguration;
 		private string _name = string.Empty;
-		private readonly SVNUserCollection _users = new SVNUserCollection();
-		private readonly SVNUserCollection _admins = new SVNUserCollection();
+		private SVNUserCollection _users = new SVNUserCollection();
+	    private bool _usersLoaded;
 		private string _fullPath = string.Empty;
 		private RepositoryTypes _createRepoType;		
 		private readonly StringBuilder _NewConfFile = new StringBuilder();
-		private string _AdminUserName = string.Empty;
-		private string _AdminUserPassword = string.Empty;
+		private string _firstUserName = string.Empty;
+		private string _firstUserPassword = string.Empty;
         private Hashtable _files = new Hashtable();
+	    private bool _filesLoaded;
 	    private string _serverCommandsPath = string.Empty;
         private List<SVNFileSystemEntity> _entities = new List<SVNFileSystemEntity>();
 	    private RepositoryHooks _repoHooks;
@@ -135,8 +137,8 @@ namespace SVNManagerLib
 		{
             _serverCommandsPath = ServerCommandPath;
             _fullPath = RepositoryPath;
+            _usersLoaded = false;
             LoadConfig( RepositoryPath );
-            _repoHooks = new RepositoryHooks( _repositoryConfiguration.RepositoryRootDirectory );
         }
 
         /// <summary>
@@ -146,14 +148,17 @@ namespace SVNManagerLib
         {
             _serverCommandsPath = ServerCommandPath;
             _repositoryConfiguration = RepositoryConfiguration;
+            _usersLoaded = false;
 
-            GetUsers( RepositoryConfiguration.UserDatabaseFileName );
+            //LoadConfig( RepositoryConfiguration.RepositoryRootDirectory );
 
-            _files = Common.GetFileList( RepositoryConfiguration.RepositoryRootDirectory, ServerCommandPath );
+            //GetUsers( RepositoryConfiguration.UserDatabaseFileName );
 
-            LoadFileEntities();
+            //_files = Common.GetFileList( RepositoryConfiguration.RepositoryRootDirectory, ServerCommandPath );
 
-            _repoHooks = new RepositoryHooks( _repositoryConfiguration.RepositoryRootDirectory );
+            //LoadFileEntities();
+
+            //_repoHooks = new RepositoryHooks( _repositoryConfiguration.RepositoryRootDirectory );
         }
 
 		#endregion
@@ -272,21 +277,14 @@ namespace SVNManagerLib
 		{
 			get
 			{
+                if ( !_usersLoaded )
+                {
+                    GetUsers( _repositoryConfiguration.RepositoryRootDirectory );
+                    _usersLoaded = true;
+                }
 				return _users;
 			}
 		}
-
-		/// <summary>
-		/// A list of <see cref="SVNUser"/> that are associated with
-		/// this repository and have administrative rights.
-		/// </summary>
-		public SVNUserCollection Administrators
-		{
-			get
-			{
-				return _admins;
-			}
-        }
 
         /// <summary>
         /// Gets or sets the repository file entities.
@@ -363,6 +361,12 @@ namespace SVNManagerLib
         {
             get
             {
+                if ( !_filesLoaded )
+                {
+                    LoadFiles();
+                    _filesLoaded = true;
+                }
+
                 return _files;
             }
         }
@@ -391,11 +395,11 @@ namespace SVNManagerLib
 	    {
 	        get
 	        {
-	            return _AdminUserName;
+	            return _firstUserName;
 	        }
             set
             {
-                _AdminUserName = value;
+                _firstUserName = value;
             }
 	    }
 
@@ -407,11 +411,11 @@ namespace SVNManagerLib
 	    {
 	        get
 	        {
-	            return _AdminUserPassword;
+	            return _firstUserPassword;
 	        }
             set
             {
-                _AdminUserPassword = value;
+                _firstUserPassword = value;
             }
 	    }
 
@@ -455,7 +459,7 @@ namespace SVNManagerLib
 
             if ( Equals( null, _repositoryConfiguration ) )
             {
-                if (_repositoryConfiguration != null) _repositoryConfiguration.RepositoryType = "fsfs";
+                if ( _repositoryConfiguration != null ) _repositoryConfiguration.RepositoryType = "fsfs";
             }
 
 			return retval;
@@ -545,7 +549,7 @@ namespace SVNManagerLib
 			bool cmdResult;
             string lines;
 		    string errors;
-			StringBuilder arg = new StringBuilder();
+			var arg = new StringBuilder();
 
 			arg.Append( "hotcopy " );
 			arg.Append( _fullPath );
@@ -600,8 +604,8 @@ namespace SVNManagerLib
             bool cmdResult;
             string lines;
             string errors;
-            StringBuilder args = new StringBuilder();
-            StringBuilder pathUrl = new StringBuilder();
+            var args = new StringBuilder();
+            var pathUrl = new StringBuilder();
             string url;
             string tmp = directoryName;
 
@@ -650,8 +654,8 @@ namespace SVNManagerLib
             bool cmdResult;
             string lines;
             string errors;
-            StringBuilder args = new StringBuilder();
-            StringBuilder pathUrl = new StringBuilder();
+            var args = new StringBuilder();
+            var pathUrl = new StringBuilder();
             string url;
             string tmp = directoryPath;
 
@@ -696,7 +700,7 @@ namespace SVNManagerLib
         /// <returns></returns>
         public bool LoadDumpFile( LoadDumpFileArgs args, out string errorMessages )
         {
-            StringBuilder cmdArgs = new StringBuilder();
+            var cmdArgs = new StringBuilder();
             bool cmdResult;
             string lines;
             string errors;
@@ -719,17 +723,10 @@ namespace SVNManagerLib
             return cmdResult;
         }
 
-		#endregion
-
-		#region Private Members
-
-        private void LoadConfig( string RepositoryPath )
-        {
-            _repositoryConfiguration = new SVNRepoConfig( RepositoryPath );
-            LoadConfig();
-        }
-
-        private void LoadConfig()
+        /// <summary>
+        /// Loads the repository filesystem entities.
+        /// </summary>
+        public void LoadRepositoryEntities()
         {
             string rootDir = _repositoryConfiguration.RepositoryRootDirectory;
 
@@ -738,6 +735,17 @@ namespace SVNManagerLib
             _files = Common.GetFileList( rootDir, _serverCommandsPath );
 
             LoadFileEntities();
+
+            _repoHooks = new RepositoryHooks( rootDir );
+        }
+
+		#endregion
+
+		#region Private Members
+
+        private void LoadConfig( string RepositoryPath )
+        {
+            _repositoryConfiguration = new SVNRepoConfig( RepositoryPath );
         }
 
         private void LoadFileEntities()
@@ -747,10 +755,17 @@ namespace SVNManagerLib
                 string fileName = pkey.ToString();
                 string filePath = _files[pkey].ToString();
 
-                SVNFileSystemEntity entity = new SVNFileSystemEntity( _serverCommandsPath, filePath, fileName );
+                var entity = new SVNFileSystemEntity( _serverCommandsPath, filePath, fileName );
 
                 _entities.Add( entity );
             }
+        }
+
+        private void LoadFiles()
+        {
+            string rootDir = _repositoryConfiguration.RepositoryRootDirectory;
+
+            _files = Common.GetFileList( rootDir, _serverCommandsPath );
         }
 
 		private bool CreateRepository( string repoName )
@@ -772,7 +787,7 @@ namespace SVNManagerLib
 			string svnFSFS = "fsfs";
             string lines;
 		    string errors;
-			StringBuilder arg = new StringBuilder();			
+			var arg = new StringBuilder();			
 
             svnCommand = Path.Combine( _serverCommandsPath, "svnadmin" );
 
@@ -808,7 +823,7 @@ namespace SVNManagerLib
 
 		private void GetUsers( string RepositoryPath  )
 		{
-		    FileInfo repo = new FileInfo( RepositoryPath );
+		    var repo = new FileInfo( RepositoryPath );
 
 		    if ( _repositoryConfiguration.UserDatabaseFileName.Length > 0 )
             {
@@ -817,11 +832,11 @@ namespace SVNManagerLib
 
                 Common.GetCorrectedPath( root, false );
 
-                string userDbFullPath;
-                userDbFullPath = _repositoryConfiguration.UserDatabaseFileName;
+                string userDbFullPath = _repositoryConfiguration.UserDatabaseFileName;
 
                 if ( userDbFullPath != "" )
                 {
+                    _users = new SVNUserCollection();
                     StreamReader userRead;
                     userRead = File.OpenText( userDbFullPath );
 
@@ -944,7 +959,7 @@ namespace SVNManagerLib
 			writer = new StreamWriter( confPath + "password.txt" );
 
 			userfile.Append( "[users]" + Environment.NewLine );
-			userfile.Append( _AdminUserName + " = " + _AdminUserPassword );
+			userfile.Append( _firstUserName + " = " + _firstUserPassword );
 
 			writer.Write( userfile.ToString() );
 			writer.Close();
