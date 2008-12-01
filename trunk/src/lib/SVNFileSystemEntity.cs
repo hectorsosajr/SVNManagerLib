@@ -155,7 +155,7 @@ namespace SVNManagerLib
 		{
 		    string lines;
 		    string errors;
-		    StringBuilder arg = new StringBuilder();
+		    var arg = new StringBuilder();
 
             string convPath = Common.PathToFileUrl( _fullPath );
 
@@ -193,7 +193,7 @@ namespace SVNManagerLib
         {
 		    string lines;
 		    string errors;
-		    StringBuilder arg = new StringBuilder();
+		    var arg = new StringBuilder();
 
             string convPath = Common.PathToFileUrl( _fullPath );
 

@@ -109,7 +109,7 @@ namespace SVNManagerLib
             string output = string.Empty;
             string errorLines = string.Empty;
             Process svnCommand = null;
-            ProcessStartInfo psi = new ProcessStartInfo( command );
+            var psi = new ProcessStartInfo( command );
 
             psi.RedirectStandardOutput = true;
             psi.RedirectStandardError = true;
@@ -235,7 +235,7 @@ namespace SVNManagerLib
             bool cmdResult;
             string lines;
             string errors;
-            Hashtable fileList = new Hashtable();
+            var fileList = new Hashtable();
             string parsedDir;
             string fullCmdPath = Path.Combine( serverCmdPath, "svn" );
 
@@ -245,18 +245,16 @@ namespace SVNManagerLib
 
             if ( cmdResult )
             {
-                string[] files;
-                files = ParseOutputIntoLines( lines );
+                string[] files = ParseOutputIntoLines( lines );
 
-                string fullPath;
-                fullPath = currentDirectory;
+                string fullPath = currentDirectory;
 
                 if ( !fullPath.EndsWith( Path.DirectorySeparatorChar.ToString() ) )
                 {
                     fullPath += Path.DirectorySeparatorChar.ToString();
                 }
 
-                if (files != null)
+                if ( files != null )
                 {
                     foreach ( string file in files )
                     {
@@ -317,7 +315,7 @@ namespace SVNManagerLib
 
             try
             {
-                fileURI = new UriBuilder(pathToConvert);
+                fileURI = new UriBuilder( pathToConvert );
             }
             catch( UriFormatException )
             {}

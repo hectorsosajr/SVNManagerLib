@@ -1,27 +1,26 @@
-//**********************************************************
+﻿//**********************************************************
 // Project Name:	SVNManagerLib.csproj
-// File Name:		SVNController.cs
+// File Name:		SubversionServerController.cs
 // Author:			Hector Sosa, Jr
-// Date:			5/7/2005
+// Date:			11/30/2008
 //**********************************************************
 
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 
 namespace SVNManagerLib
 {
-	/// <summary>
-	/// This class controls actions in SVNManagerLib. This is the top
+    /// <summary>
+    /// This class controls actions in SVNManagerLib. This is the top
     /// level class/object in this namespace.
-	/// </summary>
-	[ObsoleteAttribute("SVNController has been deprecated. Please use SubversionServerController instead.")]
-    public class SVNController
-	{
+    /// </summary>
+    public class SubversionServerController
+    {
 		#region Member Variables
 
 		private SVNServerConfig _serverConfiguration;
-		private Repositories _repositoryCollection = new Repositories();
+        private List<ISubversionRepository> _repositoryCollection = new List<ISubversionRepository>();
         private SVNUserCollection _adminUsers = new SVNUserCollection();
 
 		#endregion
@@ -29,12 +28,12 @@ namespace SVNManagerLib
 		#region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SVNController"/> class.
+        /// Initializes a new instance of the <see cref="SubversionServerController"/> class.
         /// </summary>
         /// <param name="serverRootPath">The server root path.</param>
         /// <param name="severCommandPath">The sever command path.</param>
         /// <param name="serverRepositoriesPath">The server repositories path.</param>
-        public SVNController( string serverRootPath, string severCommandPath, string serverRepositoriesPath )
+        public SubversionServerController ( string serverRootPath, string severCommandPath, string serverRepositoriesPath )
         {
             _serverConfiguration = new SVNServerConfig( serverRootPath );
             _serverConfiguration.CommandRootDirectory = severCommandPath;
@@ -44,22 +43,22 @@ namespace SVNManagerLib
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SVNController"/> class
+        /// Initializes a new instance of the <see cref="SubversionServerController"/> class
         /// using a <see cref="SVNServerConfig"/> object.
         /// </summary>
         /// <param name="config">The configuration object for the server.</param>
-        public SVNController ( SVNServerConfig config )
+        public SubversionServerController ( SVNServerConfig config )
         {
             _serverConfiguration = config;
             LoadRepositories();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SVNController"/> class.
+        /// Initializes a new instance of the <see cref="SubversionServerController"/> class.
         /// </summary>
         /// <param name="RepositoryPaths">A list of repository paths.</param>
         /// <param name="CommandPath">The command path to the Subversion command-line utilities.</param>
-        public SVNController( List<string> RepositoryPaths, string CommandPath )
+        public SubversionServerController ( IEnumerable<string> RepositoryPaths, string CommandPath )
         {
             _serverConfiguration = new SVNServerConfig();
             _serverConfiguration.CommandRootDirectory = CommandPath;
@@ -89,7 +88,7 @@ namespace SVNManagerLib
 		/// Holds a collection of SVNRepsitory objects, one
         /// for each repository in this server.
 		/// </summary>
-		public Repositories RepositoryCollection
+        public List<ISubversionRepository> RepositoryCollection
 		{
 			get
 			{
@@ -135,18 +134,18 @@ namespace SVNManagerLib
 
                     // Get an array of DirectoryInfo objects. These objects represent
                     // the roots for each repository. One root directory is a repository.
-                    if (rootRepoInfo.Exists)
+                    if ( rootRepoInfo.Exists )
                     {
                         DirectoryInfo[] childrenRepo = rootRepoInfo.GetDirectories();
 
-                        foreach (DirectoryInfo childRepo in childrenRepo)
+                        foreach ( DirectoryInfo childRepo in childrenRepo )
                         {
-                            ProcessRepository(childRepo);
+                            ProcessRepository( childRepo );
                         }
                     }
                     else
                     {
-                        throw new RepositoryRootDirectoryDoesNotExistException(rootRepoInfo.Name);
+                        throw new RepositoryRootDirectoryDoesNotExistException( rootRepoInfo.Name );
                     }
                 }
                 catch ( ArgumentException )
@@ -154,7 +153,7 @@ namespace SVNManagerLib
 		    }
 		}
 
-        private void LoadRepositories( List<string> RepositoryPaths )
+        private void LoadRepositories( IEnumerable<string> RepositoryPaths )
         {
             try
             {
@@ -180,7 +179,7 @@ namespace SVNManagerLib
 
                 foreach ( DirectoryInfo repoDir in repoDirs )
                 {
-                    if (repoDir.Name == "conf")
+                    if ( repoDir.Name == "conf" )
                     {
                         ProcessConfigFiles( repoDir );
                     }
@@ -203,25 +202,29 @@ namespace SVNManagerLib
 
 	    private void ProcessRepoConfig( FileInfo RepoConfig )
 		{
-            var currRepo = new SVNRepository( RepoConfig.FullName, _serverConfiguration.CommandRootDirectory );
-			currRepo.Name = RepoConfig.Directory.Parent.Name;
-			currRepo.FullPath = RepoConfig.Directory.Parent.FullName;
+            var currRepo = new SvnServeRepository( RepoConfig.FullName, _serverConfiguration.CommandRootDirectory )
+                               {
+                                   Name = RepoConfig.Directory.Parent.Name,
+                                   FullPath = RepoConfig.Directory.Parent.FullName
+                               };
 
-			_repositoryCollection.Add( currRepo );
+	        _repositoryCollection.Add( currRepo );
 		}
 
-        private void ProcessRepoConfig( string pathToGlobalConfig, DirectoryInfo RepoDir )
+        private void ProcessRepoConfig( string pathToGlobalConfig, FileSystemInfo RepoDir )
         {
             var globalConfigDir = new FileInfo( pathToGlobalConfig );
             var globalRepoConfig = new SVNRepoConfig( globalConfigDir, RepoDir.FullName );
-            var currRepo = new SVNRepository( globalRepoConfig, _serverConfiguration.CommandRootDirectory );
-
-            currRepo.Name = RepoDir.Name;
-            currRepo.FullPath = RepoDir.FullName;
+            var currRepo = new SvnServeRepository( globalRepoConfig, _serverConfiguration.CommandRootDirectory )
+                               {
+                                   Name = RepoDir.Name,
+                                   FullPath = RepoDir.FullName,
+                                   IsUsingGlobalConfigFile = true
+                               };
 
             _repositoryCollection.Add( currRepo );
         }
 
 	    #endregion
-	}
+    }
 }

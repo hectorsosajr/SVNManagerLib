@@ -111,6 +111,7 @@ namespace SVNManagerLib
             _binaryExtensions.Add("so");
             _binaryExtensions.Add("doc");
             _binaryExtensions.Add("rtf");
+            _binaryExtensions.Add("wpd");
             _binaryExtensions.Add("xls");
             _binaryExtensions.Add("ppt");
             _binaryExtensions.Add("pdb");
@@ -122,6 +123,10 @@ namespace SVNManagerLib
             _binaryExtensions.Add("aac");
             _binaryExtensions.Add("tif");
             _binaryExtensions.Add("tiff");
+            _binaryExtensions.Add("flv");
+            _binaryExtensions.Add("mvk");
+            _binaryExtensions.Add("mdb");
+            _binaryExtensions.Add("mdf");
         }
 
         private void LoadContents()
@@ -130,7 +135,7 @@ namespace SVNManagerLib
 
             if ( !_binaryExtensions.Contains( ext ) )
             {
-                StreamReader sr = new StreamReader( _hookPath );
+                var sr = new StreamReader( _hookPath );
                 _contents = sr.ReadToEnd();
             }
             else

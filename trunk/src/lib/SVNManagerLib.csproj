@@ -18,8 +18,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace>SVNManagerLib</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -116,16 +115,21 @@
     <Compile Include="Common.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ISubversionRepository.cs" />
     <Compile Include="Repositories.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RepositoryHooks.cs" />
+    <Compile Include="RepositoryRootDirectoryDoesNotExistException.cs" />
+    <Compile Include="SubversionRepositoryBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SubversionServerController.cs" />
     <Compile Include="SVNController.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SVNFileSystemEntity.cs" />
     <Compile Include="SVNHook.cs" />
-    <Compile Include="SVNLazyLoadController.cs" />
     <Compile Include="SVNProperties.cs" />
     <Compile Include="SVNRepoConfig.cs">
       <SubType>Code</SubType>
@@ -135,6 +139,9 @@
     </Compile>
     <Compile Include="SVNServerConfig.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SvnServeRepository.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="SVNUser.cs">
       <SubType>Code</SubType>
