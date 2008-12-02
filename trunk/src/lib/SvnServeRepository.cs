@@ -12,7 +12,7 @@ using System.Text;
 namespace SVNManagerLib
 {
     /// <summary>
-    /// Represents are repository managed by svnserve.exe
+    /// Represents a single repository managed by svnserve.exe
     /// </summary>
 	public class SvnServeRepository : SubversionRepositoryBase
 	{
@@ -82,8 +82,7 @@ namespace SVNManagerLib
 
             if ( _repositoryConfiguration.UserDatabaseFileName.Length > 0 )
             {
-                string root;
-                root = repo.DirectoryName;
+                string root = repo.DirectoryName;
 
                 Common.GetCorrectedPath( root, false );
 

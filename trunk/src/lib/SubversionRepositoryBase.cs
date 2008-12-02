@@ -52,6 +52,7 @@ namespace SVNManagerLib
         protected internal string _serverCommandsPath = string.Empty;
         protected internal string _fullPath = string.Empty;
         protected internal RepositoryTypes _createRepoType;
+        protected internal string _realm = string.Empty;
 
         #endregion
 
@@ -145,6 +146,15 @@ namespace SVNManagerLib
         #region Properties
 
         public string RepositoryPath { get; set; }
+
+        /// <summary>
+        /// Holds the name or ID of the repository's realm. When no realm is present,
+        /// it defaults to the UUID.
+        /// </summary>
+        public string Realm
+        {
+            get { return _realm; }
+        }
 
         /// <summary>
         /// Gets the hook files for this repository.

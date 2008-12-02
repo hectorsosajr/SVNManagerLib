@@ -230,6 +230,10 @@ namespace SVNManagerLib
                 {
                     _config.Configs["subversion"].Set( "globalconfigdir", _globalConfigFilePath );
                 }
+                else
+                {
+                    _config.Configs["subversion"].Set( "globalconfigdir", string.Empty );
+                }
 
 			    _config.Configs["repositories"].Set( "reporoot", _repositoryRootDirectory );
                 _config.Configs["repositories"].Set( "mode", _repoMode );
