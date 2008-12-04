@@ -153,7 +153,7 @@ namespace SVNManagerLib
         /// </summary>
         public string Realm
         {
-            get { return _realm; }
+            get { return _repositoryConfiguration.RepositoryRealm; }
         }
 
         /// <summary>
@@ -376,8 +376,7 @@ namespace SVNManagerLib
         /// <value>First user name used during repository creation.</value>
         public string FirstRepoUserName
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get; set;
         }
 
         /// <summary>
@@ -386,8 +385,7 @@ namespace SVNManagerLib
         /// <value>First user password used during repository creation.</value>
         public string FirstRepoUserPassword
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get; set;
         }
 
         #endregion
@@ -436,25 +434,41 @@ namespace SVNManagerLib
         /// Deletes the repository and all its subfolders from the hard drive.
         /// </summary>
         /// <returns>Whether or not this operation was successful.</returns>
-        public bool DeleteRepository()
+        public bool DeleteRepository( out string errors )
         {
             bool retval;
+            string msg = "";
             string formatFilePath = Path.Combine( _fullPath, "format" );
+            string formatFilePathdb = Path.Combine( Path.Combine( _fullPath, "db" ), "format");
 
             // The "format" file was set to read only. Need to remove
             // that file attribute in order for the directory delete
             // to work.
-            File.SetAttributes( formatFilePath, FileAttributes.Normal );
+            if ( File.Exists( formatFilePath ) )
+            {
+                File.SetAttributes( formatFilePath, FileAttributes.Normal );
+            }
+
+            if ( File.Exists( formatFilePathdb ) )
+            {
+                File.SetAttributes( formatFilePathdb, FileAttributes.Normal );
+            }
 
             try
             {
+                string hookDir = Path.Combine( _fullPath, "hooks" );
+                Directory.Delete( hookDir, true );
                 Directory.Delete( _fullPath, true );
                 retval = true;
             }
-            catch ( Exception )
+            catch ( Exception ex )
             {
                 retval = false;
+                msg = ex.Message;
+                System.Diagnostics.Debugger.Log(1,"IO", msg);
             }
+
+            errors = msg;
 
             return retval;
         }
@@ -747,9 +761,12 @@ namespace SVNManagerLib
 
         private void LoadFiles()
         {
-            string rootDir = _repositoryConfiguration.RepositoryRootDirectory;
+            if ( !Equals( _repositoryConfiguration, null ) )
+            {
+                string rootDir = _repositoryConfiguration.RepositoryRootDirectory;
 
-            _files = Common.GetFileList( rootDir, _serverCommandsPath );
+                _files = Common.GetFileList(rootDir, _serverCommandsPath);
+            }
         }
 
         protected void LoadConfig( string repositoryPath )
