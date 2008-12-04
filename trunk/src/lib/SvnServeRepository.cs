@@ -56,8 +56,11 @@ namespace SVNManagerLib
             {
                 if ( !_usersLoaded )
                 {
-                    GetUsers( _repositoryConfiguration.RepositoryRootDirectory );
-                    _usersLoaded = true;
+                    if ( !Equals( _repositoryConfiguration, null ) )
+                    {
+                        GetUsers(_repositoryConfiguration.RepositoryRootDirectory);
+                        _usersLoaded = true;
+                    }
                 }
 
                 return _users;
@@ -186,18 +189,22 @@ namespace SVNManagerLib
 
             bool retval = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
 
-            ProcessNewConfFile( newRepoPath );
+            if ( retval )
+            {
+                ProcessNewConfFile( newRepoPath );
 
-            LoadConfig( newRepoPath );
+                LoadConfig( newRepoPath );
+            }
 
             return retval;
         }
 
         // TODO : Fix this so that it works with global config files.
-        private void ProcessNewConfFile(string newRepoPath)
+        private void ProcessNewConfFile( string newRepoPath )
         {
             string lineString = string.Empty;
-            string confPath = Path.Combine( newRepoPath, "conf" ) + Path.DirectorySeparatorChar + "svnserve.conf";
+            string rootConfPath = Path.Combine( newRepoPath, "conf" );
+            string confPath = Path.Combine( rootConfPath, "svnserve.conf" );
             var reader = new StreamReader( confPath );
 
             try
@@ -213,11 +220,11 @@ namespace SVNManagerLib
                 reader.Close();
             }
 
-            var writer = new StreamWriter( confPath + "svnserve.conf" );
+            var writer = new StreamWriter( confPath );
             writer.Write( _NewConfFile.ToString() );
             writer.Close();
 
-            CreateUserFile( confPath );
+            CreateUserFile( rootConfPath );
         }
 
         // TODO : Fix this so that it works with global config files.
@@ -242,7 +249,7 @@ namespace SVNManagerLib
 
                 case "# password-db = passwd":
 
-                    _NewConfFile.Append( Environment.NewLine + "password-db = password.txt" + Environment.NewLine + Environment.NewLine );
+                    _NewConfFile.Append( Environment.NewLine + "password-db = passwd" + Environment.NewLine + Environment.NewLine );
                     break;
 
                 default:
@@ -256,10 +263,22 @@ namespace SVNManagerLib
         private void CreateUserFile( string confPath )
         {
             var userfile = new StringBuilder();
-            var writer = new StreamWriter( confPath + "password.txt" );
+            string userFileTemp;
+            
+            if ( Equals( _repositoryConfiguration, null ) )
+            {
+                userFileTemp = "passwd";
+            }
+            else
+            {
+                userFileTemp = _repositoryConfiguration.UserDatabaseFileName;
+            }
+
+            var pathToUserFile = Path.Combine( confPath, userFileTemp );
+            var writer = new StreamWriter( pathToUserFile );
 
             userfile.Append( "[users]" + Environment.NewLine );
-            userfile.Append( _firstUserName + " = " + _firstUserPassword );
+            userfile.Append( FirstRepoUserName + " = " + FirstRepoUserPassword );
 
             writer.Write( userfile.ToString() );
             writer.Close();

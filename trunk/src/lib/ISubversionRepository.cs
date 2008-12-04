@@ -53,7 +53,7 @@ namespace SVNManagerLib
         /// Deletes the repository and all its subfolders from the hard drive.
         /// </summary>
         /// <returns>Whether or not this operation was successful.</returns>
-        bool DeleteRepository();
+        bool DeleteRepository( out string errors );
 
         /// <summary>
         /// Creates a dumpfile portable format of this repository.
