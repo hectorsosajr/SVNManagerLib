@@ -1,7 +1,7 @@
 ﻿<project schemaVersion="1.6.0.7">
     <assemblies>
-        <assembly assemblyPath="..\trunk\src\lib\bin\Debug\Nini.dll" xmlCommentsPath="" commentsOnly="False" />
-        <assembly assemblyPath="..\trunk\src\lib\bin\Debug\SVNManagerLib.dll" xmlCommentsPath="..\trunk\src\lib\bin\Debug\SVNManagerLib.xml" commentsOnly="False" />
+        <assembly assemblyPath="..\trunk\src\lib\bin\Debug\Nini.dll" xmlCommentsPath="..\dependencies\Nini.xml" commentsOnly="False" />
+        <assembly assemblyPath="..\trunk\src\lib\bin\x86\Release\SVNManagerLib.dll" xmlCommentsPath="..\trunk\src\lib\bin\x86\Release\SVNManagerLib.xml" commentsOnly="False" />
     </assemblies>
     <ProjectSummary />
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
@@ -12,7 +12,7 @@
     <SandcastlePath path="C:\Dev\Tools\Sandcastle\" />
     <WorkingPath path="" />
     <CleanIntermediates>True</CleanIntermediates>
-    <KeepLogFile>True</KeepLogFile>
+    <KeepLogFile>False</KeepLogFile>
     <BuildLogFile path="" />
     <HelpFileFormat>Help1xAndWebsite</HelpFileFormat>
     <CppCommentsFixup>False</CppCommentsFixup>
@@ -22,7 +22,7 @@
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <RootNamespaceTitle />
     <HelpTitle>SVNManagerLib API Documentation</HelpTitle>
-    <HtmlHelpName>SVNManager Lib API</HtmlHelpName>
+    <HtmlHelpName>SVNManagerLib API</HtmlHelpName>
     <Language>en-US</Language>
     <CopyrightHref />
     <CopyrightText>Copyright 2006-2008 Hector Sosa, Jr</CopyrightText>
@@ -36,7 +36,7 @@
     <PresentationStyle>Prototype</PresentationStyle>
     <NamingMethod>Guid</NamingMethod>
     <SyntaxFilters>Standard</SyntaxFilters>
-    <ShowFeedbackControl>True</ShowFeedbackControl>
+    <ShowFeedbackControl>False</ShowFeedbackControl>
     <BinaryTOC>True</BinaryTOC>
     <IncludeFavorites>False</IncludeFavorites>
     <CollectionTocStyle>Hierarchical</CollectionTocStyle>
