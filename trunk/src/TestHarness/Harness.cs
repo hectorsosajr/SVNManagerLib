@@ -6,9 +6,9 @@ namespace TestHarness
 {
     public partial class Harness : Form
     {
-        private bool _txtServerValid = false;
-        private bool _txtCommandsValid = false;
-        private bool _txtRepoDirValid = false;
+        private bool _txtServerValid;
+        private bool _txtCommandsValid;
+        private bool _txtRepoDirValid;
 
         public Harness()
         {
@@ -118,9 +118,9 @@ namespace TestHarness
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
-            SVNController controller = new SVNController(txtServer.Text, txtCommands.Text,txtRepoDir.Text);
+            var controller = new SubversionServerController(txtServer.Text, txtCommands.Text,txtRepoDir.Text);
 
-            foreach(SVNRepository repo in controller.RepositoryCollection)
+            foreach(SubversionRepositoryBase repo in controller.RepositoryCollection)
             {
                 cboRepos.Items.Add(repo.Name);
             }
