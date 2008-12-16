@@ -11,9 +11,9 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SystemWidgets - http://www.systemwidgets.com")]
 [assembly: AssemblyProduct("SVNManagerLib")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("Copyright 2006-2008 Hector Sosa, Jr")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]		
+[assembly: AssemblyCulture("en-US")]		
 
 //
 // Version information for an assembly consists of the following four values:
@@ -26,7 +26,7 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("0.5.5.0")]
+[assembly: AssemblyVersion("0.5.6.0")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
