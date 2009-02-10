@@ -1,5 +1,24 @@
 SVNManagerLib History
 
+0.5.6 - Feb 10, 2009
+
+Massive changes!
+
+NEW - Upgraded the solution to Visual Studio 2008.
+NEW - Started introducing interfaces
+NEW - Introduced lazy loading of anything below repository level
+NEW - Deprecated SVNController for SubversionServerController
+NEW - Deprecated SVNRepository for ISubversionRepository, SubversionRepositoryBase,
+      and SvnServeRepository. This will open the way for eventually adding
+      Apache support.
+NEW - Broke out RepositoryRootDirectoryDoesNotExistException into a file
+NEW - Added support for using a global configuration file.
+NEW - Added support for Subversion Realms.
+NEW - Finished the code for loading dump files. Hasn't been tested yet!
+NEW - Added RepositoryRootDirectoryDoesNotExistException.cs to help deal with 
+      the issue of disconnected mapped drives in Vista.
+NEW - Many little code refactorings to help readability
+
 0.5.5 - Feb 3, 2008
 
 FIX - Fixed MANY issues with repositories that were upgraded from
