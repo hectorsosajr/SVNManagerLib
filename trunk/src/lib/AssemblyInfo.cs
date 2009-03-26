@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyProduct("SVNManagerLib")]
 [assembly: AssemblyCopyright("Copyright 2006-2008 Hector Sosa, Jr")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("en-US")]		
+[assembly: AssemblyCulture("")]		
 
 //
 // Version information for an assembly consists of the following four values:
