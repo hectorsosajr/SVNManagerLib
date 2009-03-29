@@ -45,7 +45,25 @@ namespace SVNManagerLib
 		/// This repository uses the file system.
 		/// </summary>
 		FileSystem = 2
-	}
+    }
+
+    ///<summary>
+    /// A list to tell the SVNFileSystemEntity what
+    /// type of item it is dealing with.
+    ///</summary>
+    public enum FileSystemEntityType
+    {
+        ///<summary>
+        /// This represents a folder/directory in the
+        /// specified Subversion repository.
+        ///</summary>
+        Folder,
+        ///<summary>
+        /// This represents a file in the
+        /// specified Subversion repository.
+        ///</summary>
+        File
+    }
 
 	/// <summary>
 	/// Functions that are common across several classes.
