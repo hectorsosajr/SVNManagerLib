@@ -15,7 +15,7 @@ namespace SVNManagerLib
 	/// Represents a file or folder inside a Subversion repository.
 	/// </summary>
     public class SVNFileSystemEntity
-	{
+    {
         #region Member Variables
 
 		private Hashtable _properties = new Hashtable();
@@ -23,7 +23,7 @@ namespace SVNManagerLib
         private string _entityName;        
         private string _fullPath;
 	    private string _serverCommandsPath;
- 
+
 	    #endregion
 
         #region Constructors
@@ -115,9 +115,17 @@ namespace SVNManagerLib
             {
                 _properties = value;
             }
-        } 
+        }
 
-        #endregion
+	    ///<summary>
+        /// Whether this Subversion item is a <see cref="FileSystemEntityType">file or directory</see>.
+	    ///</summary>
+	    public FileSystemEntityType FileSystemType
+	    {
+	        get; set;
+	    }
+
+	    #endregion
 
         #region Public Members 
 
