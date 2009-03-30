@@ -337,6 +337,18 @@ namespace SVNManagerLib
         }
 
         /// <summary>
+        /// Gets the schema version associated with the repository in question.
+        /// </summary>
+        /// <value>The repository schema version.</value>
+        public string RepositorySchemaVersion
+        {
+            get
+            {
+                return _repositoryConfiguration.RepositorySchemaVersion;
+            }
+        }
+
+        /// <summary>
         /// Holds a list of files and folders for this repository,
         /// as a list of text items.
         /// </summary>
@@ -344,7 +356,7 @@ namespace SVNManagerLib
         {
             get
             {
-                if (!_filesLoaded)
+                if ( !_filesLoaded )
                 {
                     LoadFiles();
                     _filesLoaded = true;
@@ -529,22 +541,21 @@ namespace SVNManagerLib
         public bool LoadDumpFile( SVNManagerLib.LoadDumpFileArgs args, out string errorMessages )
         {
             var cmdArgs = new StringBuilder();
-            bool cmdResult;
             string lines;
             string errors;
 
-            string svnCommand = Path.Combine(_serverCommandsPath, "svnadmin");
+            string svnCommand = Path.Combine( _serverCommandsPath, "svnadmin" );
 
-            cmdArgs.Append("load ");
+            cmdArgs.Append( "load " );
 
-            if (args.ParentPath.Length > 0)
+            if ( args.ParentPath.Length > 0 )
             {
-                cmdArgs.Append("--parent-dir " + args.ParentPath + " ");
+                cmdArgs.Append( "--parent-dir " + args.ParentPath + " " );
             }
 
-            cmdArgs.Append(args.DestinationPath + " < " + args.DumpFilePath);
+            cmdArgs.Append( args.DestinationPath + " < " + args.DumpFilePath );
 
-            cmdResult = Common.ExecuteSvnCommand(svnCommand, cmdArgs.ToString(), out lines, out errors);
+            bool cmdResult = Common.ExecuteSvnCommand( svnCommand, cmdArgs.ToString(), out lines, out errors );
 
             errorMessages = errors;
 
@@ -562,43 +573,43 @@ namespace SVNManagerLib
             string errors;
             var arg = new StringBuilder();
 
-            arg.Append("hotcopy ");
-            arg.Append(_fullPath);
+            arg.Append( "hotcopy " );
+            arg.Append( _fullPath );
 
             // Processing struct arguments for command-line switches
-            if (Equals(args, null))
+            if ( Equals( args, null ) )
             {
                 return false;
             }
 
-            if (Equals(args.DestinationPath, null))
+            if ( Equals( args.DestinationPath, null ) )
             {
                 return false;
             }
 
-            if (args.DestinationPath == string.Empty)
+            if ( args.DestinationPath == string.Empty )
             {
                 return false;
             }
 
-            arg.Append(" ");
-            arg.Append(args.DestinationPath);
+            arg.Append( " " );
+            arg.Append( args.DestinationPath );
 
-            if (!Equals(args.UseCleanLogs, null))
+            if ( !Equals( args.UseCleanLogs, null ) )
             {
-                if (args.UseCleanLogs)
+                if ( args.UseCleanLogs )
                 {
                     // the clean-logs switch is only useful for Berkeley repositories.
-                    if (RepositoryType == RepositoryTypes.BerkeleyDatabase)
+                    if ( RepositoryType == RepositoryTypes.BerkeleyDatabase )
                     {
-                        arg.Append(" --clean-logs");
+                        arg.Append( " --clean-logs" );
                     }
                 }
             }
 
-            string svnCommand = Path.Combine(_serverCommandsPath, "svnadmin");
+            string svnCommand = Path.Combine( _serverCommandsPath, "svnadmin" );
 
-            bool cmdResult = Common.ExecuteSvnCommand(svnCommand, arg.ToString(), out lines, out errors);
+            bool cmdResult = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
 
             return cmdResult;
         }
@@ -610,43 +621,41 @@ namespace SVNManagerLib
         /// <param name="message">The "svn mkdir" command commits immediately and it requires a comment.</param>
         /// <returns>Returns whether or not the command was successful.</returns>
         /// <param name="errorMessages">This will contain the error text from the Subversion command, if any.</param>
-        public bool CreateDirectory(string directoryName, string message, out string errorMessages)
+        public bool CreateDirectory( string directoryName, string message, out string errorMessages )
         {
-            bool cmdResult;
             string lines;
             string errors;
             var args = new StringBuilder();
             var pathUrl = new StringBuilder();
-            string url;
             string tmp = directoryName;
 
-            pathUrl.Append(_repositoryConfiguration.RepositoryRootDirectory);
+            pathUrl.Append( _repositoryConfiguration.RepositoryRootDirectory );
 
-            if (!_repositoryConfiguration.RepositoryRootDirectory.EndsWith(Path.DirectorySeparatorChar.ToString()))
+            if ( !_repositoryConfiguration.RepositoryRootDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ) )
             {
-                pathUrl.Append(Path.DirectorySeparatorChar.ToString());
+                pathUrl.Append( Path.DirectorySeparatorChar.ToString() );
             }
 
-            if (tmp.StartsWith(Path.DirectorySeparatorChar.ToString()))
+            if (tmp.StartsWith( Path.DirectorySeparatorChar.ToString() ) )
             {
-                int pos = tmp.IndexOf(Path.DirectorySeparatorChar.ToString());
-                tmp = tmp.Substring(pos + 1);
+                int pos = tmp.IndexOf( Path.DirectorySeparatorChar.ToString() );
+                tmp = tmp.Substring( pos + 1 );
 
             }
-            pathUrl.Append(tmp);
+            pathUrl.Append( tmp );
 
-            url = Common.PathToFileUrl(pathUrl.ToString());
+            string url = Common.PathToFileUrl( pathUrl.ToString() );
 
-            args.Append("mkdir -m ");
-            args.Append(((Char)34).ToString());
-            args.Append(message);
-            args.Append(((Char)34).ToString());
-            args.Append(" ");
-            args.Append(url);
+            args.Append( "mkdir -m " );
+            args.Append( ( ( Char ) 34 ).ToString() );
+            args.Append( message );
+            args.Append( ( ( Char )34 ).ToString() );
+            args.Append( " " );
+            args.Append( url );
 
-            string svnCommand = Path.Combine(_serverCommandsPath, "svn");
-
-            cmdResult = Common.ExecuteSvnCommand(svnCommand, args.ToString(), out lines, out errors);
+            string svnCommand = Path.Combine( _serverCommandsPath, "svn" );
+            
+            bool cmdResult = Common.ExecuteSvnCommand( svnCommand, args.ToString(), out lines, out errors );
 
             errorMessages = errors;
 
@@ -660,43 +669,41 @@ namespace SVNManagerLib
         /// <param name="message">The "svn delete" command commits immediately and it requires a comment.</param>
         /// <returns>Returns whether or not the command was successful.</returns>
         /// <param name="errorMessages">This will contain the error text from the Subversion command, if any.</param>
-        public bool DeleteDirectory(string directoryPath, string message, out string errorMessages)
+        public bool DeleteDirectory( string directoryPath, string message, out string errorMessages )
         {
-            bool cmdResult;
             string lines;
             string errors;
             var args = new StringBuilder();
             var pathUrl = new StringBuilder();
-            string url;
             string tmp = directoryPath;
 
-            pathUrl.Append(_repositoryConfiguration.RepositoryRootDirectory);
+            pathUrl.Append( _repositoryConfiguration.RepositoryRootDirectory );
 
-            if (!_repositoryConfiguration.RepositoryRootDirectory.EndsWith(Path.DirectorySeparatorChar.ToString()))
+            if ( !_repositoryConfiguration.RepositoryRootDirectory.EndsWith( Path.DirectorySeparatorChar.ToString() ) )
             {
-                pathUrl.Append(Path.DirectorySeparatorChar.ToString());
+                pathUrl.Append( Path.DirectorySeparatorChar.ToString() );
             }
 
-            if (tmp.StartsWith(Path.DirectorySeparatorChar.ToString()))
+            if ( tmp.StartsWith( Path.DirectorySeparatorChar.ToString() ) )
             {
-                int pos = tmp.IndexOf(Path.DirectorySeparatorChar.ToString());
-                tmp = tmp.Substring(pos + 1);
+                int pos = tmp.IndexOf( Path.DirectorySeparatorChar.ToString() );
+                tmp = tmp.Substring( pos + 1 );
             }
 
-            pathUrl.Append(tmp);
+            pathUrl.Append( tmp );
 
-            url = Common.PathToFileUrl(pathUrl.ToString());
+            string url = Common.PathToFileUrl( pathUrl.ToString() );
 
-            args.Append("delete -m ");
-            args.Append(((Char)34).ToString());
-            args.Append(message);
-            args.Append(((Char)34).ToString());
-            args.Append(" ");
-            args.Append(url);
+            args.Append( "delete -m " );
+            args.Append( ( ( Char )34 ).ToString() );
+            args.Append( message );
+            args.Append( ( ( Char )34 ).ToString() );
+            args.Append( " " );
+            args.Append( url );
 
-            string svnCommand = Path.Combine(_serverCommandsPath, "svn");
+            string svnCommand = Path.Combine( _serverCommandsPath, "svn" );
 
-            cmdResult = Common.ExecuteSvnCommand(svnCommand, args.ToString(), out lines, out errors);
+            bool cmdResult = Common.ExecuteSvnCommand( svnCommand, args.ToString(), out lines, out errors );
 
             errorMessages = errors;
 
@@ -712,14 +719,14 @@ namespace SVNManagerLib
         /// <param name="revision">The revision to grab information about.</param>
         /// <param name="args">Arguments except for the revision and repository.</param>
         /// <returns></returns>
-        public string[] SvnLook(string subcommand, int revision, params string[] args)
+        public string[] SvnLook( string subcommand, int revision, params string[] args )
         {
             string lines;
             string errors;
-            string svnCommand = Path.Combine(_serverCommandsPath, "svnlook");
-            bool result = Common.ExecuteSvnCommand(svnCommand, String.Join(" ", args), out lines, out errors);
+            string svnCommand = Path.Combine( _serverCommandsPath, "svnlook" );
+            Common.ExecuteSvnCommand( svnCommand, String.Join ( " ", args ), out lines, out errors );
 
-            return Common.ParseOutputIntoLines(lines);
+            return Common.ParseOutputIntoLines( lines );
         }
 
         /// <summary>
@@ -730,14 +737,14 @@ namespace SVNManagerLib
         /// <param name="subcommand">Sub command for svnlook</param>
         /// <param name="args">Arguments except for the revision and repository.</param>
         /// <returns></returns>
-        public string[] SvnLook(string subcommand, params string[] args)
+        public string[] SvnLook( string subcommand, params string[] args )
         {
             string lines;
             string errors;
-            string svnCommand = Path.Combine(_serverCommandsPath, "svnlook");
-            bool result = Common.ExecuteSvnCommand(svnCommand, String.Join(" ", args), out lines, out errors);
+            string svnCommand = Path.Combine( _serverCommandsPath, "svnlook" );
+            Common.ExecuteSvnCommand(svnCommand, String.Join( " ", args ), out lines, out errors );
 
-            return Common.ParseOutputIntoLines(lines);
+            return Common.ParseOutputIntoLines( lines );
         }
 
         /// <summary>
@@ -745,14 +752,14 @@ namespace SVNManagerLib
         /// </summary>
         /// <param name="args">Command line arguments.</param>
         /// <returns></returns>
-        public string[] Svn(params string[] args)
+        public string[] Svn( params string[] args )
         {
             string lines;
             string errors;
-            string svnCommand = Path.Combine(_serverCommandsPath, "svnlook");
-            bool result = Common.ExecuteSvnCommand(svnCommand, String.Join(" ", args), out lines, out errors);
+            string svnCommand = Path.Combine( _serverCommandsPath, "svnlook" );
+            Common.ExecuteSvnCommand( svnCommand, String.Join( " ", args ), out lines, out errors );
 
-            return Common.ParseOutputIntoLines(lines);
+            return Common.ParseOutputIntoLines( lines );
         }
 
         #endregion
@@ -765,7 +772,7 @@ namespace SVNManagerLib
             {
                 string rootDir = _repositoryConfiguration.RepositoryRootDirectory;
 
-                _files = Common.GetFileList(rootDir, _serverCommandsPath);
+                _files = Common.GetFileList( rootDir, _serverCommandsPath );
             }
         }
 
@@ -783,7 +790,7 @@ namespace SVNManagerLib
 
                 var entity = new SVNFileSystemEntity( _serverCommandsPath, filePath, fileName );
 
-                _entities.Add(entity);
+                _entities.Add( entity );
             }
         }
 
