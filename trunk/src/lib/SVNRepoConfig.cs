@@ -33,7 +33,7 @@ namespace SVNManagerLib
         private string _fullPathToConfFile;
         private string _authorizationRulesFile;
         private string _repositoryRealm;
-
+	    private string _repositorySchemaVersion;
 
 		#endregion
 
@@ -195,6 +195,21 @@ namespace SVNManagerLib
             }
         }
 
+        /// <summary>
+        /// Gets or sets the repository schema version.
+        /// </summary>
+        /// <value>The repository schema version.</value>
+	    public string RepositorySchemaVersion
+	    {
+	        get
+	        {
+	            return _repositorySchemaVersion;
+	        }
+            set
+            {
+                _repositorySchemaVersion = value;
+            }
+	    }
 
 		#endregion
 		
@@ -354,6 +369,7 @@ namespace SVNManagerLib
 
 			_repositoryType = GetRepositoryType();
             _repositoryUUID = GetRepositoryUUID();
+		    _repositorySchemaVersion = GetRepositorySchemaVersion();
         }
 
         private void LoadRepositoryConfigurationSettings( FileInfo globalConfigFileInfo )
@@ -433,6 +449,7 @@ namespace SVNManagerLib
 
             _repositoryType = GetRepositoryType();
             _repositoryUUID = GetRepositoryUUID();
+            _repositorySchemaVersion = GetRepositorySchemaVersion();
         }
 
 	    private string GetRepositoryType()
@@ -498,6 +515,36 @@ namespace SVNManagerLib
 			
 			return lineString;
 		}
+
+        private string GetRepositorySchemaVersion()
+        {
+            string lineString;
+            string fixedPath = _RepositoryRootDirectory;
+            string schemaPath = Path.Combine( fixedPath, "format" );
+
+            try
+            {
+                var reader = new StreamReader( schemaPath );
+
+                try
+                {
+                    lineString = reader.ReadToEnd();
+                }
+                finally
+                {
+                    reader.Close();
+                }
+
+                lineString = lineString.Replace( "\n", "" );
+                lineString = lineString.Trim();
+            }
+            catch ( FileNotFoundException )
+            {
+                lineString = string.Empty;
+            }
+
+            return lineString;
+        }
 
 	    #endregion
 	}
