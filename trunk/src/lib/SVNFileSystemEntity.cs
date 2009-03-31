@@ -45,8 +45,6 @@ namespace SVNManagerLib
             _serverCommandsPath = serverCommandsPath;
 			_fullPath = pathToEntity;
 			_entityName = entityName;
-            LoadEntityInfo();
-            LoadEntityProperties();
 		}
 
         #endregion
