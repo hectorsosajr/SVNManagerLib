@@ -141,6 +141,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SubversionServerController.cs" />
+    <Compile Include="SVNAuthorization.cs" />
     <Compile Include="SVNController.cs">
       <SubType>Code</SubType>
     </Compile>
