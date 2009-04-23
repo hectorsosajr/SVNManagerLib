@@ -5,6 +5,7 @@
 // Date:			5/7/2005
 //**********************************************************
 
+using System;
 using System.IO;
 
 using Nini.Config;
@@ -34,8 +35,11 @@ namespace SVNManagerLib
         private string _authorizationRulesFile;
         private string _repositoryRealm;
 	    private string _repositorySchemaVersion;
+	    private bool _isSaslAvailable;
+	    private int _minSaslEncryption;
+	    private int _maxSaslEncryption;
 
-		#endregion
+	    #endregion
 
 		#region Constructors
 
@@ -211,7 +215,46 @@ namespace SVNManagerLib
             }
 	    }
 
-		#endregion
+
+        /// <summary>
+        /// Gets a value indicating whether this repository has SASL available.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this this repository has SASL available; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsSaslAvailable
+	    {
+	        get
+	        {
+	            return _isSaslAvailable;
+	        }
+	    }
+
+        /// <summary>
+        /// Gets the sasl minimun encryption.
+        /// </summary>
+        /// <value>The sasl minimun encryption.</value>
+	    public Int32 SaslMinimunEncryption
+	    {
+	        get
+	        {
+	            return _minSaslEncryption;
+	        }
+	    }
+
+        /// <summary>
+        /// Gets the sasl maximum encryption.
+        /// </summary>
+        /// <value>The sasl maximum encryption.</value>
+	    public Int32 SaslMaximumEncryption
+	    {
+	        get
+	        {
+	            return _maxSaslEncryption;
+	        }
+	    }
+
+	    #endregion
 		
 		#region Public Members
 
@@ -327,52 +370,10 @@ namespace SVNManagerLib
 				_UserDatabaseFileName = "";
 			}
 
-			try
-			{
-				_AnonAcc = _ServerConfig.Configs["general"].GetString( "anon-access" );
-				_AnonymousAccess = ConvertStringToAuth( _AnonAcc );
-			}
-			catch
-			{
-				_AnonAcc = "";
-				_AnonymousAccess = ConvertStringToAuth( _AnonAcc );
-			}
+			ParseConfigKeys();
+		}
 
-			try
-			{
-				_AuthAcc = _ServerConfig.Configs["general"].GetString( "auth-access" );
-				_AuthorizedAccess = ConvertStringToAuth( _AuthAcc );
-			}
-			catch
-			{
-				_AuthAcc = "";
-				_AuthorizedAccess = ConvertStringToAuth( _AuthAcc );
-			}
-
-		    try
-		    {
-		        _authorizationRulesFile = _ServerConfig.Configs["general"].GetString( "authz-db" );
-		    }
-		    catch
-		    {
-		        _authorizationRulesFile = "";
-		    }
-
-		    try
-		    {
-		        _repositoryRealm = _ServerConfig.Configs["general"].GetString( "realm" );
-		    }
-		    catch
-		    {
-		        _repositoryRealm = "";
-		    }
-
-			_repositoryType = GetRepositoryType();
-            _repositoryUUID = GetRepositoryUUID();
-		    _repositorySchemaVersion = GetRepositorySchemaVersion();
-        }
-
-        private void LoadRepositoryConfigurationSettings( FileInfo globalConfigFileInfo )
+	    private void LoadRepositoryConfigurationSettings( FileInfo globalConfigFileInfo )
         {
             var iniDoc = new IniDocument( globalConfigFileInfo.FullName, IniFileType.SambaStyle );
 
@@ -407,26 +408,31 @@ namespace SVNManagerLib
                 _UserDatabaseFileName = "";
             }
 
+            ParseConfigKeys();
+        }
+
+        private void ParseConfigKeys()
+        {
             try
             {
-                _AnonAcc = _ServerConfig.Configs["general"].GetString( "anon-access" );
+                _AnonAcc = _ServerConfig.Configs["general"].GetString( "anon-access") ;
                 _AnonymousAccess = ConvertStringToAuth(_AnonAcc);
             }
             catch
             {
                 _AnonAcc = "";
-                _AnonymousAccess = ConvertStringToAuth( _AnonAcc );
+                _AnonymousAccess = ConvertStringToAuth(_AnonAcc);
             }
 
             try
             {
                 _AuthAcc = _ServerConfig.Configs["general"].GetString( "auth-access" );
-                _AuthorizedAccess = ConvertStringToAuth( _AuthAcc );
+                _AuthorizedAccess = ConvertStringToAuth(_AuthAcc);
             }
             catch
             {
                 _AuthAcc = "";
-                _AuthorizedAccess = ConvertStringToAuth( _AuthAcc );
+                _AuthorizedAccess = ConvertStringToAuth(_AuthAcc);
             }
 
             try
@@ -445,6 +451,36 @@ namespace SVNManagerLib
             catch
             {
                 _repositoryRealm = "";
+            }
+
+            try
+            {
+                _isSaslAvailable = _ServerConfig.Configs["sasl"].GetBoolean( "use-sasl" );
+            }
+            catch
+            {
+                _isSaslAvailable = false;
+            }
+
+            if ( _isSaslAvailable )
+            {
+                try
+                {
+                    _minSaslEncryption = _ServerConfig.Configs["sasl"].GetInt( "min-encryption" );
+                }
+                catch
+                {
+                    _minSaslEncryption = 0;
+                }
+
+                try
+                {
+                    _maxSaslEncryption = _ServerConfig.Configs["sasl"].GetInt( "max-encryption" ) ;
+                }
+                catch
+                {
+                    _maxSaslEncryption = 0;
+                }
             }
 
             _repositoryType = GetRepositoryType();
