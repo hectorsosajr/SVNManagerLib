@@ -269,7 +269,7 @@ namespace SVNManagerLib
             string auth = _AuthorizedAccess.ToString().ToLower();
 
             var iniDoc = new IniDocument( _fullPathToConfFile, IniFileType.SambaStyle );
-            var source = new IniConfigSource(iniDoc);
+            var source = new IniConfigSource( iniDoc );
 
             source.Configs["general"].Set( "anon-access", anon );
             source.Configs["general"].Set( "auth-access", auth );
@@ -282,6 +282,58 @@ namespace SVNManagerLib
            {
                 retval = false;
            }
+
+            return retval;
+        }
+
+        /// <summary>
+        /// Updates the repository realm.
+        /// </summary>
+        /// <returns></returns>
+        public bool UpdateRealm()
+        {
+            bool retval = true;
+
+            var iniDoc = new IniDocument( _fullPathToConfFile, IniFileType.SambaStyle );
+            var source = new IniConfigSource( iniDoc );
+
+            source.Configs["general"].Set( "realm", _repositoryRealm );
+
+            try
+            {
+                source.Save( _fullPathToConfFile );
+            }
+            catch
+            {
+                retval = false;
+            }
+
+            return retval;
+        }
+
+        /// <summary>
+        /// Updates the sasl data.
+        /// </summary>
+        /// <returns></returns>
+        public bool UpdateSaslData()
+        {
+            bool retval = true;
+
+            var iniDoc = new IniDocument( _fullPathToConfFile, IniFileType.SambaStyle );
+            var source = new IniConfigSource(iniDoc);
+
+            source.Configs["sasl"].Set( "use-sasl", _isSaslAvailable );
+            source.Configs["sasl"].Set( "min-encryption", _minSaslEncryption );
+            source.Configs["sasl"].Set( "max-encryption", _maxSaslEncryption );
+
+            try
+            {
+                source.Save( _fullPathToConfFile );
+            }
+            catch
+            {
+                retval = false;
+            }
 
             return retval;
         }
