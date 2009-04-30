@@ -541,21 +541,40 @@ namespace SVNManagerLib
         public bool LoadDumpFile( SVNManagerLib.LoadDumpFileArgs args, out string errorMessages )
         {
             var cmdArgs = new StringBuilder();
-            string lines;
             string errors;
+            string lines;
 
             string svnCommand = Path.Combine( _serverCommandsPath, "svnadmin" );
 
-            cmdArgs.Append( "load " );
+            cmdArgs.Append( " load " );
 
-            if ( args.ParentPath.Length > 0 )
+            if ( !Equals( null, args.ParentPath ) )
             {
-                cmdArgs.Append( "--parent-dir " + args.ParentPath + " " );
+                if ( args.ParentPath.Length > 0 )
+                {
+                    cmdArgs.Append( "--parent-dir " + args.ParentPath + " " );
+                }
             }
 
             cmdArgs.Append( args.DestinationPath + " < " + args.DumpFilePath );
 
-            bool cmdResult = Common.ExecuteSvnCommand( svnCommand, cmdArgs.ToString(), out lines, out errors );
+            OperatingSystem myOS = Environment.OSVersion;
+
+            if ( !Equals( myOS.Platform, 128 ) )
+            {
+                // This is a Windows box. Make sure to surround the path
+                // to svnadmin with qoutes. This is to deal with the issue
+                // of Windows allowing spaces in directory/folder names.
+                svnCommand = @"""" + svnCommand + @"""" + cmdArgs;
+            }
+            else
+            {
+                svnCommand = svnCommand + cmdArgs;
+            }
+
+            //bool cmdResult = Common.ExecuteWritesToDiskSvnCommand(svnCommand, cmdArgs.ToString(), outputFile, out errors);
+
+            bool cmdResult = Common.ExecuteSvnCommand( svnCommand, "", out lines, out errors );
 
             errorMessages = errors;
 
@@ -742,7 +761,7 @@ namespace SVNManagerLib
             string lines;
             string errors;
             string svnCommand = Path.Combine( _serverCommandsPath, "svnlook" );
-            Common.ExecuteSvnCommand(svnCommand, String.Join( " ", args ), out lines, out errors );
+            Common.ExecuteSvnCommand( svnCommand, String.Join( " ", args ), out lines, out errors );
 
             return Common.ParseOutputIntoLines( lines );
         }
