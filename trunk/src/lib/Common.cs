@@ -190,7 +190,7 @@ namespace SVNManagerLib
             bool retval = false;
             string errorLines = string.Empty;
             Process svnCommand = null;
-            ProcessStartInfo psi = new ProcessStartInfo( command );
+            var psi = new ProcessStartInfo( command );
 
             psi.RedirectStandardOutput = true;
             psi.RedirectStandardError = true;
