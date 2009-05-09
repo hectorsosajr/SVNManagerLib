@@ -64,7 +64,7 @@ namespace SVNManagerLib
         ///<param name="UserName">The user's account name.</param>
         ///<param name="Password">The user's account password</param>
         ///<param name="UserDatabaseFileName"></param>
-        public SVNUserProvider( string UserName, string Password, FileInfo UserDatabaseFileName )
+        public SVNUserProvider( string UserName, string Password, FileSystemInfo UserDatabaseFileName )
         {
             _UserName = UserName;
             _Password = Password;

@@ -240,6 +240,73 @@ namespace SVNManagerLib
             return retval;
         }
 
+		/// <summary>
+		/// Executes a well formed Subversion command against a command-line
+		/// where input, either as a file or text, is requested.
+		/// program.
+		/// </summary>
+		/// <param name="command">Well formed Subversion command.</param>
+		/// <param name="arguments">Arguments that will be used for the Subversion command.</param>
+        /// <param name="result">This is the output for the command after execution.</param>
+        /// <param name="errors">This is the output for any errors during execution.</param>
+		/// <returns>bool - Whether or not the command was successfully executed.</returns>
+		public static bool ExecuteSvnCommandWithInput( string command, string arguments, out string result, out string errors )
+        {
+            bool retval = false;
+            string output = string.Empty;
+            string errorLines = string.Empty;
+            Process svnCommand = null;
+            var psi = new ProcessStartInfo( command );
+
+            psi.RedirectStandardInput = true;
+			psi.RedirectStandardOutput = true;
+            psi.RedirectStandardError = true;
+            psi.WindowStyle = ProcessWindowStyle.Hidden;
+            psi.UseShellExecute = false;
+            psi.CreateNoWindow = true;
+
+            try
+            {
+                Process.Start( psi );
+                psi.Arguments = arguments;
+                svnCommand = Process.Start( psi );
+
+                StreamWriter inputWriter = svnCommand.StandardInput;
+				StreamReader myOutput = svnCommand.StandardOutput;
+                StreamReader myErrors = svnCommand.StandardError;
+                svnCommand.WaitForExit();
+
+                if ( svnCommand.HasExited )
+                {
+                    output = myOutput.ReadToEnd();
+                    errorLines = myErrors.ReadToEnd();
+                }
+
+                // Check for errors
+                if ( errorLines.Trim().Length == 0 )
+                {
+                    retval = true;
+                }
+            }
+            catch ( Exception ex )
+            {
+                string msg = ex.Message;
+                errorLines += Environment.NewLine + msg;
+            }
+            finally
+            {
+                if (svnCommand != null)
+                {
+                    svnCommand.Close();
+                }
+            }
+
+            result = output;
+		    errors = errorLines;
+
+            return retval;
+        }
+
         /// <summary>
         /// Returns a list of files for the directory that was passed in as a parameter.
         /// </summary>
