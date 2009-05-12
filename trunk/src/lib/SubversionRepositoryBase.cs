@@ -556,8 +556,6 @@ namespace SVNManagerLib
                 }
             }
 
-            //cmdArgs.Append(args.DestinationPath + " < " + args.DumpFilePath);
-
             cmdArgs.Append( args.DestinationPath );
 
             OperatingSystem myOS = Environment.OSVersion;
