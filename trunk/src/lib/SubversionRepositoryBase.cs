@@ -556,25 +556,21 @@ namespace SVNManagerLib
                 }
             }
 
-            cmdArgs.Append( args.DestinationPath + " < " + args.DumpFilePath );
+            //cmdArgs.Append(args.DestinationPath + " < " + args.DumpFilePath);
+
+            cmdArgs.Append( args.DestinationPath );
 
             OperatingSystem myOS = Environment.OSVersion;
 
-            if ( !Equals( myOS.Platform, 128 ) )
+            if (!Equals(myOS.Platform, 128))
             {
                 // This is a Windows box. Make sure to surround the path
                 // to svnadmin with qoutes. This is to deal with the issue
                 // of Windows allowing spaces in directory/folder names.
-                svnCommand = @"""" + svnCommand + @"""" + cmdArgs;
-            }
-            else
-            {
-                svnCommand = svnCommand + cmdArgs;
+                svnCommand = @"""" + svnCommand + @"""";
             }
 
-            //bool cmdResult = Common.ExecuteWritesToDiskSvnCommand(svnCommand, cmdArgs.ToString(), outputFile, out errors);
-
-            bool cmdResult = Common.ExecuteSvnCommand( svnCommand, "", out lines, out errors );
+            bool cmdResult = Common.ExecuteSvnCommandWithFileInput( svnCommand, cmdArgs.ToString(), args.DumpFilePath, out lines, out errors );
 
             errorMessages = errors;
 
