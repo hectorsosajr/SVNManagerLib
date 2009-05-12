@@ -250,7 +250,7 @@ namespace SVNManagerLib
         /// <param name="result">This is the output for the command after execution.</param>
         /// <param name="errors">This is the output for any errors during execution.</param>
 		/// <returns>bool - Whether or not the command was successfully executed.</returns>
-		public static bool ExecuteSvnCommandWithInput( string command, string arguments, out string result, out string errors )
+		public static bool ExecuteSvnCommandWithFileInput( string command, string arguments, string filePath, out string result, out string errors )
         {
             bool retval = false;
             string output = string.Empty;
@@ -271,16 +271,21 @@ namespace SVNManagerLib
                 psi.Arguments = arguments;
                 svnCommand = Process.Start( psi );
 
-                StreamWriter inputWriter = svnCommand.StandardInput;
+                var file = new FileInfo(filePath);
+                StreamReader reader = file.OpenText();
+                string fileContents = reader.ReadToEnd();
+                reader.Close();
+
+                StreamWriter myWriter = svnCommand.StandardInput;
 				StreamReader myOutput = svnCommand.StandardOutput;
                 StreamReader myErrors = svnCommand.StandardError;
-                svnCommand.WaitForExit();
 
-                if ( svnCommand.HasExited )
-                {
-                    output = myOutput.ReadToEnd();
-                    errorLines = myErrors.ReadToEnd();
-                }
+                myWriter.AutoFlush = true;
+                myWriter.Write(fileContents);
+                myWriter.Close();
+
+                output = myOutput.ReadToEnd();
+                errorLines = myErrors.ReadToEnd();
 
                 // Check for errors
                 if ( errorLines.Trim().Length == 0 )
