@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace SVNManagerLib
 {
@@ -26,23 +24,23 @@ namespace SVNManagerLib
     /// <summary>
     /// Represents the contents of the authz file.
     /// </summary>
-    public class SVNAuthorization
+    public class SVNAuthorizationController
     {
         #region Member Variables
 
         private readonly string _authzPath;
-        private List<SVNAuthorizationAlias> _aliases;
-        private List<SVNAuthorizationGroup> _groups;
+        private List<SVNAuthorizationAlias> _aliases = new List<SVNAuthorizationAlias>();
+        private List<SVNAuthorizationGroup> _groups = new List<SVNAuthorizationGroup>();
 
         #endregion
 
         #region Constructors
 
         ///<summary>
-        /// Initializes an instance of the <see cref="SVNAuthorization"/> class.
+        /// Initializes an instance of the <see cref="SVNAuthorizationController"/> class.
         ///</summary>
         ///<param name="authzFilePath">The path to the authz file.</param>
-        public SVNAuthorization( string authzFilePath )
+        public SVNAuthorizationController( string authzFilePath )
         {
             _authzPath = authzFilePath;
         } 
@@ -88,19 +86,5 @@ namespace SVNManagerLib
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// Represents an alias inside the authz file.
-    /// </summary>
-    public class SVNAuthorizationAlias
-    {
-    }
-
-    /// <summary>
-    /// Represents a group inside the authz file.
-    /// </summary>
-    public class SVNAuthorizationGroup
-    {
     }
 }

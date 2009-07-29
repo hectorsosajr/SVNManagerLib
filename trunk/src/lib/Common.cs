@@ -243,10 +243,10 @@ namespace SVNManagerLib
 		/// <summary>
 		/// Executes a well formed Subversion command against a command-line
 		/// where input, either as a file or text, is requested.
-		/// program.
 		/// </summary>
 		/// <param name="command">Well formed Subversion command.</param>
 		/// <param name="arguments">Arguments that will be used for the Subversion command.</param>
+        /// <param name="filePath">The file path that will be processed by this Subversion command.</param>
         /// <param name="result">This is the output for the command after execution.</param>
         /// <param name="errors">This is the output for any errors during execution.</param>
 		/// <returns>bool - Whether or not the command was successfully executed.</returns>
