@@ -11,10 +11,12 @@ namespace SVNManagerLib
         /// This user has no rights.
         /// </summary>
         None,
+
         /// <summary>
         /// This user has read rights.
         /// </summary>
         Read,
+
         /// <summary>
         /// This user has write rights.
         /// </summary>
@@ -43,6 +45,8 @@ namespace SVNManagerLib
         public SVNAuthorizationController( string authzFilePath )
         {
             _authzPath = authzFilePath;
+
+            ProcessFile();
         } 
 
         #endregion
@@ -83,6 +87,18 @@ namespace SVNManagerLib
             {
                 return _groups;
             }
+        }
+
+        #endregion
+
+        #region Private Members
+
+        /// <summary>
+        /// Processes the authz file.
+        /// </summary>
+        private static void ProcessFile()
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion
