@@ -98,7 +98,7 @@ namespace SVNManagerLib
         /// </summary>
         private static void ProcessFile()
         {
-            throw new System.NotImplementedException();
+            // Code this!
         }
 
         #endregion
