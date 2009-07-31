@@ -34,6 +34,11 @@ namespace SVNManagerLib
             _fullPath = RepositoryPath;
             _usersLoaded = false;
             LoadConfig( RepositoryPath );
+
+            if ( _repositoryConfiguration.AuthorizationRulesFile != null )
+            {
+                LoadAuthorizationDatabase();
+            }
         }
 
         /// <summary>
@@ -44,12 +49,22 @@ namespace SVNManagerLib
             _serverCommandsPath = ServerCommandPath;
             _repositoryConfiguration = RepositoryConfiguration;
             _usersLoaded = false;
+
+            if (_repositoryConfiguration.AuthorizationRulesFile != null)
+            {
+                LoadAuthorizationDatabase();
+            }
         } 
 
         #endregion
 
         #region Properties
 
+        /// <summary>
+        /// A list of <see cref="SVNUser"/> that are associated with
+        /// this repository.
+        /// </summary>
+        /// <value></value>
         public override SVNUserCollection Users
         {
             get
@@ -58,7 +73,7 @@ namespace SVNManagerLib
                 {
                     if ( !Equals( _repositoryConfiguration, null ) )
                     {
-                        GetUsers(_repositoryConfiguration.RepositoryRootDirectory);
+                        GetUsers( _repositoryConfiguration.RepositoryRootDirectory );
                         _usersLoaded = true;
                     }
                 }
@@ -282,7 +297,12 @@ namespace SVNManagerLib
 
             writer.Write( userfile.ToString() );
             writer.Close();
-        } 
+        }
+
+        private void LoadAuthorizationDatabase()
+        {
+            var authController = new SVNAuthorizationController( _repositoryConfiguration.AuthorizationRulesFile );
+        }
 
         #endregion
 	}
