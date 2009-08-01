@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System;
+using System.IO;
+using Nini.Config;
 
 namespace SVNManagerLib
 {
@@ -96,9 +99,11 @@ namespace SVNManagerLib
         /// <summary>
         /// Processes the authz file.
         /// </summary>
-        private static void ProcessFile()
+        private void ProcessFile()
         {
-            // Code this!
+            var authzConfig = new IniConfigSource( _authzPath );
+
+            var configs = authzConfig.Configs;
         }
 
         #endregion

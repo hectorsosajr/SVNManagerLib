@@ -227,10 +227,9 @@ namespace SVNManagerLib
 
         private bool InsertUpdateUser( string userFile )
         {
-            IniConfigSource userConfig;
             bool result;
 
-            userConfig = new IniConfigSource( userFile );
+            var userConfig = new IniConfigSource( userFile );
 
             userConfig.Configs["users"].Set( _UserName, _Password );
 
