@@ -141,7 +141,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SubversionServerController.cs" />
-    <Compile Include="SVNAuthorizationController.cs" />
+    <Compile Include="SVNAuthorizationProvider.cs" />
     <Compile Include="SVNAuthorizationAlias.cs" />
     <Compile Include="SVNAuthorizationGroup.cs" />
     <Compile Include="SVNAuthorizationMember.cs" />

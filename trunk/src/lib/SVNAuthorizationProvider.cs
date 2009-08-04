@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System;
-using System.IO;
 using Nini.Config;
 
 namespace SVNManagerLib
@@ -29,7 +27,7 @@ namespace SVNManagerLib
     /// <summary>
     /// Represents the contents of the authz file.
     /// </summary>
-    public class SVNAuthorizationController
+    public class SVNAuthorizationProvider
     {
         #region Member Variables
 
@@ -42,10 +40,10 @@ namespace SVNManagerLib
         #region Constructors
 
         ///<summary>
-        /// Initializes an instance of the <see cref="SVNAuthorizationController"/> class.
+        /// Initializes an instance of the <see cref="SVNAuthorizationProvider"/> class.
         ///</summary>
         ///<param name="authzFilePath">The path to the authz file.</param>
-        public SVNAuthorizationController( string authzFilePath )
+        public SVNAuthorizationProvider( string authzFilePath )
         {
             _authzPath = authzFilePath;
 
