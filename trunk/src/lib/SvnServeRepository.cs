@@ -301,7 +301,7 @@ namespace SVNManagerLib
 
         private void LoadAuthorizationDatabase()
         {
-            var authController = new SVNAuthorizationController( _repositoryConfiguration.AuthorizationRulesFile );
+            var authController = new SVNAuthorizationProvider( _repositoryConfiguration.AuthorizationRulesFile );
         }
 
         #endregion
