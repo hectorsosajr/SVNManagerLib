@@ -59,9 +59,11 @@ namespace SVNManagerLib
 		}
 
         ///<summary>
+        /// Loads a repository configuration information.
         ///</summary>
-        ///<param name="GlobalConfigFileInfo"></param>
-        ///<param name="RepositoryPath"></param>
+        ///<param name="GlobalConfigFileInfo">The <see cref="FileInfo"/> object that contains information
+        /// about the global configuration file.</param>
+        ///<param name="RepositoryPath">The path to the repository in question.</param>
         public SVNRepoConfig( FileInfo GlobalConfigFileInfo, string RepositoryPath )
         {
             _RepositoryRootDirectory = RepositoryPath;
@@ -422,7 +424,7 @@ namespace SVNManagerLib
 				_UserDatabaseFileName = "";
 			}
 
-			ParseConfigKeys();
+            ParseConfigKeys();
 		}
 
 	    private void LoadRepositoryConfigurationSettings( FileInfo globalConfigFileInfo )
@@ -468,28 +470,30 @@ namespace SVNManagerLib
             try
             {
                 _AnonAcc = _ServerConfig.Configs["general"].GetString( "anon-access") ;
-                _AnonymousAccess = ConvertStringToAuth(_AnonAcc);
+                _AnonymousAccess = ConvertStringToAuth( _AnonAcc );
             }
             catch
             {
                 _AnonAcc = "";
-                _AnonymousAccess = ConvertStringToAuth(_AnonAcc);
+                _AnonymousAccess = ConvertStringToAuth( _AnonAcc );
             }
 
             try
             {
                 _AuthAcc = _ServerConfig.Configs["general"].GetString( "auth-access" );
-                _AuthorizedAccess = ConvertStringToAuth(_AuthAcc);
+                _AuthorizedAccess = ConvertStringToAuth( _AuthAcc );
             }
             catch
             {
                 _AuthAcc = "";
-                _AuthorizedAccess = ConvertStringToAuth(_AuthAcc);
+                _AuthorizedAccess = ConvertStringToAuth( _AuthAcc );
             }
 
             try
             {
-                _authorizationRulesFile = _ServerConfig.Configs["general"].GetString( "authz-db" );
+                string fileName = _ServerConfig.Configs["general"].GetString( "authz-db" );
+                string repoConfPath = Path.Combine( _RepositoryRootDirectory, "conf" );
+                _authorizationRulesFile = Path.Combine( repoConfPath, fileName );
             }
             catch
             {

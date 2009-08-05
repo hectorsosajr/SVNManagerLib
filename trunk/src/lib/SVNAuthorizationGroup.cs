@@ -7,6 +7,16 @@ namespace SVNManagerLib
     /// </summary>
     public class SVNAuthorizationGroup
     {
+        ///<summary>
+        /// Initializes a new instance of the <see cref="SVNAuthorizationGroup"/> class.
+        ///</summary>
+        ///<param name="GroupName">The name for this group</param>
+        public SVNAuthorizationGroup( string GroupName )
+        {
+            Name = GroupName;
+            Members = new List<SVNAuthorizationMember>();
+        }
+
         #region Properties
 
         /// <summary>
