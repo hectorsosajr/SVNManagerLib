@@ -6,6 +6,7 @@
 //**********************************************************
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -21,7 +22,10 @@ namespace SVNManagerLib
         /// <summary>
         /// Initializes a new instance of the <see cref="SvnServeRepository"/> class.
         /// </summary>
-        public SvnServeRepository() { }
+        public SvnServeRepository()
+        {
+            Groups = new List<SVNAuthorizationGroup>();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SvnServeRepository"/> class.
@@ -35,9 +39,14 @@ namespace SVNManagerLib
             _usersLoaded = false;
             LoadConfig( RepositoryPath );
 
+            Groups = new List<SVNAuthorizationGroup>();
+
             if ( _repositoryConfiguration.AuthorizationRulesFile != null )
             {
-                LoadAuthorizationDatabase();
+                if ( _repositoryConfiguration.AuthorizationRulesFile != string.Empty )
+                {
+                    LoadAuthorizationDatabase();
+                }
             }
         }
 
@@ -50,15 +59,24 @@ namespace SVNManagerLib
             _repositoryConfiguration = RepositoryConfiguration;
             _usersLoaded = false;
 
-            if (_repositoryConfiguration.AuthorizationRulesFile != null)
+            Groups = new List<SVNAuthorizationGroup>();
+
+            if ( _repositoryConfiguration.AuthorizationRulesFile != null )
             {
-                LoadAuthorizationDatabase();
+                if ( _repositoryConfiguration.AuthorizationRulesFile != string.Empty )
+                {
+                    LoadAuthorizationDatabase();
+                }
             }
         } 
 
         #endregion
 
         #region Properties
+
+        ///<summary>
+        ///</summary>
+        public List<SVNAuthorizationGroup> Groups { get; set; }
 
         /// <summary>
         /// A list of <see cref="SVNUser"/> that are associated with
@@ -301,7 +319,8 @@ namespace SVNManagerLib
 
         private void LoadAuthorizationDatabase()
         {
-            var authController = new SVNAuthorizationProvider( _repositoryConfiguration.AuthorizationRulesFile );
+            var authProvider = new SVNAuthorizationProvider( _repositoryConfiguration.AuthorizationRulesFile );
+            Groups = authProvider.Groups;
         }
 
         #endregion

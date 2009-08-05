@@ -110,7 +110,7 @@
     <DocumentationFile>bin\x86\Release\SVNManagerLib.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Nini, Version=1.1.0.0, Culture=neutral">
+    <Reference Include="Nini, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\Nini.dll</HintPath>
     </Reference>

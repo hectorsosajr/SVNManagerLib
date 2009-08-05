@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Nini.Config;
+using Nini.Ini;
 
 namespace SVNManagerLib
 {
@@ -99,9 +100,42 @@ namespace SVNManagerLib
         /// </summary>
         private void ProcessFile()
         {
-            var authzConfig = new IniConfigSource( _authzPath );
+            var iniDoc = new IniDocument( _authzPath, IniFileType.SambaStyle );
+            var authzConfig = new IniConfigSource( iniDoc );
 
             var configs = authzConfig.Configs;
+
+            foreach ( var config in configs )
+            {
+                var currConfig = (IniConfig)config;
+
+                if ( currConfig.Name == "groups" )
+                {
+                    ProcessGroup( currConfig );
+                }
+            }
+        }
+
+        private void ProcessGroup( IConfig config )
+        {
+            foreach (var group in config.GetKeys())
+            {
+                var currGroup = new SVNAuthorizationGroup( group );
+                ProcessGroupMembers( config, currGroup, group );
+
+                Groups.Add( currGroup );
+            }
+        }
+
+        private void ProcessGroupMembers( IConfig config, SVNAuthorizationGroup currGrp, string group )
+        {
+            string[] members = config.Get( group ).Split( ',' );
+
+            foreach (var s in members)
+            {
+                var currMember = new SVNAuthorizationMember( s );
+                currGrp.Members.Add( currMember );
+            }
         }
 
         #endregion
