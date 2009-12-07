@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SystemWidgets - http://www.systemwidgets.com")]
 [assembly: AssemblyProduct("SVNManagerLib")]
-[assembly: AssemblyCopyright("Copyright 2006-2008 Hector Sosa, Jr")]
+[assembly: AssemblyCopyright("Copyright 2006-2009 Hector Sosa, Jr")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 
