@@ -165,9 +165,8 @@ namespace SVNManagerLib
         private SVNUser GetUserData( string CurrentLine )
         {
             var retval = new SVNUser();
-            string[] data;
 
-            data = CurrentLine.Split( '=' );
+            string[] data = CurrentLine.Split( '=' );
 
             retval.UserName = data[0].Trim();
             retval.Password = data[1].Trim();
