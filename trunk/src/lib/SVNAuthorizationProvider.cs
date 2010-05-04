@@ -93,6 +93,36 @@ namespace SVNManagerLib
 
         #endregion
 
+        #region Public Members
+
+        ///<summary>
+        /// Adds a new group to the authz file.
+        ///</summary>
+        ///<param name="groupName"></param>
+        public void AddGroup(string groupName)
+        {
+        }
+
+        ///<summary>
+        /// Adds a new alias to the authz file.
+        ///</summary>
+        ///<param name="alias">The name of the new alias.</param>
+        ///<param name="aliasPath">The path that the new alias will be representing.</param>
+        public void AddAlias(string alias, string aliasPath)
+        {
+        }
+
+        ///<summary>
+        /// Adds a new member to an existing authz group.
+        ///</summary>
+        ///<param name="groupName"></param>
+        ///<param name="newMemberName"></param>
+        public void AddGroupMember(string groupName, string newMemberName)
+        {
+        } 
+
+        #endregion
+
         #region Private Members
 
         /// <summary>
@@ -127,13 +157,13 @@ namespace SVNManagerLib
             }
         }
 
-        private void ProcessGroupMembers( IConfig config, SVNAuthorizationGroup currGrp, string group )
+        private static void ProcessGroupMembers( IConfig config, SVNAuthorizationGroup currGrp, string group )
         {
             string[] members = config.Get( group ).Split( ',' );
 
-            foreach (var s in members)
+            foreach (var member in members)
             {
-                var currMember = new SVNAuthorizationMember( s );
+                var currMember = new SVNAuthorizationMember( member );
                 currGrp.Members.Add( currMember );
             }
         }

@@ -6,6 +6,7 @@
     public class SVNAuthorizationMember
     {
         ///<summary>
+        /// Initializes a new instance of the <see cref="SVNAuthorizationMember"/> class.
         ///</summary>
         ///<param name="memberName"></param>
         public SVNAuthorizationMember( string memberName )
