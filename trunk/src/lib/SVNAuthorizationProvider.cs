@@ -104,6 +104,14 @@ namespace SVNManagerLib
         }
 
         ///<summary>
+        /// Deletes a group from the authz file.
+        ///</summary>
+        ///<param name="groupName">The name of the group that will be deleted.</param>
+        public void DeleteGroup(string groupName)
+        {
+        }
+
+        ///<summary>
         /// Adds a new alias to the authz file.
         ///</summary>
         ///<param name="alias">The name of the new alias.</param>
@@ -113,13 +121,30 @@ namespace SVNManagerLib
         }
 
         ///<summary>
+        /// Deletes an alias from the authz file.
+        ///</summary>
+        ///<param name="alias">The name of the alias that will be deleted.</param>
+        public void DeleteAlias(string alias)
+        {
+        }
+
+        ///<summary>
         /// Adds a new member to an existing authz group.
         ///</summary>
-        ///<param name="groupName"></param>
-        ///<param name="newMemberName"></param>
+        ///<param name="groupName">The group name which will have the new member added.</param>
+        ///<param name="newMemberName">The name of the new group member.</param>
         public void AddGroupMember(string groupName, string newMemberName)
         {
-        } 
+        }
+ 
+        ///<summary>
+        /// Removes a member from an existing authz group.
+        ///</summary>
+        ///<param name="groupName">The group name which will have the member deleted.</param>
+        ///<param name="memberNameToDelete">The name of the group member that will be removed from the group.</param>
+        public void RemoveGroupMember(string groupName, string memberNameToDelete)
+        {
+        }
 
         #endregion
 
