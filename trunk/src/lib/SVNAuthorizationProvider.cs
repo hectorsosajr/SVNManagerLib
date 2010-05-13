@@ -109,11 +109,11 @@ namespace SVNManagerLib
 
             try
             {
-                authzConfigFile.Save(_authzPath );
+                authzConfigFile.Save( _authzPath );
             }
-            catch (Exception ex)
+            catch ( Exception ex )
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine( ex.Message );
             }
         }
 
@@ -121,8 +121,21 @@ namespace SVNManagerLib
         /// Deletes a group from the authz file.
         ///</summary>
         ///<param name="groupName">The name of the group that will be deleted.</param>
-        public void DeleteGroup(string groupName)
+        public void DeleteGroup( string groupName )
         {
+            var iniDoc = new IniDocument( _authzPath, IniFileType.SambaStyle );
+            var authzConfigFile = new IniConfigSource( iniDoc );
+
+            authzConfigFile.Configs.Remove( groupName );
+
+            try
+            {
+                authzConfigFile.Save( _authzPath );
+            }
+            catch ( Exception ex )
+            {
+                Console.WriteLine( ex.Message );
+            }
         }
 
         ///<summary>
@@ -130,7 +143,7 @@ namespace SVNManagerLib
         ///</summary>
         ///<param name="alias">The name of the new alias.</param>
         ///<param name="aliasPath">The path that the new alias will be representing.</param>
-        public void AddAlias(string alias, string aliasPath)
+        public void AddAlias( string alias, string aliasPath )
         {
         }
 
@@ -138,7 +151,7 @@ namespace SVNManagerLib
         /// Deletes an alias from the authz file.
         ///</summary>
         ///<param name="alias">The name of the alias that will be deleted.</param>
-        public void DeleteAlias(string alias)
+        public void DeleteAlias( string alias )
         {
         }
 
@@ -147,8 +160,21 @@ namespace SVNManagerLib
         ///</summary>
         ///<param name="groupName">The group name which will have the new member added.</param>
         ///<param name="newMemberName">The name of the new group member.</param>
-        public void AddGroupMember(string groupName, string newMemberName)
+        public void AddGroupMember( string groupName, string newMemberName )
         {
+            var iniDoc = new IniDocument( _authzPath, IniFileType.SambaStyle );
+            var authzConfigFile = new IniConfigSource( iniDoc );
+
+            authzConfigFile.Configs["groups"].Set( groupName, newMemberName );
+
+            try
+            {
+                authzConfigFile.Save( _authzPath );
+            }
+            catch ( Exception ex )
+            {
+                Console.WriteLine( ex.Message );
+            }
         }
  
         ///<summary>
@@ -158,6 +184,26 @@ namespace SVNManagerLib
         ///<param name="memberNameToDelete">The name of the group member that will be removed from the group.</param>
         public void RemoveGroupMember(string groupName, string memberNameToDelete)
         {
+            var iniDoc = new IniDocument( _authzPath, IniFileType.SambaStyle );
+            var authzConfigFile = new IniConfigSource( iniDoc );
+
+            string[] members = authzConfigFile.Configs["groups"].GetString( groupName ).Split( ',' );
+            var memberList = new List<string>( members.Length );
+            memberList.AddRange( members );
+            memberList.Remove( memberNameToDelete );
+            members = memberList.ToArray();
+
+            string newMemberList = string.Join( ",", members );
+            authzConfigFile.Configs["groups"].Set( groupName, newMemberList );
+
+            try
+            {
+                authzConfigFile.Save( _authzPath );
+            }
+            catch ( Exception ex )
+            {
+                Console.WriteLine( ex.Message );
+            }
         }
 
         #endregion
