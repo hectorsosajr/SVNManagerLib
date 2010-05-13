@@ -190,27 +190,23 @@ namespace SVNManagerLib
         /// <returns>Returns whether or not the command was successful.</returns>
 		public bool AddAdmin()
 		{
-			bool result;
+		    bool result = InsertUpdateAdminUser();
 
-			result = InsertUpdateAdminUser();
-
-			return result;
+		    return result;
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Deletes this user from the repository's admin user database.
 		/// </summary>
         /// <returns>Returns whether or not the command was successful.</returns>
 		public bool DeleteAdmin()
-		{
-			bool result;
-			
-			result = DeleteAdminUser();
+	    {
+	        bool result = DeleteAdminUser();
 
-			return result;
-		}
+	        return result;
+	    }
 
-		#endregion
+	    #endregion
 
 		#region Private Members
 		
@@ -271,11 +267,10 @@ namespace SVNManagerLib
 		private bool DeleteUser()
 		{
 			var repoConfig = new SVNRepoConfig( _RepositoryPath );
-		    bool result;
 
-			string userFile = repoConfig.UserDatabaseFileName;
+		    string userFile = repoConfig.UserDatabaseFileName;
 
-		    result = DeleteUser( userFile );
+		    bool result = DeleteUser( userFile );
 
 		    return result;
 		}
@@ -303,12 +298,10 @@ namespace SVNManagerLib
 		
 		private bool DeleteAdminUser()
 		{
-			string userFile;
-			IniConfigSource userConfig;
-			bool result;
+		    bool result;
 
-		    userFile = Common.GetCorrectedPath( _RepositoryPath, true ) + "administrators.txt";
-			userConfig = new IniConfigSource( userFile );
+		    string userFile = Common.GetCorrectedPath( _RepositoryPath, true ) + "administrators.txt";
+			var userConfig = new IniConfigSource( userFile );
 
 			userConfig.Configs["users"].Remove( _UserName );
 
