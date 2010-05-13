@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Nini.Config;
 using Nini.Ini;
 
@@ -99,8 +100,21 @@ namespace SVNManagerLib
         /// Adds a new group to the authz file.
         ///</summary>
         ///<param name="groupName"></param>
-        public void AddGroup(string groupName)
+        public void AddGroup( string groupName )
         {
+            var iniDoc = new IniDocument( _authzPath, IniFileType.SambaStyle );
+            var authzConfigFile = new IniConfigSource( iniDoc );
+
+            authzConfigFile.Configs["groups"].Set( groupName, "none" );
+
+            try
+            {
+                authzConfigFile.Save(_authzPath );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         ///<summary>
@@ -156,17 +170,21 @@ namespace SVNManagerLib
         private void ProcessFile()
         {
             var iniDoc = new IniDocument( _authzPath, IniFileType.SambaStyle );
-            var authzConfig = new IniConfigSource( iniDoc );
+            var authzConfigFile = new IniConfigSource( iniDoc );
 
-            var configs = authzConfig.Configs;
+            var configSections = authzConfigFile.Configs;
 
-            foreach ( var config in configs )
+            foreach (var config in configSections)
             {
                 var currConfig = (IniConfig)config;
 
                 if ( currConfig.Name == "groups" )
                 {
                     ProcessGroup( currConfig );
+                }
+                else
+                {
+                    ProcessAliases( currConfig );
                 }
             }
         }
@@ -176,7 +194,13 @@ namespace SVNManagerLib
             foreach (var group in config.GetKeys())
             {
                 var currGroup = new SVNAuthorizationGroup( group );
-                ProcessGroupMembers( config, currGroup, group );
+
+                string[] members = config.Get(group).Split(',');
+
+                if ( members[0] != string.Empty )
+                {
+                    ProcessGroupMembers(config, currGroup, group);
+                }
 
                 Groups.Add( currGroup );
             }
@@ -191,6 +215,10 @@ namespace SVNManagerLib
                 var currMember = new SVNAuthorizationMember( member );
                 currGrp.Members.Add( currMember );
             }
+        }
+
+        private static void ProcessAliases( IConfig config )
+        {
         }
 
         #endregion
