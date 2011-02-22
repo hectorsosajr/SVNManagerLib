@@ -153,7 +153,15 @@ namespace SVNManagerLib
         /// </summary>
         public string Realm
         {
-            get { return _repositoryConfiguration.RepositoryRealm; }
+            get 
+            {
+                if ( Equals( _repositoryConfiguration, null ) )
+                {
+                    return string.Empty;
+                }
+
+                return _repositoryConfiguration.RepositoryRealm; 
+            }
         }
 
         /// <summary>
@@ -456,7 +464,7 @@ namespace SVNManagerLib
             // The "format" file was set to read only. Need to remove
             // that file attribute in order for the directory delete
             // to work.
-            if ( File.Exists( formatFilePath ) )
+            if ( File.Exists(formatFilePath) )
             {
                 File.SetAttributes( formatFilePath, FileAttributes.Normal );
             }
@@ -465,6 +473,11 @@ namespace SVNManagerLib
             {
                 File.SetAttributes( formatFilePathdb, FileAttributes.Normal );
             }
+
+            // Recurse through this path and remove all the read-only attributes
+            // it finds.
+            Common.ScanAndRemoveReadOnlyFromFileTree( _fullPath );
+
 
             try
             {
