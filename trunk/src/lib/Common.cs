@@ -421,5 +421,39 @@ namespace SVNManagerLib
 
             return fileURL;
         }
+
+        /// <summary>
+        /// Scans a directory and subdirectories and removes any read-only attributes that it
+        /// finds in any file under the root directory.
+        /// </summary>
+        /// <param name="rootDirectory"></param>
+        /// <returns></returns>
+        public static bool ScanAndRemoveReadOnlyFromFileTree( string rootDirectory )
+        {
+            bool retval;
+
+            try
+            {
+                foreach ( string d in Directory.GetDirectories( rootDirectory ))
+                {
+                    foreach ( string file in Directory.GetFiles(d) )
+                    {
+                        if (File.GetAttributes(file) == FileAttributes.ReadOnly)
+                            File.SetAttributes(file, FileAttributes.Normal);
+                    }
+
+                    ScanAndRemoveReadOnlyFromFileTree( d );
+                }
+
+                retval = true;
+            }
+            catch ( System.Exception ex )
+            {
+                Console.WriteLine(ex.Message);
+                retval = false;
+            }
+
+            return retval;
+        }
 	}
 }

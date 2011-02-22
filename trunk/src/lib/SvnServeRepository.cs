@@ -188,7 +188,8 @@ namespace SVNManagerLib
             {
             }
 
-            string newRepoPath = Path.Combine( rootRepoDir, repoName );
+            string newRepoPath = "\"" + Path.Combine(rootRepoDir, repoName) + "\"";
+            string newRepoPathUnescaped = Path.Combine(rootRepoDir, repoName);
             const string fileOptions = " --fs-type ";
             const string svnBDB = "bdb";
             const string svnFSFS = "fsfs";
@@ -223,9 +224,9 @@ namespace SVNManagerLib
 
             if ( retval )
             {
-                ProcessNewConfFile( newRepoPath );
+                ProcessNewConfFile( newRepoPathUnescaped );
 
-                LoadConfig( newRepoPath );
+                LoadConfig( newRepoPathUnescaped );
             }
 
             return retval;
