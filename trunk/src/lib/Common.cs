@@ -428,28 +428,28 @@ namespace SVNManagerLib
         /// </summary>
         /// <param name="rootDirectory"></param>
         /// <returns></returns>
-        public static bool ScanAndRemoveReadOnlyFromFileTree( string rootDirectory )
+        public static bool SafeDelete( FileSystemInfo rootDirectory )
         {
             bool retval;
 
             try
             {
-                foreach ( string d in Directory.GetDirectories( rootDirectory ))
-                {
-                    foreach ( string file in Directory.GetFiles(d) )
-                    {
-                        if (File.GetAttributes(file) == FileAttributes.ReadOnly)
-                            File.SetAttributes(file, FileAttributes.Normal);
-                    }
+                rootDirectory.Attributes = FileAttributes.Normal;
+                var di = rootDirectory as DirectoryInfo;
 
-                    ScanAndRemoveReadOnlyFromFileTree( d );
+                if (di != null)
+                {
+                    foreach (var dirInfo in di.GetFileSystemInfos())
+                        SafeDelete( dirInfo );
                 }
+
+                rootDirectory.Delete();
 
                 retval = true;
             }
             catch ( System.Exception ex )
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine( ex.Message );
                 retval = false;
             }
 
