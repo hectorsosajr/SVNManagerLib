@@ -456,41 +456,20 @@ namespace SVNManagerLib
         /// <returns>Whether or not this operation was successful.</returns>
         public bool DeleteRepository( out string errors )
         {
-            bool retval;
+            bool retval = true;
             string msg = "";
-            string formatFilePath = Path.Combine( _fullPath, "format" );
-            string formatFilePathdb = Path.Combine( Path.Combine( _fullPath, "db" ), "format");
-
-            // The "format" file was set to read only. Need to remove
-            // that file attribute in order for the directory delete
-            // to work.
-            if ( File.Exists(formatFilePath) )
-            {
-                File.SetAttributes( formatFilePath, FileAttributes.Normal );
-            }
-
-            if ( File.Exists( formatFilePathdb ) )
-            {
-                File.SetAttributes( formatFilePathdb, FileAttributes.Normal );
-            }
-
-            // Recurse through this path and remove all the read-only attributes
-            // it finds.
-            Common.ScanAndRemoveReadOnlyFromFileTree( _fullPath );
-
 
             try
             {
-                string hookDir = Path.Combine( _fullPath, "hooks" );
-                Directory.Delete( hookDir, true );
-                Directory.Delete( _fullPath, true );
-                retval = true;
+                // Recurse through this path and remove all the read-only attributes
+                // it finds. Then delete them.
+                Common.SafeDelete(new DirectoryInfo( _fullPath ));
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
                 retval = false;
                 msg = ex.Message;
-                System.Diagnostics.Debugger.Log(1,"IO", msg);
+                System.Diagnostics.Debugger.Log(1, "IO", msg);
             }
 
             errors = msg;
