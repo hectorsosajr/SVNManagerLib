@@ -11,118 +11,118 @@ using Nini.Config;
 
 namespace SVNManagerLib
 {
-	/// <summary>
-	/// This class provides read/write access to server-wide configuration
+    /// <summary>
+    /// This class provides read/write access to server-wide configuration
     /// settings. This uses the Nini configuration library at
     /// http://nini.sourceforge.net/
-	/// </summary>
-	public class SVNServerConfig
-	{
-		#region Member Variables
+    /// </summary>
+    public class SVNServerConfig
+    {
+        #region Member Variables
 
-		private string _repositoryRootDirectory = string.Empty;
-		private string _serverRootDirectory = string.Empty;
-		private string _commandRootDirectory = string.Empty;
-	    private string _repoMode = string.Empty;
+        private string _repositoryRootDirectory = string.Empty;
+        private string _serverRootDirectory = string.Empty;
+        private string _commandRootDirectory = string.Empty;
+        private string _repoMode = string.Empty;
         private string _configFileName = string.Empty;
         private string _configFilePath = string.Empty;
-	    private bool _usersGlobalConfigFile;
-	    private string _globalConfigFilePath = string.Empty;
+        private bool _usersGlobalConfigFile;
+        private string _globalConfigFilePath = string.Empty;
         private readonly string _defaultConfigFileName = "svnmanagerlib.ini";
-		private IConfigSource _config;
+        private IConfigSource _config;
 
-		#endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
-		/// <summary>
-		/// Default constructor
-		/// This class defaults the configuration file 
-		/// to "svnmanagerlib.ini"
-		/// </summary>
-		public SVNServerConfig()
-		{
-			try
-			{
-				LoadServerConfiguration();
-			}
-			catch ( Exception ex )
-			{
-				Console.WriteLine(ex.Message);
-			}
-		}
+        /// <summary>
+        /// Default constructor
+        /// This class defaults the configuration file 
+        /// to "svnmanagerlib.ini"
+        /// </summary>
+        public SVNServerConfig()
+        {
+            try
+            {
+                LoadServerConfiguration();
+            }
+            catch ( Exception ex )
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
-		/// <summary>
-		/// This class defaults to "svnmanagerlib.ini"
-		/// This allows for a different configuration file.
-		/// </summary>
-		/// <param name="ConfigFilePath">The path to the user selected config file.</param>
-		public SVNServerConfig( string ConfigFilePath )
-		{
-			try
-			{
-				LoadServerConfiguration( ConfigFilePath );
-			}
-			catch ( Exception ex )
-			{
-				Console.WriteLine( ex.Message );
-			}
-		}
+        /// <summary>
+        /// This class defaults to "svnmanagerlib.ini"
+        /// This allows for a different configuration file.
+        /// </summary>
+        /// <param name="ConfigFilePath">The path to the user selected config file.</param>
+        public SVNServerConfig( string ConfigFilePath )
+        {
+            try
+            {
+                LoadServerConfiguration( ConfigFilePath );
+            }
+            catch ( Exception ex )
+            {
+                Console.WriteLine( ex.Message );
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// This is the directory where the actual command-line
-		/// programs reside.
-		/// </summary>
-		/// <remarks>It looks like some Linux distributions install the
-		/// command-line programs to different locations.</remarks>
-		public string CommandRootDirectory
-		{
-			get
-			{
-				return _commandRootDirectory;
-			}
-			set
-			{
-				_commandRootDirectory = value;
-			}
-		}
+        /// <summary>
+        /// This is the directory where the actual command-line
+        /// programs reside.
+        /// </summary>
+        /// <remarks>It looks like some Linux distributions install the
+        /// command-line programs to different locations.</remarks>
+        public string CommandRootDirectory
+        {
+            get
+            {
+                return _commandRootDirectory;
+            }
+            set
+            {
+                _commandRootDirectory = value;
+            }
+        }
 
-		/// <summary>
-		/// This is the topmost directory. This is where the
-		/// Subversion server binaries get installed.
-		/// </summary>
-		public string ServerRootDirectory
-		{
-			get
-			{
-				return _serverRootDirectory;
-			}
-			set
-			{
-				_serverRootDirectory = value;
-			}
-		}
+        /// <summary>
+        /// This is the topmost directory. This is where the
+        /// Subversion server binaries get installed.
+        /// </summary>
+        public string ServerRootDirectory
+        {
+            get
+            {
+                return _serverRootDirectory;
+            }
+            set
+            {
+                _serverRootDirectory = value;
+            }
+        }
 
-		/// <summary>
-		/// This is the root directory for all the repositories.
-		/// </summary>
-		/// <remarks>svnserve.exe should be configured with the -r argument on this
-		/// directory in order for this to work correctly.</remarks>
-		public string RepositoryRootDirectory
-		{
-			get
-			{
-				return _repositoryRootDirectory;
-			}
-			set
-			{
-				_repositoryRootDirectory = value;
-			}
-		}
+        /// <summary>
+        /// This is the root directory for all the repositories.
+        /// </summary>
+        /// <remarks>svnserve.exe should be configured with the -r argument on this
+        /// directory in order for this to work correctly.</remarks>
+        public string RepositoryRootDirectory
+        {
+            get
+            {
+                return _repositoryRootDirectory;
+            }
+            set
+            {
+                _repositoryRootDirectory = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the name of the config file.
@@ -173,14 +173,14 @@ namespace SVNManagerLib
             }
         }
 
-	    ///<summary>
-	    /// Tells whether or not the server is using a global config file.
-	    ///</summary>
-	    ///<remarks>
-	    /// This is the svnserve.conf file. This is only available on Subversion 1.5 or greater.
-	    /// </remarks>
-	    public bool UsesGlobalConfigFile
-	    {
+        ///<summary>
+        /// Tells whether or not the server is using a global config file.
+        ///</summary>
+        ///<remarks>
+        /// This is the svnserve.conf file. This is only available on Subversion 1.5 or greater.
+        /// </remarks>
+        public bool UsesGlobalConfigFile
+        {
             get
             {
                 return _usersGlobalConfigFile;
@@ -209,21 +209,21 @@ namespace SVNManagerLib
             }
         }
 
-		#endregion
+        #endregion
 
-		#region Public Members
+        #region Public Members
 
-		/// <summary>
-		/// Saves the current values to the config file.
-		/// </summary>
-		/// <returns>Whether or not the save action was successful.</returns>
-		public bool Save()
-		{
-			bool retval;
+        /// <summary>
+        /// Saves the current values to the config file.
+        /// </summary>
+        /// <returns>Whether or not the save action was successful.</returns>
+        public bool Save()
+        {
+            bool retval;
 
-			try
-			{
-				_config.Configs["subversion"].Set( "serverdir", _serverRootDirectory );
+            try
+            {
+                _config.Configs["subversion"].Set( "serverdir", _serverRootDirectory );
                 _config.Configs["subversion"].Set( "commanddir", _commandRootDirectory );
 
                 if ( _usersGlobalConfigFile )
@@ -235,12 +235,12 @@ namespace SVNManagerLib
                     _config.Configs["subversion"].Set( "globalconfigdir", string.Empty );
                 }
 
-			    _config.Configs["repositories"].Set( "reporoot", _repositoryRootDirectory );
+                _config.Configs["repositories"].Set( "reporoot", _repositoryRootDirectory );
                 _config.Configs["repositories"].Set( "mode", _repoMode );
-				_config.Save();
+                _config.Save();
 
-				retval = true;
-			}
+                retval = true;
+            }
             catch ( NullReferenceException )
             {
                 string path = "";
@@ -282,23 +282,23 @@ namespace SVNManagerLib
 
                 retval = true;
             }
-			catch ( Exception )
-			{
-			    retval = false;
-			}
+            catch ( Exception )
+            {
+                retval = false;
+            }
 
-			return retval;
-		}
+            return retval;
+        }
 
-		#endregion
+        #endregion
 
-		#region Private members
+        #region Private members
 
-		private void LoadServerConfiguration()
-		{
+        private void LoadServerConfiguration()
+        {
             _config = new IniConfigSource( _defaultConfigFileName );
             
-			_serverRootDirectory =  _config.Configs["subversion"].GetString( "serverdir" );
+            _serverRootDirectory =  _config.Configs["subversion"].GetString( "serverdir" );
             _commandRootDirectory = _config.Configs["subversion"].GetString( "commanddir" );
             _globalConfigFilePath = _config.Configs["subversion"].GetString( "globalconfigdir" );
 
@@ -312,11 +312,11 @@ namespace SVNManagerLib
 
             _repositoryRootDirectory = _config.Configs["repositories"].GetString( "reporoot" );
             _repoMode = _config.Configs["repositories"].GetString( "mode" );
-		    _configFileName = _defaultConfigFileName;
-		}
+            _configFileName = _defaultConfigFileName;
+        }
 
-		private void LoadServerConfiguration( string configFileName )
-		{
+        private void LoadServerConfiguration( string configFileName )
+        {
             _config = new IniConfigSource( configFileName );
 
             _serverRootDirectory = _config.Configs["subversion"].GetString( "serverdir" );
@@ -331,11 +331,11 @@ namespace SVNManagerLib
                 }
             }
 
-		    _repositoryRootDirectory = _config.Configs["repositories"].GetString( "reporoot" );
+            _repositoryRootDirectory = _config.Configs["repositories"].GetString( "reporoot" );
             _repoMode = _config.Configs["repositories"].GetString( "mode" );
-		    _configFileName = configFileName;
-		}
+            _configFileName = configFileName;
+        }
 
-		#endregion
+        #endregion
     }
 }

@@ -15,7 +15,7 @@ namespace SVNManagerLib
     /// Represents the most basic representation of a Subversion repository,
     /// which could be used for both svnserve and Apache servers.
     /// </summary>
-	public interface ISubversionRepository : IComponent
+    public interface ISubversionRepository : IComponent
     {
         /// <summary>
         /// Creates a repository with a Berkeley database backend.
@@ -105,10 +105,10 @@ namespace SVNManagerLib
         /// <returns></returns>
         string[] SvnLook( string subcommand, params string[] args );
 
-		/// <summary>
+        /// <summary>
         /// Holds what <see cref="RepositoryAuthorization">rights</see> do the anonymous users have
         /// for this repository.
-		/// </summary>
+        /// </summary>
         RepositoryAuthorization AnonymousAccess { get; set; }
 
         /// <summary>
@@ -135,9 +135,9 @@ namespace SVNManagerLib
         /// <value>First user password used during repository creation.</value>
         string FirstRepoUserPassword { get; set; }
 
-		/// <summary>
-		/// The full path to this repository.
-		/// </summary>
+        /// <summary>
+        /// The full path to this repository.
+        /// </summary>
         string FullPath { get; set; }
 
         /// <summary>
@@ -146,10 +146,10 @@ namespace SVNManagerLib
         /// <value>The hook files.</value>
         List<SVNHook> HookScriptFiles { get; }
 
-		/// <summary>
-		/// The name of this repository. This is usually the root folder
-		/// name of the repository
-		/// </summary>
+        /// <summary>
+        /// The name of this repository. This is usually the root folder
+        /// name of the repository
+        /// </summary>
         string Name { get; set; }
 
         /// <summary>
@@ -158,10 +158,10 @@ namespace SVNManagerLib
         /// </summary>
         string Realm { get; }
 
-		/// <summary>
-		/// The <see cref="SVNRepoConfig"/> managing this repository's
-		/// configuration settings.
-		/// </summary>
+        /// <summary>
+        /// The <see cref="SVNRepoConfig"/> managing this repository's
+        /// configuration settings.
+        /// </summary>
         SVNRepoConfig RepositoryConfiguration { get; set; }
 
         /// <summary>
@@ -174,9 +174,9 @@ namespace SVNManagerLib
         /// </summary>
         string RepositoryPath { get; }
 
-		/// <summary>
-		/// Holds the back end that this repository is using.
-		/// </summary>
+        /// <summary>
+        /// Holds the back end that this repository is using.
+        /// </summary>
         RepositoryTypes RepositoryType { get; }
 
         /// <summary>
@@ -190,10 +190,10 @@ namespace SVNManagerLib
         /// <value>The sever commands path.</value>
         string SeverCommandsPath { get; set; }
 
-		/// <summary>
-		/// A list of <see cref="SVNUser"/> that are associated with
-		/// this repository.
-		/// </summary>
+        /// <summary>
+        /// A list of <see cref="SVNUser"/> that are associated with
+        /// this repository.
+        /// </summary>
         SVNUserCollection Users { get; }
-	}
+    }
 }

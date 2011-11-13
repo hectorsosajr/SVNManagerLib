@@ -12,39 +12,39 @@ using System.IO;
 
 namespace SVNManagerLib
 {
-	/// <summary>
-	/// A list of possible authorization modes for a
-	/// Subversion repository.
-	/// </summary>
-	public enum RepositoryAuthorization
-	{
-		/// <summary>
-		/// This repository will allow both read and write access.
-		/// </summary>
-		Write	= 0,
-		/// <summary>
-		/// This repository will allow read-only access.
-		/// </summary>
-		Read	= 1,
-		/// <summary>
-		/// This is a private repository.
-		/// </summary>
-		None	= 2
-	}
+    /// <summary>
+    /// A list of possible authorization modes for a
+    /// Subversion repository.
+    /// </summary>
+    public enum RepositoryAuthorization
+    {
+        /// <summary>
+        /// This repository will allow both read and write access.
+        /// </summary>
+        Write	= 0,
+        /// <summary>
+        /// This repository will allow read-only access.
+        /// </summary>
+        Read	= 1,
+        /// <summary>
+        /// This is a private repository.
+        /// </summary>
+        None	= 2
+    }
 
-	/// <summary>
-	/// A list of currently supported Subversion repository backends.
-	/// </summary>
-	public enum RepositoryTypes
-	{
-		/// <summary>
-		/// This repository uses the Berekely database.
-		/// </summary>
-		BerkeleyDatabase = 1,
-		/// <summary>
-		/// This repository uses the file system.
-		/// </summary>
-		FileSystem = 2
+    /// <summary>
+    /// A list of currently supported Subversion repository backends.
+    /// </summary>
+    public enum RepositoryTypes
+    {
+        /// <summary>
+        /// This repository uses the Berekely database.
+        /// </summary>
+        BerkeleyDatabase = 1,
+        /// <summary>
+        /// This repository uses the file system.
+        /// </summary>
+        FileSystem = 2
     }
 
     ///<summary>
@@ -65,63 +65,63 @@ namespace SVNManagerLib
         File
     }
 
-	/// <summary>
-	/// Functions that are common across several classes.
-	/// </summary>
-	public class Common
-	{
-		/// <summary>
-		/// Returns a fully qualified path for the current operating system.
-		/// This also fixes the path separators according to the current
-		/// Operating System.
-		/// </summary>
-		/// <param name="FullPath">The path to verify.</param>
-		/// <param name="EndSeparator">A switch to tell the function whether it should check for a separator at the end of the path.</param>
-		public static string GetCorrectedPath( string FullPath, bool EndSeparator )
-		{
-			string retval;
+    /// <summary>
+    /// Functions that are common across several classes.
+    /// </summary>
+    public class Common
+    {
+        /// <summary>
+        /// Returns a fully qualified path for the current operating system.
+        /// This also fixes the path separators according to the current
+        /// Operating System.
+        /// </summary>
+        /// <param name="FullPath">The path to verify.</param>
+        /// <param name="EndSeparator">A switch to tell the function whether it should check for a separator at the end of the path.</param>
+        public static string GetCorrectedPath( string FullPath, bool EndSeparator )
+        {
+            string retval;
 
-			OperatingSystem myOS = Environment.OSVersion;
-			
-			//Code Checks to see which OS is being used 128 indicates Linux
-			if( (int)myOS.Platform == 128 )
-			{
-				retval = FullPath.Replace( "\\", "/" );
+            OperatingSystem myOS = Environment.OSVersion;
+            
+            //Code Checks to see which OS is being used 128 indicates Linux
+            if( (int)myOS.Platform == 128 )
+            {
+                retval = FullPath.Replace( "\\", "/" );
 
-				if ( EndSeparator ) 
-				{
-					if ( !retval.EndsWith("/") )
-					{
-						retval += "/";
-					}
-				}
-			}
-			else
-			{
-				retval = FullPath.Replace( "/", "\\" );
+                if ( EndSeparator ) 
+                {
+                    if ( !retval.EndsWith("/") )
+                    {
+                        retval += "/";
+                    }
+                }
+            }
+            else
+            {
+                retval = FullPath.Replace( "/", "\\" );
 
-				if ( EndSeparator )
-				{
-					if ( !retval.EndsWith("\\")  )
-					{
-						retval += "\\";
-					}
-				}
-			}
+                if ( EndSeparator )
+                {
+                    if ( !retval.EndsWith("\\")  )
+                    {
+                        retval += "\\";
+                    }
+                }
+            }
 
-			return retval;
-		}
+            return retval;
+        }
 
-		/// <summary>
-		/// Executes a well formed Subversion command against a command-line
-		/// program.
-		/// </summary>
-		/// <param name="command">Well formed Subversion command.</param>
-		/// <param name="arguments">Arguments that will be used for the Subversion command.</param>
+        /// <summary>
+        /// Executes a well formed Subversion command against a command-line
+        /// program.
+        /// </summary>
+        /// <param name="command">Well formed Subversion command.</param>
+        /// <param name="arguments">Arguments that will be used for the Subversion command.</param>
         /// <param name="result">This is the output for the command after execution.</param>
         /// <param name="errors">This is the output for any errors during execution.</param>
-		/// <returns>bool - Whether or not the command was successfully executed.</returns>
-		public static bool ExecuteSvnCommand( string command, string arguments, out string result, out string errors )
+        /// <returns>bool - Whether or not the command was successfully executed.</returns>
+        public static bool ExecuteSvnCommand( string command, string arguments, out string result, out string errors )
         {
             bool retval = false;
             string output = string.Empty;
@@ -171,7 +171,7 @@ namespace SVNManagerLib
             }
 
             result = output;
-		    errors = errorLines;
+            errors = errorLines;
 
             return retval;
         }
@@ -240,17 +240,17 @@ namespace SVNManagerLib
             return retval;
         }
 
-		/// <summary>
-		/// Executes a well formed Subversion command against a command-line
-		/// where input, either as a file or text, is requested.
-		/// </summary>
-		/// <param name="command">Well formed Subversion command.</param>
-		/// <param name="arguments">Arguments that will be used for the Subversion command.</param>
+        /// <summary>
+        /// Executes a well formed Subversion command against a command-line
+        /// where input, either as a file or text, is requested.
+        /// </summary>
+        /// <param name="command">Well formed Subversion command.</param>
+        /// <param name="arguments">Arguments that will be used for the Subversion command.</param>
         /// <param name="filePath">The file path that will be processed by this Subversion command.</param>
         /// <param name="result">This is the output for the command after execution.</param>
         /// <param name="errors">This is the output for any errors during execution.</param>
-		/// <returns>bool - Whether or not the command was successfully executed.</returns>
-		public static bool ExecuteSvnCommandWithFileInput( string command, string arguments, string filePath, out string result, out string errors )
+        /// <returns>bool - Whether or not the command was successfully executed.</returns>
+        public static bool ExecuteSvnCommandWithFileInput( string command, string arguments, string filePath, out string result, out string errors )
         {
             bool retval = false;
             string output = string.Empty;
@@ -259,7 +259,7 @@ namespace SVNManagerLib
             var psi = new ProcessStartInfo( command );
 
             psi.RedirectStandardInput = true;
-			psi.RedirectStandardOutput = true;
+            psi.RedirectStandardOutput = true;
             psi.RedirectStandardError = true;
             psi.WindowStyle = ProcessWindowStyle.Hidden;
             psi.UseShellExecute = false;
@@ -277,7 +277,7 @@ namespace SVNManagerLib
                 reader.Close();
 
                 StreamWriter myWriter = svnCommand.StandardInput;
-				StreamReader myOutput = svnCommand.StandardOutput;
+                StreamReader myOutput = svnCommand.StandardOutput;
                 StreamReader myErrors = svnCommand.StandardError;
 
                 myWriter.AutoFlush = true;
@@ -307,7 +307,7 @@ namespace SVNManagerLib
             }
 
             result = output;
-		    errors = errorLines;
+            errors = errorLines;
 
             return retval;
         }
@@ -455,5 +455,5 @@ namespace SVNManagerLib
 
             return retval;
         }
-	}
+    }
 }

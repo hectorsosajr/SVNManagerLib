@@ -11,20 +11,20 @@ using System.Text;
 
 namespace SVNManagerLib
 {
-	/// <summary>
-	/// Represents a file or folder inside a Subversion repository.
-	/// </summary>
+    /// <summary>
+    /// Represents a file or folder inside a Subversion repository.
+    /// </summary>
     public class SVNFileSystemEntity
     {
         #region Member Variables
 
-		private Hashtable _properties = new Hashtable();
+        private Hashtable _properties = new Hashtable();
         private Hashtable _information = new Hashtable();
         private string _entityName;        
         private string _fullPath;
-	    private string _serverCommandsPath;
+        private string _serverCommandsPath;
 
-	    #endregion
+        #endregion
 
         #region Constructors
 
@@ -43,9 +43,9 @@ namespace SVNManagerLib
         public SVNFileSystemEntity( string serverCommandsPath, string pathToEntity, string entityName )
         {
             _serverCommandsPath = serverCommandsPath;
-			_fullPath = pathToEntity;
-			_entityName = entityName;
-		}
+            _fullPath = pathToEntity;
+            _entityName = entityName;
+        }
 
         #endregion
 
@@ -115,15 +115,15 @@ namespace SVNManagerLib
             }
         }
 
-	    ///<summary>
+        ///<summary>
         /// Whether this Subversion item is a <see cref="FileSystemEntityType">file or directory</see>.
-	    ///</summary>
-	    public FileSystemEntityType FileSystemType
-	    {
-	        get; set;
-	    }
+        ///</summary>
+        public FileSystemEntityType FileSystemType
+        {
+            get; set;
+        }
 
-	    #endregion
+        #endregion
 
         #region Public Members 
 
@@ -135,9 +135,9 @@ namespace SVNManagerLib
         {
             _fullPath = pathToEntity;
 
-			bool retval = LoadEntityInfo();
+            bool retval = LoadEntityInfo();
 
-			return retval;
+            return retval;
         }
 
         /// <summary>
@@ -145,23 +145,23 @@ namespace SVNManagerLib
         /// </summary>
         /// <returns></returns>
         public bool LoadProperties( string pathToEntity )
-		{
+        {
             _fullPath = pathToEntity;
 
-			bool retval = LoadEntityProperties();
+            bool retval = LoadEntityProperties();
 
             return retval;
         } 
 
         #endregion
 
-		#region Private Members
+        #region Private Members
 
-		private bool LoadEntityInfo()
-		{
-		    string lines;
-		    string errors;
-		    var arg = new StringBuilder();
+        private bool LoadEntityInfo()
+        {
+            string lines;
+            string errors;
+            var arg = new StringBuilder();
 
             string convPath = Common.PathToFileUrl( _fullPath );
 
@@ -173,7 +173,7 @@ namespace SVNManagerLib
 
             bool retval = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
 
-		    string[] parsedLines = Common.ParseOutputIntoLines( lines );
+            string[] parsedLines = Common.ParseOutputIntoLines( lines );
 
             if ( !Equals( parsedLines,null ) )
             {
@@ -192,14 +192,14 @@ namespace SVNManagerLib
                 } 
             }
 
-			return retval;
-		}
+            return retval;
+        }
 
-		private bool LoadEntityProperties()
+        private bool LoadEntityProperties()
         {
-		    string lines;
-		    string errors;
-		    var arg = new StringBuilder();
+            string lines;
+            string errors;
+            var arg = new StringBuilder();
 
             string convPath = Common.PathToFileUrl( _fullPath );
 
@@ -207,7 +207,7 @@ namespace SVNManagerLib
 
             // Start setting up the svn command
             arg.Append( "proplist " );
-		    arg.Append( "--verbose " );
+            arg.Append( "--verbose " );
             arg.Append( convPath );
 
             bool retval = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );

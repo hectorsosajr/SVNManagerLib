@@ -13,50 +13,50 @@ using Nini.Ini;
 
 namespace SVNManagerLib
 {
-	/// <summary>
+    /// <summary>
     /// This class provides read/write access to repository-wide configuration
     /// settings. This uses the Nini configuration library at
     /// http://nini.sourceforge.net/
-	/// </summary>
-	public class SVNRepoConfig
-	{
+    /// </summary>
+    public class SVNRepoConfig
+    {
         #region Member Variables
 
-		private string _UserDatabaseFileName;
-		private IniConfigSource _ServerConfig;
-		private string _RepositoryRootDirectory;
+        private string _UserDatabaseFileName;
+        private IniConfigSource _ServerConfig;
+        private string _RepositoryRootDirectory;
         private RepositoryAuthorization _AnonymousAccess;
         private RepositoryAuthorization _AuthorizedAccess;
-		private string _AnonAcc;
-		private string _AuthAcc;
-		private string _repositoryType;
+        private string _AnonAcc;
+        private string _AuthAcc;
+        private string _repositoryType;
         private string _repositoryUUID;
         private string _fullPathToConfFile;
         private string _authorizationRulesFile;
         private string _repositoryRealm;
-	    private string _repositorySchemaVersion;
-	    private bool _isSaslAvailable;
-	    private int _minSaslEncryption;
-	    private int _maxSaslEncryption;
+        private string _repositorySchemaVersion;
+        private bool _isSaslAvailable;
+        private int _minSaslEncryption;
+        private int _maxSaslEncryption;
 
-	    #endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
-		/// <summary>
-		/// Empty constructor
-		/// </summary>
-		public SVNRepoConfig()
-		{}
+        /// <summary>
+        /// Empty constructor
+        /// </summary>
+        public SVNRepoConfig()
+        {}
 
-		/// <summary>
-		/// Loads a repository configuration information.
-		/// </summary>
-		/// <param name="RepositoryPath">The path to the repository.</param>
-		public SVNRepoConfig( string RepositoryPath )
-		{
-			LoadRepositoryConfigurationSettings( RepositoryPath );
-		}
+        /// <summary>
+        /// Loads a repository configuration information.
+        /// </summary>
+        /// <param name="RepositoryPath">The path to the repository.</param>
+        public SVNRepoConfig( string RepositoryPath )
+        {
+            LoadRepositoryConfigurationSettings( RepositoryPath );
+        }
 
         ///<summary>
         /// Loads a repository configuration information.
@@ -71,87 +71,87 @@ namespace SVNManagerLib
             LoadRepositoryConfigurationSettings( GlobalConfigFileInfo );
         }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// The file that contains the user accounts.
-		/// </summary>
-		public string UserDatabaseFileName
-		{
-			get
-			{
-				return _UserDatabaseFileName;
-			}
-			set
-			{
-				_UserDatabaseFileName = value;
-			}
-		}
+        /// <summary>
+        /// The file that contains the user accounts.
+        /// </summary>
+        public string UserDatabaseFileName
+        {
+            get
+            {
+                return _UserDatabaseFileName;
+            }
+            set
+            {
+                _UserDatabaseFileName = value;
+            }
+        }
 
-		/// <summary>
-		/// The root directory for this repository.
-		/// </summary>
-		public string RepositoryRootDirectory
-		{
-			get
-			{
-				return _RepositoryRootDirectory;
-			}
-			set
-			{
-				_RepositoryRootDirectory = value;
-			}
-		}
+        /// <summary>
+        /// The root directory for this repository.
+        /// </summary>
+        public string RepositoryRootDirectory
+        {
+            get
+            {
+                return _RepositoryRootDirectory;
+            }
+            set
+            {
+                _RepositoryRootDirectory = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the anonymous access.
         /// </summary>
         /// <value>The anonymous access.</value>
-		public RepositoryAuthorization AnonymousAccess
-		{
-			get
-			{
-				return _AnonymousAccess;
-			}
-			set
-			{
-				_AnonymousAccess = value;
-			}
-		}
+        public RepositoryAuthorization AnonymousAccess
+        {
+            get
+            {
+                return _AnonymousAccess;
+            }
+            set
+            {
+                _AnonymousAccess = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the authorized access.
         /// </summary>
         /// <value>The authorized access.</value>
-		public RepositoryAuthorization AuthorizedAccess
-		{
-			get
-			{
-				return _AuthorizedAccess;
-			}
-			set
-			{
-				_AuthorizedAccess = value;
-			}
-		}
+        public RepositoryAuthorization AuthorizedAccess
+        {
+            get
+            {
+                return _AuthorizedAccess;
+            }
+            set
+            {
+                _AuthorizedAccess = value;
+            }
+        }
 
-		/// <summary>
-		/// Holds the string contained in the fs-type file
-		/// inside the db folder.
-		/// </summary>
-		public string RepositoryType
-		{
-			get
-			{
-				return _repositoryType;
-			}
-			set
-			{
-				_repositoryType = value;
-			}
-		}
+        /// <summary>
+        /// Holds the string contained in the fs-type file
+        /// inside the db folder.
+        /// </summary>
+        public string RepositoryType
+        {
+            get
+            {
+                return _repositoryType;
+            }
+            set
+            {
+                _repositoryType = value;
+            }
+        }
 
         /// <summary>
         /// Holds the UUID (Universal Unique IDentifier) for this repository.
@@ -205,17 +205,17 @@ namespace SVNManagerLib
         /// Gets or sets the repository schema version.
         /// </summary>
         /// <value>The repository schema version.</value>
-	    public string RepositorySchemaVersion
-	    {
-	        get
-	        {
-	            return _repositorySchemaVersion;
-	        }
+        public string RepositorySchemaVersion
+        {
+            get
+            {
+                return _repositorySchemaVersion;
+            }
             set
             {
                 _repositorySchemaVersion = value;
             }
-	    }
+        }
 
 
         /// <summary>
@@ -225,40 +225,40 @@ namespace SVNManagerLib
         /// 	<c>true</c> if this this repository has SASL available; otherwise, <c>false</c>.
         /// </value>
         public bool IsSaslAvailable
-	    {
-	        get
-	        {
-	            return _isSaslAvailable;
-	        }
-	    }
+        {
+            get
+            {
+                return _isSaslAvailable;
+            }
+        }
 
         /// <summary>
         /// Gets the sasl minimun encryption.
         /// </summary>
         /// <value>The sasl minimun encryption.</value>
-	    public Int32 SaslMinimunEncryption
-	    {
-	        get
-	        {
-	            return _minSaslEncryption;
-	        }
-	    }
+        public Int32 SaslMinimunEncryption
+        {
+            get
+            {
+                return _minSaslEncryption;
+            }
+        }
 
         /// <summary>
         /// Gets the sasl maximum encryption.
         /// </summary>
         /// <value>The sasl maximum encryption.</value>
-	    public Int32 SaslMaximumEncryption
-	    {
-	        get
-	        {
-	            return _maxSaslEncryption;
-	        }
-	    }
+        public Int32 SaslMaximumEncryption
+        {
+            get
+            {
+                return _maxSaslEncryption;
+            }
+        }
 
-	    #endregion
-		
-		#region Public Members
+        #endregion
+        
+        #region Public Members
 
         /// <summary>
         /// Updates the repository authorization settings in the svnserve.conf file.
@@ -375,14 +375,42 @@ namespace SVNManagerLib
             return retVal;
         }
 
-		#endregion
+        /// <summary>
+        /// Gets the schema version description.
+        /// </summary>
+        /// <returns>Returns a human friendly description of the Subversion version number.</returns>
+        public string GetSchemaVersionDescription()
+        {
+            string versionNumber = _repositorySchemaVersion;
+            string retval = versionNumber;
 
-		#region Private Members
+            switch ( versionNumber )
+            {
+                case "1":
+                    retval = retval + " - " + "Subversion up to and including 0.27";
+                    break;
+                case "2":
+                    retval = retval + " - " + "Subversion 0.28 to 0.33.1";
+                    break;
+                case "3":
+                    retval = retval + " - " + "Subversion 0.34 to 1.3";
+                    break;
+                case "5":
+                    retval = retval + " - " + "Subversion 1.4 to 1.6.16";
+                    break;
+            }
 
-		private void LoadRepositoryConfigurationSettings( string RepositoryPath )
-		{
-		    string fullPath = RepositoryPath;
-		    string newFullPath;
+            return retval;
+        }
+
+        #endregion
+
+        #region Private Members
+
+        private void LoadRepositoryConfigurationSettings( string RepositoryPath )
+        {
+            string fullPath = RepositoryPath;
+            string newFullPath;
 
             string confPart = "conf" + Path.DirectorySeparatorChar + "svnserve.conf";
 
@@ -401,12 +429,12 @@ namespace SVNManagerLib
 
             var iniDoc = new IniDocument( newFullPath, IniFileType.SambaStyle );
 
-			_ServerConfig = new IniConfigSource( iniDoc );
+            _ServerConfig = new IniConfigSource( iniDoc );
 
             _UserDatabaseFileName = Path.GetDirectoryName( newFullPath );
-			
-			try
-			{
+            
+            try
+            {
                 string fileName = _ServerConfig.Configs["general"].GetString( "password-db" );
 
                 if ( fileName.Length > 0 )
@@ -418,16 +446,16 @@ namespace SVNManagerLib
                     _UserDatabaseFileName = "";
                 }
 
-			}
-			catch
-			{
-				_UserDatabaseFileName = "";
-			}
+            }
+            catch
+            {
+                _UserDatabaseFileName = "";
+            }
 
             ParseConfigKeys();
-		}
+        }
 
-	    private void LoadRepositoryConfigurationSettings( FileInfo globalConfigFileInfo )
+        private void LoadRepositoryConfigurationSettings( FileInfo globalConfigFileInfo )
         {
             var iniDoc = new IniDocument( globalConfigFileInfo.FullName, IniFileType.SambaStyle );
 
@@ -544,11 +572,11 @@ namespace SVNManagerLib
             _repositorySchemaVersion = GetRepositorySchemaVersion();
         }
 
-	    private string GetRepositoryType()
-		{
-		    string lineString;
+        private string GetRepositoryType()
+        {
+            string lineString;
 
-	        string fixedPath = Common.GetCorrectedPath( _RepositoryRootDirectory, true );
+            string fixedPath = Common.GetCorrectedPath( _RepositoryRootDirectory, true );
 
             string typeFile = fixedPath + "db" + Path.DirectorySeparatorChar + "fs-type";
 
@@ -556,25 +584,25 @@ namespace SVNManagerLib
             {
                 var reader = new StreamReader( typeFile );
 
-			    try
-			    {
-				    lineString = reader.ReadToEnd();
-			    }
-			    finally
-			    {
-				    reader.Close();
-			    }
+                try
+                {
+                    lineString = reader.ReadToEnd();
+                }
+                finally
+                {
+                    reader.Close();
+                }
 
-			    lineString = lineString.Replace( "\n", "" );
-			    lineString = lineString.Trim();
+                lineString = lineString.Replace( "\n", "" );
+                lineString = lineString.Trim();
             }
             catch ( FileNotFoundException )
             {
                 lineString = string.Empty;
             }
-			
-			return lineString;
-		}
+            
+            return lineString;
+        }
 
         private string GetRepositoryUUID()
         {
@@ -604,9 +632,9 @@ namespace SVNManagerLib
             {
                 lineString = string.Empty;
             }
-			
-			return lineString;
-		}
+            
+            return lineString;
+        }
 
         private string GetRepositorySchemaVersion()
         {
@@ -638,6 +666,6 @@ namespace SVNManagerLib
             return lineString;
         }
 
-	    #endregion
-	}
+        #endregion
+    }
 }

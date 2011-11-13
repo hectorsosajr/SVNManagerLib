@@ -10,17 +10,17 @@ using System.IO;
 
 namespace SVNManagerLib
 {
-	///<summary>
-	/// Represents a single Subversion hook file.
-	///</summary>
-	public class SVNHook
-	{
+    ///<summary>
+    /// Represents a single Subversion hook file.
+    ///</summary>
+    public class SVNHook
+    {
         #region Member Variables
 
         private string _contents = string.Empty;
         private readonly string _hookPath = string.Empty;
-	    private readonly FileInfo _hookInfo;
-	    private bool _isBinary;
+        private readonly FileInfo _hookInfo;
+        private bool _isBinary;
         private readonly List<string> _binaryExtensions = new List<string>();
 
         #endregion
@@ -78,13 +78,13 @@ namespace SVNManagerLib
         /// Gets the file path to this hook script.
         /// </summary>
         /// <value>The file path.</value>
-	    public string FilePath
-	    {
-	        get
-	        {
-	            return _hookInfo.FullName;
-	        }
-	    }
+        public string FilePath
+        {
+            get
+            {
+                return _hookInfo.FullName;
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this instance is binary.

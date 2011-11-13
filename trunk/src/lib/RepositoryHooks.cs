@@ -12,9 +12,9 @@ namespace SVNManagerLib
 {
     ///<summary>
     /// This represents a list of hook scripts in the current Subversion repository.
-	///</summary>
-	public class RepositoryHooks
-	{
+    ///</summary>
+    public class RepositoryHooks
+    {
         #region Member Variables
 
         private List<SVNHook> _hooks = new List<SVNHook>();

@@ -13,68 +13,68 @@ using System.Text;
 
 namespace SVNManagerLib
 {
-	/// <summary>
-	/// Arguments for the "svnadmin create" command.
-	/// </summary>
-	public struct CreateRepositoryArgs
-	{
-		/// <summary>
-		/// The type of back end this repository will be using. This
-		/// uses one of the types in <see cref="RepositoryTypes"/>.
-		/// </summary>
-		public RepositoryTypes RepositoryType;
-		/// <summary>
-		/// The name of the new repository. This will also be the folder
-		/// name under the repository root folder.
-		/// </summary>
-		public string RepositoryName;
-	}
+    /// <summary>
+    /// Arguments for the "svnadmin create" command.
+    /// </summary>
+    public struct CreateRepositoryArgs
+    {
+        /// <summary>
+        /// The type of back end this repository will be using. This
+        /// uses one of the types in <see cref="RepositoryTypes"/>.
+        /// </summary>
+        public RepositoryTypes RepositoryType;
+        /// <summary>
+        /// The name of the new repository. This will also be the folder
+        /// name under the repository root folder.
+        /// </summary>
+        public string RepositoryName;
+    }
 
-	/// <summary>
-	/// Arguments for the "svnadmin dump" command.
-	/// </summary>
-	public struct DumpArgs
-	{
-		/// <summary>
-		/// The revision number to dump. This can also be
+    /// <summary>
+    /// Arguments for the "svnadmin dump" command.
+    /// </summary>
+    public struct DumpArgs
+    {
+        /// <summary>
+        /// The revision number to dump. This can also be
         /// a range in the X:Y format.
-		/// </summary>
-		public string RevisionArg;
+        /// </summary>
+        public string RevisionArg;
         /// <summary>
         /// The name that will be given to this dump file.
         /// </summary>
-	    public string DumpFileName;
-		/// <summary>
-		/// Whether or not to use an incremental dump.
-		/// </summary>
-		public bool UseIncremental;
-		/// <summary>
-		/// Whether or not to show progress. Also known as verbose.
-		/// </summary>
+        public string DumpFileName;
+        /// <summary>
+        /// Whether or not to use an incremental dump.
+        /// </summary>
+        public bool UseIncremental;
+        /// <summary>
+        /// Whether or not to show progress. Also known as verbose.
+        /// </summary>
         public bool UseQuiet;
         /// <summary>
         /// The name of the new repository. This will also be the folder
         /// name under the repository root folder.
         /// </summary>
         public string RepositoryName;
-	}
+    }
 
-	/// <summary>
-	/// Arguments for the "svnadmin hotcopy" command.
-	/// </summary>
-	public struct HotCopyArgs
-	{
-		/// <summary>
-		/// The destination folder for the hot copy.
-		/// </summary>
-		public string DestinationPath;
-		/// <summary>
-		/// Whether or not to remove the redundant log files
-		/// from the source repository. This only works for
-		/// BerkeleyDB repositories.
-		/// </summary>
-		public bool UseCleanLogs;
-	}
+    /// <summary>
+    /// Arguments for the "svnadmin hotcopy" command.
+    /// </summary>
+    public struct HotCopyArgs
+    {
+        /// <summary>
+        /// The destination folder for the hot copy.
+        /// </summary>
+        public string DestinationPath;
+        /// <summary>
+        /// Whether or not to remove the redundant log files
+        /// from the source repository. This only works for
+        /// BerkeleyDB repositories.
+        /// </summary>
+        public bool UseCleanLogs;
+    }
 
     ///<summary>
     /// Arguments for the "svnadmin load" command.
@@ -96,32 +96,32 @@ namespace SVNManagerLib
         public string ParentPath;
     }
 
-	/// <summary>
-	/// This represents a single repository in the current Subversion server.
-	/// </summary>
+    /// <summary>
+    /// This represents a single repository in the current Subversion server.
+    /// </summary>
     [ObsoleteAttribute("SVNRepository has been deprecated. Please use classes that inherit from SubversionRepositoryBase instead.")]
-	public class SVNRepository
-	{
-		#region Member Variables
+    public class SVNRepository
+    {
+        #region Member Variables
 
-		private SVNRepoConfig _repositoryConfiguration;
-		private string _name = string.Empty;
-		private SVNUserCollection _users = new SVNUserCollection();
-	    private bool _usersLoaded;
-		private string _fullPath = string.Empty;
-		private RepositoryTypes _createRepoType;		
-		private readonly StringBuilder _NewConfFile = new StringBuilder();
-		private string _firstUserName = string.Empty;
-		private string _firstUserPassword = string.Empty;
+        private SVNRepoConfig _repositoryConfiguration;
+        private string _name = string.Empty;
+        private SVNUserCollection _users = new SVNUserCollection();
+        private bool _usersLoaded;
+        private string _fullPath = string.Empty;
+        private RepositoryTypes _createRepoType;		
+        private readonly StringBuilder _NewConfFile = new StringBuilder();
+        private string _firstUserName = string.Empty;
+        private string _firstUserPassword = string.Empty;
         private Hashtable _files = new Hashtable();
-	    private bool _filesLoaded;
-	    private string _serverCommandsPath = string.Empty;
+        private bool _filesLoaded;
+        private string _serverCommandsPath = string.Empty;
         private List<SVNFileSystemEntity> _entities = new List<SVNFileSystemEntity>();
-	    private RepositoryHooks _repoHooks;
+        private RepositoryHooks _repoHooks;
 
-		#endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SVNRepository"/> class.
@@ -132,9 +132,9 @@ namespace SVNManagerLib
         /// Initializes a new instance of the <see cref="SVNRepository"/> class.
         /// </summary>
         /// <param name="RepositoryPath">The repository path.</param>
-		/// <param name="ServerCommandPath">Path to where the Subversion commands are located.</param>
-		public SVNRepository( string RepositoryPath, string ServerCommandPath )
-		{
+        /// <param name="ServerCommandPath">Path to where the Subversion commands are located.</param>
+        public SVNRepository( string RepositoryPath, string ServerCommandPath )
+        {
             _serverCommandsPath = ServerCommandPath;
             _fullPath = RepositoryPath;
             _usersLoaded = false;
@@ -161,16 +161,16 @@ namespace SVNManagerLib
             //_repoHooks = new RepositoryHooks( _repositoryConfiguration.RepositoryRootDirectory );
         }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
         /// <summary>
         /// Gets the hook files for this repository.
         /// </summary>
         /// <value>The hook files.</value>
-	    public List<SVNHook> HookScriptFiles
-	    {
+        public List<SVNHook> HookScriptFiles
+        {
             get
             {
                 if ( Equals( _repoHooks, null ) )
@@ -188,103 +188,103 @@ namespace SVNManagerLib
 
                 return _repoHooks.HookFiles;
             }
-	    }
+        }
 
-		/// <summary>
+        /// <summary>
         /// Holds what <see cref="RepositoryAuthorization">rights</see> do the anonymous users have
         /// for this repository.
-		/// </summary>
+        /// </summary>
         public RepositoryAuthorization AnonymousAccess
-		{
-			get
-			{
-				return _repositoryConfiguration.AnonymousAccess;
-			}
-			set
-			{
-				_repositoryConfiguration.AnonymousAccess = value;
-			}
-		}
+        {
+            get
+            {
+                return _repositoryConfiguration.AnonymousAccess;
+            }
+            set
+            {
+                _repositoryConfiguration.AnonymousAccess = value;
+            }
+        }
 
         /// <summary>
         /// Holds what <see cref="RepositoryAuthorization">rights</see> do the authenticated users have 
         /// for this repository.
         /// </summary>
         public RepositoryAuthorization AuthorizedAccess
-		{
-			get
-			{
-				return _repositoryConfiguration.AuthorizedAccess;
-			}
-			set
-			{
-				_repositoryConfiguration.AuthorizedAccess = value;
-			}
-		}
+        {
+            get
+            {
+                return _repositoryConfiguration.AuthorizedAccess;
+            }
+            set
+            {
+                _repositoryConfiguration.AuthorizedAccess = value;
+            }
+        }
 
-		/// <summary>
-		/// The full path to this repository.
-		/// </summary>
-		public string FullPath
-		{
-			get
-			{
-				return _fullPath;
-			}
-			set
-			{
-				_fullPath = value;
-			}
-		}
+        /// <summary>
+        /// The full path to this repository.
+        /// </summary>
+        public string FullPath
+        {
+            get
+            {
+                return _fullPath;
+            }
+            set
+            {
+                _fullPath = value;
+            }
+        }
 
-		/// <summary>
-		/// The name of this repository. This is usually the root folder
-		/// name of the repository
-		/// </summary>
-		public string Name
-		{
-			get
-			{
-				return _name;
-			}
-			set
-			{
-				_name = value;
-			}
-		}
+        /// <summary>
+        /// The name of this repository. This is usually the root folder
+        /// name of the repository
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+            }
+        }
 
-		/// <summary>
-		/// The <see cref="SVNRepoConfig"/> managing this repository's
-		/// configuration settings.
-		/// </summary>
-		public SVNRepoConfig RepositoryConfiguration
-		{
-			get
-			{
-				return _repositoryConfiguration;
-			}
-			set
-			{
-				_repositoryConfiguration = value;
-			}
-		}
+        /// <summary>
+        /// The <see cref="SVNRepoConfig"/> managing this repository's
+        /// configuration settings.
+        /// </summary>
+        public SVNRepoConfig RepositoryConfiguration
+        {
+            get
+            {
+                return _repositoryConfiguration;
+            }
+            set
+            {
+                _repositoryConfiguration = value;
+            }
+        }
 
-		/// <summary>
-		/// A list of <see cref="SVNUser"/> that are associated with
-		/// this repository.
-		/// </summary>
-		public SVNUserCollection Users
-		{
-			get
-			{
+        /// <summary>
+        /// A list of <see cref="SVNUser"/> that are associated with
+        /// this repository.
+        /// </summary>
+        public SVNUserCollection Users
+        {
+            get
+            {
                 if ( !_usersLoaded )
                 {
                     GetUsers( _repositoryConfiguration.RepositoryRootDirectory );
                     _usersLoaded = true;
                 }
-				return _users;
-			}
-		}
+                return _users;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the repository file entities.
@@ -302,14 +302,14 @@ namespace SVNManagerLib
             }
         }
 
-		/// <summary>
-		/// Holds the back end that this repository is using.
-		/// </summary>
-		public RepositoryTypes RepositoryType
-		{
-			get
-			{
-			    RepositoryTypes repoType;
+        /// <summary>
+        /// Holds the back end that this repository is using.
+        /// </summary>
+        public RepositoryTypes RepositoryType
+        {
+            get
+            {
+                RepositoryTypes repoType;
 
                 if ( Equals( null, _repositoryConfiguration ) )
                 {
@@ -339,7 +339,7 @@ namespace SVNManagerLib
                 }
 
                 return repoType;
-			}
+            }
         }
 
         /// <summary>
@@ -375,85 +375,85 @@ namespace SVNManagerLib
         /// Gets the sever commands path.
         /// </summary>
         /// <value>The sever commands path.</value>
-	    public string SeverCommandsPath
-	    {
-	        get
-	        {
-	            return _serverCommandsPath;
-	        }
+        public string SeverCommandsPath
+        {
+            get
+            {
+                return _serverCommandsPath;
+            }
             set
             {
                 _serverCommandsPath = value;
             }
-	    }
+        }
 
         /// <summary>
         /// Gets or sets the name of the first repo user.
         /// </summary>
         /// <value>The name of the first repo user.</value>
-	    public string FirstRepoUserName
-	    {
-	        get
-	        {
-	            return _firstUserName;
-	        }
+        public string FirstRepoUserName
+        {
+            get
+            {
+                return _firstUserName;
+            }
             set
             {
                 _firstUserName = value;
             }
-	    }
+        }
 
         /// <summary>
         /// Gets or sets the first repo user password.
         /// </summary>
         /// <value>The first repo user password.</value>
-	    public string FirstRepoUserPassword
-	    {
-	        get
-	        {
-	            return _firstUserPassword;
-	        }
+        public string FirstRepoUserPassword
+        {
+            get
+            {
+                return _firstUserPassword;
+            }
             set
             {
                 _firstUserPassword = value;
             }
-	    }
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Members
+        #region Public Members
 
-		/// <summary>
-		/// Creates a repository with a Berkeley database backend.
-		/// </summary>
-		/// <param name="repoName">The name of the desired new repository.</param>
-		/// <returns>Whether or not this operation was successful.</returns>
-		public bool CreateBerkeleyDbRepository( string repoName )
-		{
-			bool retval;
+        /// <summary>
+        /// Creates a repository with a Berkeley database backend.
+        /// </summary>
+        /// <param name="repoName">The name of the desired new repository.</param>
+        /// <returns>Whether or not this operation was successful.</returns>
+        public bool CreateBerkeleyDbRepository( string repoName )
+        {
+            bool retval;
 
-			_createRepoType = RepositoryTypes.BerkeleyDatabase;
+            _createRepoType = RepositoryTypes.BerkeleyDatabase;
 
-			retval = CreateRepository( repoName );
+            retval = CreateRepository( repoName );
 
             if ( Equals( null, _repositoryConfiguration ) )
             {
                 if ( _repositoryConfiguration != null ) _repositoryConfiguration.RepositoryType = "bdb";
             }
 
-			return retval;
-		}
+            return retval;
+        }
 
-		/// <summary>
-		/// Creates a repository with the OS filesystem as the backend.
-		/// </summary>
-		/// <param name="repoName">The name of the desired new repository.</param>
-		/// <returns>Whether or not this operation was successful.</returns>
-		public bool CreateFSFSRepository( string repoName )
-		{
-			bool retval;
+        /// <summary>
+        /// Creates a repository with the OS filesystem as the backend.
+        /// </summary>
+        /// <param name="repoName">The name of the desired new repository.</param>
+        /// <returns>Whether or not this operation was successful.</returns>
+        public bool CreateFSFSRepository( string repoName )
+        {
+            bool retval;
 
-			_createRepoType = RepositoryTypes.FileSystem;
+            _createRepoType = RepositoryTypes.FileSystem;
 
             retval = CreateRepository( repoName );
 
@@ -462,48 +462,48 @@ namespace SVNManagerLib
                 if ( _repositoryConfiguration != null ) _repositoryConfiguration.RepositoryType = "fsfs";
             }
 
-			return retval;
-		}
+            return retval;
+        }
 
-		/// <summary>
-		/// Deletes the repository and all its subfolders from the hard drive.
-		/// </summary>
-		/// <returns>Whether or not this operation was successful.</returns>
-		public bool DeleteRepository()
-		{
-			bool retval;
+        /// <summary>
+        /// Deletes the repository and all its subfolders from the hard drive.
+        /// </summary>
+        /// <returns>Whether or not this operation was successful.</returns>
+        public bool DeleteRepository()
+        {
+            bool retval;
             string formatFilePath = Path.Combine( _fullPath, "format" );
 
-			// The "format" file was set to read only. Need to remove
-			// that file attribute in order for the directory delete
-			// to work.
-			File.SetAttributes( formatFilePath, FileAttributes.Normal );
-			
-			try
-			{
-				Directory.Delete( _fullPath, true );
-				retval = true;
-			}
-			catch ( Exception )
-			{
-			    retval = false;
-			}
+            // The "format" file was set to read only. Need to remove
+            // that file attribute in order for the directory delete
+            // to work.
+            File.SetAttributes( formatFilePath, FileAttributes.Normal );
+            
+            try
+            {
+                Directory.Delete( _fullPath, true );
+                retval = true;
+            }
+            catch ( Exception )
+            {
+                retval = false;
+            }
 
-			return retval;
-		}
+            return retval;
+        }
 
-		/// <summary>
-		/// Creates a dumpfile portable format of this repository.
-		/// </summary>
-		/// <param name="args">An instance of <see cref="DumpArgs"/>.</param>
-		/// <returns>Whether or not this operation was successful.</returns>
-		public bool DumpRepository( DumpArgs args )
-		{
-			bool cmdResult;
-		    string errors;
-			StringBuilder arg = new StringBuilder();
+        /// <summary>
+        /// Creates a dumpfile portable format of this repository.
+        /// </summary>
+        /// <param name="args">An instance of <see cref="DumpArgs"/>.</param>
+        /// <returns>Whether or not this operation was successful.</returns>
+        public bool DumpRepository( DumpArgs args )
+        {
+            bool cmdResult;
+            string errors;
+            StringBuilder arg = new StringBuilder();
 
-			arg.Append( "dump " );
+            arg.Append( "dump " );
             arg.Append( _fullPath );
 
             // Processing struct arguments for command-line switches
@@ -537,27 +537,27 @@ namespace SVNManagerLib
             cmdResult = Common.ExecuteWritesToDiskSvnCommand( svnCommand, arg.ToString(), args.DumpFileName, out errors );
 
             return cmdResult;
-		}
+        }
 
-		/// <summary>
-		/// Creates an exact copy of the repository to a different folder.
-		/// </summary>
-		/// <param name="args">An instance of <see cref="HotCopyArgs"/>.</param>
-		/// <returns>Whether or not this operation was successful.</returns>
-		public bool HotCopyRepository( HotCopyArgs args )
-		{
-			bool cmdResult;
+        /// <summary>
+        /// Creates an exact copy of the repository to a different folder.
+        /// </summary>
+        /// <param name="args">An instance of <see cref="HotCopyArgs"/>.</param>
+        /// <returns>Whether or not this operation was successful.</returns>
+        public bool HotCopyRepository( HotCopyArgs args )
+        {
+            bool cmdResult;
             string lines;
-		    string errors;
-			var arg = new StringBuilder();
+            string errors;
+            var arg = new StringBuilder();
 
-			arg.Append( "hotcopy " );
-			arg.Append( _fullPath );
+            arg.Append( "hotcopy " );
+            arg.Append( _fullPath );
 
             // Processing struct arguments for command-line switches
             if ( Equals( args, null ) )
-		    {
-		        return false;
+            {
+                return false;
             }
 
             if ( Equals( args.DestinationPath, null ) )
@@ -570,8 +570,8 @@ namespace SVNManagerLib
                 return false;
             }
 
-		    arg.Append( " " );
-		    arg.Append( args.DestinationPath );
+            arg.Append( " " );
+            arg.Append( args.DestinationPath );
 
             if ( !Equals( args.UseCleanLogs, null ) )
             {
@@ -589,8 +589,8 @@ namespace SVNManagerLib
 
             cmdResult = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
 
-		    return cmdResult;
-		}
+            return cmdResult;
+        }
 
         /// <summary>
         /// Creates a new directory using the "svn mkdir" command.
@@ -739,9 +739,9 @@ namespace SVNManagerLib
             _repoHooks = new RepositoryHooks( rootDir );
         }
 
-		#endregion
+        #endregion
 
-		#region Private Members
+        #region Private Members
 
         private void LoadConfig( string RepositoryPath )
         {
@@ -768,64 +768,64 @@ namespace SVNManagerLib
             _files = Common.GetFileList( rootDir, _serverCommandsPath );
         }
 
-		private bool CreateRepository( string repoName )
-		{
-		    string rootRepoDir = "";
+        private bool CreateRepository( string repoName )
+        {
+            string rootRepoDir = "";
 
-		    try
-		    {
+            try
+            {
                 rootRepoDir = Directory.GetParent( _fullPath ).ToString();
-		    }
-		    catch
-		    {
-		    }
+            }
+            catch
+            {
+            }
 
-		    string newRepoPath = Path.Combine( rootRepoDir, repoName );
-			string svnCommand;
-			string fileOptions = " --fs-type ";
-			string svnBDB = "bdb";
-			string svnFSFS = "fsfs";
+            string newRepoPath = Path.Combine( rootRepoDir, repoName );
+            string svnCommand;
+            string fileOptions = " --fs-type ";
+            string svnBDB = "bdb";
+            string svnFSFS = "fsfs";
             string lines;
-		    string errors;
-			var arg = new StringBuilder();			
+            string errors;
+            var arg = new StringBuilder();			
 
             svnCommand = Path.Combine( _serverCommandsPath, "svnadmin" );
 
-			// Start setting up the svn command
-			arg.Append( "create " );
-			arg.Append( newRepoPath + " " );
-			arg.Append( fileOptions );
+            // Start setting up the svn command
+            arg.Append( "create " );
+            arg.Append( newRepoPath + " " );
+            arg.Append( fileOptions );
 
-			// decide what type of repository backend is wanted
-			switch( _createRepoType )
-			{
-				case RepositoryTypes.BerkeleyDatabase:
+            // decide what type of repository backend is wanted
+            switch( _createRepoType )
+            {
+                case RepositoryTypes.BerkeleyDatabase:
 
-					// Berkely DB switch
-					arg.Append( svnBDB );
-					break;
+                    // Berkely DB switch
+                    arg.Append( svnBDB );
+                    break;
 
-				case RepositoryTypes.FileSystem:
+                case RepositoryTypes.FileSystem:
 
-					// FSFS (File System) switch
-					arg.Append( svnFSFS );
-					break;
-			}
+                    // FSFS (File System) switch
+                    arg.Append( svnFSFS );
+                    break;
+            }
 
-			bool retval = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
+            bool retval = Common.ExecuteSvnCommand( svnCommand, arg.ToString(), out lines, out errors );
 
-			ProcessNewConfFile( newRepoPath );
+            ProcessNewConfFile( newRepoPath );
 
             LoadConfig( newRepoPath );
 
-			return retval;
-		}
+            return retval;
+        }
 
-		private void GetUsers( string RepositoryPath  )
-		{
-		    var repo = new FileInfo( RepositoryPath );
+        private void GetUsers( string RepositoryPath  )
+        {
+            var repo = new FileInfo( RepositoryPath );
 
-		    if ( _repositoryConfiguration.UserDatabaseFileName.Length > 0 )
+            if ( _repositoryConfiguration.UserDatabaseFileName.Length > 0 )
             {
                 string root;
                 root = repo.DirectoryName;
@@ -872,99 +872,99 @@ namespace SVNManagerLib
                     userRead.Close();
                 }
             }
-		}
+        }
 
-		private SVNUser GetUserData( string CurrentLine )
-		{
-			SVNUser retval = new SVNUser();
-			string[] data;
+        private SVNUser GetUserData( string CurrentLine )
+        {
+            SVNUser retval = new SVNUser();
+            string[] data;
 
-			data = CurrentLine.Split( '=' );
+            data = CurrentLine.Split( '=' );
 
-			retval.UserName = data[0].Trim();
-			retval.Password = data[1].Trim();
-			retval.ParentRepositoryPath = _repositoryConfiguration.RepositoryRootDirectory;
-			retval.UserDatabasePath = _repositoryConfiguration.UserDatabaseFileName; 
+            retval.UserName = data[0].Trim();
+            retval.Password = data[1].Trim();
+            retval.ParentRepositoryPath = _repositoryConfiguration.RepositoryRootDirectory;
+            retval.UserDatabasePath = _repositoryConfiguration.UserDatabaseFileName; 
 
-			return retval;
-		}
+            return retval;
+        }
 
-		private void ProcessNewConfFile( string newRepoPath )
-		{
-			StreamReader reader;
-			StreamWriter writer;
-			string lineString = string.Empty;
-			string confPath;
+        private void ProcessNewConfFile( string newRepoPath )
+        {
+            StreamReader reader;
+            StreamWriter writer;
+            string lineString = string.Empty;
+            string confPath;
 
             confPath = Path.Combine(newRepoPath, "conf") + Path.DirectorySeparatorChar + "svnserve.conf";
 
-			reader = new StreamReader( confPath );
+            reader = new StreamReader( confPath );
 
-			try
-			{				
-				while ( lineString != null )
-				{
-					lineString = reader.ReadLine();
-					ProcessLine( lineString );
-				}
-			}
-			finally
-			{
-				reader.Close();
-			}
+            try
+            {				
+                while ( lineString != null )
+                {
+                    lineString = reader.ReadLine();
+                    ProcessLine( lineString );
+                }
+            }
+            finally
+            {
+                reader.Close();
+            }
 
-			writer = new StreamWriter( confPath + "svnserve.conf" );
-			writer.Write( _NewConfFile.ToString() );
-			writer.Close();
+            writer = new StreamWriter( confPath + "svnserve.conf" );
+            writer.Write( _NewConfFile.ToString() );
+            writer.Close();
 
-			CreateUserFile( confPath );
-		}
+            CreateUserFile( confPath );
+        }
 
-		private void ProcessLine( string line )
-		{
-			switch( line )
-			{
-				case "# [general]":
+        private void ProcessLine( string line )
+        {
+            switch( line )
+            {
+                case "# [general]":
 
-					_NewConfFile.Append( "[general]" + Environment.NewLine );
-					break;
+                    _NewConfFile.Append( "[general]" + Environment.NewLine );
+                    break;
 
-				case "# anon-access = read":
+                case "# anon-access = read":
 
-					_NewConfFile.Append( Environment.NewLine + "anon-access = none" + Environment.NewLine );
-					break;
+                    _NewConfFile.Append( Environment.NewLine + "anon-access = none" + Environment.NewLine );
+                    break;
 
-				case "# auth-access = write":
+                case "# auth-access = write":
 
-					_NewConfFile.Append( "auth-access = write" + Environment.NewLine + Environment.NewLine );
-					break;
+                    _NewConfFile.Append( "auth-access = write" + Environment.NewLine + Environment.NewLine );
+                    break;
 
-				case "# password-db = passwd":
+                case "# password-db = passwd":
 
-					_NewConfFile.Append( Environment.NewLine + "password-db = password.txt" + Environment.NewLine + Environment.NewLine );
-					break;
+                    _NewConfFile.Append( Environment.NewLine + "password-db = password.txt" + Environment.NewLine + Environment.NewLine );
+                    break;
 
-				default:
+                default:
 
-					_NewConfFile.Append( line + Environment.NewLine );
-					break;
-			}
-		}
+                    _NewConfFile.Append( line + Environment.NewLine );
+                    break;
+            }
+        }
 
-		private void CreateUserFile( string confPath )
-		{
-			StreamWriter writer;
-			StringBuilder userfile = new StringBuilder();
+        private void CreateUserFile( string confPath )
+        {
+            StreamWriter writer;
+            StringBuilder userfile = new StringBuilder();
 
-			writer = new StreamWriter( confPath + "password.txt" );
+            writer = new StreamWriter( confPath + "password.txt" );
 
-			userfile.Append( "[users]" + Environment.NewLine );
-			userfile.Append( _firstUserName + " = " + _firstUserPassword );
+            userfile.Append( "[users]" + Environment.NewLine );
+            userfile.Append( _firstUserName + " = " + _firstUserPassword );
 
-			writer.Write( userfile.ToString() );
-			writer.Close();
-		}
+            writer.Write( userfile.ToString() );
+            writer.Close();
+        }
 
-	    #endregion
+        #endregion
     }
 }
