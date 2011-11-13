@@ -17,15 +17,15 @@ namespace SVNManagerLib
     /// </summary>
     public class SubversionServerController
     {
-		#region Member Variables
+        #region Member Variables
 
-		private SVNServerConfig _serverConfiguration;
+        private SVNServerConfig _serverConfiguration;
         private List<ISubversionRepository> _repositoryCollection = new List<ISubversionRepository>();
         private SVNUserCollection _adminUsers = new SVNUserCollection();
 
-		#endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubversionServerController"/> class.
@@ -65,40 +65,40 @@ namespace SVNManagerLib
             LoadRepositories( RepositoryPaths );
         }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// Holds a <see cref="SVNServerConfig"/> object for this server.
-		/// </summary>
-		public SVNServerConfig ServerConfiguration
-		{
-			get
-			{
-				return _serverConfiguration;
-			}
-			set
-			{
-				_serverConfiguration = value;
-			}
-		}
+        /// <summary>
+        /// Holds a <see cref="SVNServerConfig"/> object for this server.
+        /// </summary>
+        public SVNServerConfig ServerConfiguration
+        {
+            get
+            {
+                return _serverConfiguration;
+            }
+            set
+            {
+                _serverConfiguration = value;
+            }
+        }
 
-		/// <summary>
-		/// Holds a collection of SVNRepsitory objects, one
+        /// <summary>
+        /// Holds a collection of SVNRepsitory objects, one
         /// for each repository in this server.
-		/// </summary>
+        /// </summary>
         public List<ISubversionRepository> RepositoryCollection
-		{
-			get
-			{
-				return _repositoryCollection;
-			}
-			set
-			{
-				_repositoryCollection = value;
-			}
-		}
+        {
+            get
+            {
+                return _repositoryCollection;
+            }
+            set
+            {
+                _repositoryCollection = value;
+            }
+        }
         
         /// <summary>
         /// Holds a list of <see cref="SVNUser"/> objects that have administrative rights.
@@ -114,21 +114,21 @@ namespace SVNManagerLib
             }
         }
         
-		#endregion
+        #endregion
 
-		#region Public Members
+        #region Public Members
 
-		#endregion
+        #endregion
 
-		#region Private Members
+        #region Private Members
 
-		private void LoadRepositories()
-		{
-		    if ( !Equals( _serverConfiguration, null ) )
-		    {
-		        string repoRoot = _serverConfiguration.RepositoryRootDirectory;
+        private void LoadRepositories()
+        {
+            if ( !Equals( _serverConfiguration, null ) )
+            {
+                string repoRoot = _serverConfiguration.RepositoryRootDirectory;
 
-		        try
+                try
                 {
                     var rootRepoInfo = new DirectoryInfo( repoRoot );
 
@@ -150,8 +150,8 @@ namespace SVNManagerLib
                 }
                 catch ( ArgumentException )
                 {}
-		    }
-		}
+            }
+        }
 
         private void LoadRepositories( IEnumerable<string> RepositoryPaths )
         {
@@ -167,8 +167,8 @@ namespace SVNManagerLib
             {}
         }
 
-		private void ProcessRepository( DirectoryInfo childRepo )
-		{
+        private void ProcessRepository( DirectoryInfo childRepo )
+        {
             if ( _serverConfiguration.UsesGlobalConfigFile )
             {
                 ProcessRepoConfig( _serverConfiguration.GlobalConfigFilePath, childRepo );
@@ -185,31 +185,31 @@ namespace SVNManagerLib
                     }
                 }
             }
-		}
+        }
 
-	    private void ProcessConfigFiles( DirectoryInfo currRepoDir )
-		{
-		    FileInfo[] configFiles = currRepoDir.GetFiles();
+        private void ProcessConfigFiles( DirectoryInfo currRepoDir )
+        {
+            FileInfo[] configFiles = currRepoDir.GetFiles();
 
-		    foreach ( FileInfo config in configFiles )
-			{
-				if( config.Name == "svnserve.conf" )
-				{
-					ProcessRepoConfig( config );
-				}
-			}
-		}
+            foreach ( FileInfo config in configFiles )
+            {
+                if( config.Name == "svnserve.conf" )
+                {
+                    ProcessRepoConfig( config );
+                }
+            }
+        }
 
-	    private void ProcessRepoConfig( FileInfo RepoConfig )
-		{
+        private void ProcessRepoConfig( FileInfo RepoConfig )
+        {
             var currRepo = new SvnServeRepository( RepoConfig.FullName, _serverConfiguration.CommandRootDirectory )
                                {
                                    Name = RepoConfig.Directory.Parent.Name,
                                    FullPath = RepoConfig.Directory.Parent.FullName
                                };
 
-	        _repositoryCollection.Add( currRepo );
-		}
+            _repositoryCollection.Add( currRepo );
+        }
 
         private void ProcessRepoConfig( string pathToGlobalConfig, FileSystemInfo RepoDir )
         {
@@ -225,6 +225,6 @@ namespace SVNManagerLib
             _repositoryCollection.Add( currRepo );
         }
 
-	    #endregion
+        #endregion
     }
 }

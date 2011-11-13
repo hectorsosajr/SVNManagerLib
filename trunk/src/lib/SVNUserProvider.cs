@@ -11,52 +11,52 @@ using Nini.Config;
 
 namespace SVNManagerLib
 {
-	/// <summary>
+    /// <summary>
     /// This class provides read/write access to individual user
     /// settings. This uses the Nini configuration library at
     /// http://nini.sourceforge.net/
-	/// </summary>
-	public class SVNUserProvider
-	{
-		#region Member Variables
+    /// </summary>
+    public class SVNUserProvider
+    {
+        #region Member Variables
 
-		private string _Password;
-		private string _UserName;
-		private string _RepositoryPath;
-	    private readonly string _UserDatabaseFileName;
+        private string _Password;
+        private string _UserName;
+        private string _RepositoryPath;
+        private readonly string _UserDatabaseFileName;
 
-	    #endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-		public SVNUserProvider()
-		{}
+        public SVNUserProvider()
+        {}
 
-		/// <summary>
-		/// Constructor to set the username and password.
-		/// </summary>
-		/// <param name="UserName">The user's account name.</param>
-		/// <param name="Password">The user's account password.</param>
-		public SVNUserProvider( string UserName, string Password )
-		{
-			_UserName = UserName;
-			_Password = Password;
-		}
-
-		/// <summary>
-		/// Constructor to set the username, password, and repository path.
-		/// </summary>
+        /// <summary>
+        /// Constructor to set the username and password.
+        /// </summary>
         /// <param name="UserName">The user's account name.</param>
         /// <param name="Password">The user's account password.</param>
-		/// <param name="RepositoryPath">The path to the repository where this user will be created.</param>
-		public SVNUserProvider( string UserName, string Password, string RepositoryPath )
-		{
-			_UserName = UserName;
-			_Password = Password;
-			_RepositoryPath = RepositoryPath;
+        public SVNUserProvider( string UserName, string Password )
+        {
+            _UserName = UserName;
+            _Password = Password;
+        }
+
+        /// <summary>
+        /// Constructor to set the username, password, and repository path.
+        /// </summary>
+        /// <param name="UserName">The user's account name.</param>
+        /// <param name="Password">The user's account password.</param>
+        /// <param name="RepositoryPath">The path to the repository where this user will be created.</param>
+        public SVNUserProvider( string UserName, string Password, string RepositoryPath )
+        {
+            _UserName = UserName;
+            _Password = Password;
+            _RepositoryPath = RepositoryPath;
         }
 
         ///<summary>
@@ -71,66 +71,66 @@ namespace SVNManagerLib
             _UserDatabaseFileName = UserDatabaseFileName.FullName;
         }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// The account's user name.
-		/// </summary>
-		public string UserName
-		{
-			get
-			{
-				return _UserName;
-			}
-			set
-			{
-				_UserName = value;
-			}
-		}
+        /// <summary>
+        /// The account's user name.
+        /// </summary>
+        public string UserName
+        {
+            get
+            {
+                return _UserName;
+            }
+            set
+            {
+                _UserName = value;
+            }
+        }
 
-		/// <summary>
-		/// The account's password.
-		/// </summary>
-		public string Password
-		{
-			get
-			{
-				return _Password;
-			}
-			set
-			{
-				_Password = value;
-			}
-		}
+        /// <summary>
+        /// The account's password.
+        /// </summary>
+        public string Password
+        {
+            get
+            {
+                return _Password;
+            }
+            set
+            {
+                _Password = value;
+            }
+        }
 
-		/// <summary>
-		/// The physical path to the repository where this account resides.
-		/// </summary>
-		public string RepositoryPath
-		{
-			get
-			{
-				return _RepositoryPath;
-			}
-			set
-			{
-				_RepositoryPath = value;
-			}
-		}
+        /// <summary>
+        /// The physical path to the repository where this account resides.
+        /// </summary>
+        public string RepositoryPath
+        {
+            get
+            {
+                return _RepositoryPath;
+            }
+            set
+            {
+                _RepositoryPath = value;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Members
+        #region Public Members
 
-		/// <summary>
-		/// Saves this user's information to the user's database file.
-		/// </summary>
+        /// <summary>
+        /// Saves this user's information to the user's database file.
+        /// </summary>
         /// <returns>Returns whether or not the command was successful.</returns>
-		public bool Save()
-		{
-			bool result;
+        public bool Save()
+        {
+            bool result;
 
             if ( !Equals( _UserDatabaseFileName, null ) )
             {
@@ -141,15 +141,15 @@ namespace SVNManagerLib
                 result = InsertUpdateUser();
             }
 
-		    return result;
-		}
+            return result;
+        }
 
-		/// <summary>
-		/// Adds a new user to the repository's user database.
-		/// </summary>
+        /// <summary>
+        /// Adds a new user to the repository's user database.
+        /// </summary>
         /// <returns>Returns whether or not the command was successful.</returns>
-		public bool Add()
-		{
+        public bool Add()
+        {
             bool result;
 
             if (!Equals(_UserDatabaseFileName, null))
@@ -161,16 +161,16 @@ namespace SVNManagerLib
                 result = InsertUpdateUser();
             }
 
-			return result;
-		}
+            return result;
+        }
 
-		/// <summary>
-		/// Deletes this user from the repository's user database.
-		/// </summary>
+        /// <summary>
+        /// Deletes this user from the repository's user database.
+        /// </summary>
         /// <returns>Returns whether or not the command was successful.</returns>
-		public bool Delete()
-		{
-			bool result;
+        public bool Delete()
+        {
+            bool result;
 
             if ( !Equals( _UserDatabaseFileName, null ) )
             {
@@ -181,45 +181,45 @@ namespace SVNManagerLib
                 result = DeleteUser();
             }
 
-		    return result;
-		}
+            return result;
+        }
 
-		/// <summary>
-		/// Adds this user to the repository's admin user database.
-		/// </summary>
+        /// <summary>
+        /// Adds this user to the repository's admin user database.
+        /// </summary>
         /// <returns>Returns whether or not the command was successful.</returns>
-		public bool AddAdmin()
-		{
-		    bool result = InsertUpdateAdminUser();
+        public bool AddAdmin()
+        {
+            bool result = InsertUpdateAdminUser();
 
-		    return result;
-		}
+            return result;
+        }
 
-	    /// <summary>
-		/// Deletes this user from the repository's admin user database.
-		/// </summary>
+        /// <summary>
+        /// Deletes this user from the repository's admin user database.
+        /// </summary>
         /// <returns>Returns whether or not the command was successful.</returns>
-		public bool DeleteAdmin()
-	    {
-	        bool result = DeleteAdminUser();
+        public bool DeleteAdmin()
+        {
+            bool result = DeleteAdminUser();
 
-	        return result;
-	    }
+            return result;
+        }
 
-	    #endregion
+        #endregion
 
-		#region Private Members
-		
-		private bool InsertUpdateUser()
-		{
-			var repoConfig = new SVNRepoConfig( _RepositoryPath );
+        #region Private Members
+        
+        private bool InsertUpdateUser()
+        {
+            var repoConfig = new SVNRepoConfig( _RepositoryPath );
 
-		    string userFile = repoConfig.UserDatabaseFileName;
+            string userFile = repoConfig.UserDatabaseFileName;
 
-		    bool result = InsertUpdateUser( userFile );
+            bool result = InsertUpdateUser( userFile );
 
-		    return result;
-		}
+            return result;
+        }
 
         private bool InsertUpdateUser( string userFile )
         {
@@ -241,40 +241,40 @@ namespace SVNManagerLib
 
             return result;
         }
-		
-		private bool InsertUpdateAdminUser()
-		{
-		    bool result;
+        
+        private bool InsertUpdateAdminUser()
+        {
+            bool result;
 
-			string userFile = Common.GetCorrectedPath( _RepositoryPath, true ) + "administrators.txt";
-			var userConfig = new IniConfigSource( userFile );
+            string userFile = Common.GetCorrectedPath( _RepositoryPath, true ) + "administrators.txt";
+            var userConfig = new IniConfigSource( userFile );
 
-			userConfig.Configs["users"].Set( _UserName, _Password );
+            userConfig.Configs["users"].Set( _UserName, _Password );
 
-			try
-			{
-				userConfig.Save();
-				result = true;
-			}
-			catch ( Exception )
-			{
-			    result = false;
-			}
+            try
+            {
+                userConfig.Save();
+                result = true;
+            }
+            catch ( Exception )
+            {
+                result = false;
+            }
 
-		    return result;
-		}		
-		
-		private bool DeleteUser()
-		{
-			var repoConfig = new SVNRepoConfig( _RepositoryPath );
+            return result;
+        }		
+        
+        private bool DeleteUser()
+        {
+            var repoConfig = new SVNRepoConfig( _RepositoryPath );
 
-		    string userFile = repoConfig.UserDatabaseFileName;
+            string userFile = repoConfig.UserDatabaseFileName;
 
-		    bool result = DeleteUser( userFile );
+            bool result = DeleteUser( userFile );
 
-		    return result;
-		}
-		
+            return result;
+        }
+        
         private bool DeleteUser( string userFile )
         {
             var userConfig = new IniConfigSource( userFile );
@@ -295,29 +295,29 @@ namespace SVNManagerLib
 
             return result;
         }
-		
-		private bool DeleteAdminUser()
-		{
-		    bool result;
+        
+        private bool DeleteAdminUser()
+        {
+            bool result;
 
-		    string userFile = Common.GetCorrectedPath( _RepositoryPath, true ) + "administrators.txt";
-			var userConfig = new IniConfigSource( userFile );
+            string userFile = Common.GetCorrectedPath( _RepositoryPath, true ) + "administrators.txt";
+            var userConfig = new IniConfigSource( userFile );
 
-			userConfig.Configs["users"].Remove( _UserName );
+            userConfig.Configs["users"].Remove( _UserName );
 
-			try
-			{
-				userConfig.Save();
-				result = true;
-			}
-			catch ( Exception )
-			{
-			    result = false;
-			}
+            try
+            {
+                userConfig.Save();
+                result = true;
+            }
+            catch ( Exception )
+            {
+                result = false;
+            }
 
-		    return result;
-		}
+            return result;
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

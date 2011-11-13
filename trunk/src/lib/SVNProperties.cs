@@ -9,10 +9,10 @@ using System.Collections.Generic;
 
 namespace SVNManagerLib
 {
-	///<summary>
-	///</summary>
-	public class SVNProperty
-	{
+    ///<summary>
+    ///</summary>
+    public class SVNProperty
+    {
         #region Member Variables
 
         private string _value;

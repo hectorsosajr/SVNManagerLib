@@ -15,8 +15,8 @@ namespace SVNManagerLib
     /// <summary>
     /// Represents a single repository managed by svnserve.exe
     /// </summary>
-	public class SvnServeRepository : SubversionRepositoryBase
-	{
+    public class SvnServeRepository : SubversionRepositoryBase
+    {
         #region Constructors
 
         /// <summary>
@@ -178,7 +178,11 @@ namespace SVNManagerLib
 
         protected override bool CreateRepository( string repoName )
         {
-            string rootRepoDir = "";
+            const string fileOptions = " --fs-type ";
+            const string svnBDB = "bdb";
+            const string svnFSFS = "fsfs";
+
+            string rootRepoDir = string.Empty;
 
             try
             {
@@ -188,11 +192,8 @@ namespace SVNManagerLib
             {
             }
 
-            string newRepoPath = "\"" + Path.Combine(rootRepoDir, repoName) + "\"";
+            string newRepoPath = Path.PathSeparator + Path.Combine(rootRepoDir, repoName) + Path.PathSeparator;
             string newRepoPathUnescaped = Path.Combine(rootRepoDir, repoName);
-            const string fileOptions = " --fs-type ";
-            const string svnBDB = "bdb";
-            const string svnFSFS = "fsfs";
             string lines;
             string errors;
             var arg = new StringBuilder();
@@ -209,7 +210,7 @@ namespace SVNManagerLib
             {
                 case RepositoryTypes.BerkeleyDatabase:
 
-                    // Berkely DB switch
+                    // Berkeley DB switch
                     arg.Append( svnBDB );
                     break;
 
@@ -324,5 +325,5 @@ namespace SVNManagerLib
         }
 
         #endregion
-	}
+    }
 }
