@@ -322,16 +322,12 @@ namespace SVNManagerLib
         /// <param name="serverCmdPath">Path to where the Subversion command folder resides.</param>
         public static Hashtable GetFileList( string currentDirectory, string serverCmdPath )
         {
-            bool cmdResult;
             string lines;
             string errors;
             var fileList = new Hashtable();
-            string parsedDir;
             string fullCmdPath = Path.Combine( serverCmdPath, "svn" );
-
-            parsedDir = PathToFileUrl( currentDirectory );
-
-            cmdResult = ExecuteSvnCommand( fullCmdPath, "list " + parsedDir, out lines, out errors );
+            string parsedDir = PathToFileUrl( currentDirectory );
+            bool cmdResult = ExecuteSvnCommand( fullCmdPath, "list " + parsedDir, out lines, out errors );
 
             if ( cmdResult )
             {
@@ -447,7 +443,7 @@ namespace SVNManagerLib
 
                 retval = true;
             }
-            catch ( System.Exception ex )
+            catch ( Exception ex )
             {
                 Console.WriteLine( ex.Message );
                 retval = false;

@@ -192,7 +192,7 @@ namespace SVNManagerLib
             {
             }
 
-            string newRepoPath = Path.PathSeparator + Path.Combine(rootRepoDir, repoName) + Path.PathSeparator;
+            string newRepoPath = Path.DirectorySeparatorChar + Path.Combine(rootRepoDir, repoName) + Path.DirectorySeparatorChar;
             string newRepoPathUnescaped = Path.Combine(rootRepoDir, repoName);
             string lines;
             string errors;
