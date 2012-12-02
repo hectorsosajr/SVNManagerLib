@@ -5,13 +5,14 @@
 // Date:			1/7/2006
 //**********************************************************
 
-using System;
-using System.Collections;
-using System.Diagnostics;
-using System.IO;
-
 namespace SVNManagerLib
 {
+    using System;
+    using System.Collections;
+    using System.Diagnostics;
+    using System.Globalization;
+    using System.IO;
+
     /// <summary>
     /// A list of possible authorization modes for a
     /// Subversion repository.
@@ -21,15 +22,17 @@ namespace SVNManagerLib
         /// <summary>
         /// This repository will allow both read and write access.
         /// </summary>
-        Write	= 0,
+        Write = 0,
+
         /// <summary>
         /// This repository will allow read-only access.
         /// </summary>
-        Read	= 1,
+        Read = 1,
+
         /// <summary>
         /// This is a private repository.
         /// </summary>
-        None	= 2
+        None = 2
     }
 
     /// <summary>
@@ -41,27 +44,29 @@ namespace SVNManagerLib
         /// This repository uses the Berekely database.
         /// </summary>
         BerkeleyDatabase = 1,
+
         /// <summary>
         /// This repository uses the file system.
         /// </summary>
         FileSystem = 2
     }
 
-    ///<summary>
+    /// <summary>
     /// A list to tell the SVNFileSystemEntity what
     /// type of item it is dealing with.
-    ///</summary>
+    /// </summary>
     public enum FileSystemEntityType
     {
-        ///<summary>
+        /// <summary>
         /// This represents a folder/directory in the
         /// specified Subversion repository.
-        ///</summary>
+        /// </summary>
         Folder,
-        ///<summary>
+
+        /// <summary>
         /// This represents a file in the
         /// specified Subversion repository.
-        ///</summary>
+        /// </summary>
         File
     }
 
@@ -75,22 +80,29 @@ namespace SVNManagerLib
         /// This also fixes the path separators according to the current
         /// Operating System.
         /// </summary>
-        /// <param name="FullPath">The path to verify.</param>
-        /// <param name="EndSeparator">A switch to tell the function whether it should check for a separator at the end of the path.</param>
-        public static string GetCorrectedPath( string FullPath, bool EndSeparator )
+        /// <param name="fullPath">
+        /// The path to verify.
+        /// </param>
+        /// <param name="endSeparator">
+        /// A switch to tell the function whether it should check for a separator at the end of the path.
+        /// </param>
+        /// <returns>
+        /// The get corrected path.
+        /// </returns>
+        public static string GetCorrectedPath(string fullPath, bool endSeparator)
         {
             string retval;
 
             OperatingSystem myOS = Environment.OSVersion;
-            
-            //Code Checks to see which OS is being used 128 indicates Linux
-            if( (int)myOS.Platform == 128 )
-            {
-                retval = FullPath.Replace( "\\", "/" );
 
-                if ( EndSeparator ) 
+            // Code Checks to see which OS is being used 128 indicates Linux
+            if ((int)myOS.Platform == 128)
+            {
+                retval = fullPath.Replace("\\", "/");
+
+                if (endSeparator)
                 {
-                    if ( !retval.EndsWith("/") )
+                    if (!retval.EndsWith("/"))
                     {
                         retval += "/";
                     }
@@ -98,11 +110,11 @@ namespace SVNManagerLib
             }
             else
             {
-                retval = FullPath.Replace( "/", "\\" );
+                retval = fullPath.Replace("/", "\\");
 
-                if ( EndSeparator )
+                if (endSeparator)
                 {
-                    if ( !retval.EndsWith("\\")  )
+                    if (!retval.EndsWith("\\"))
                     {
                         retval += "\\";
                     }
@@ -121,43 +133,45 @@ namespace SVNManagerLib
         /// <param name="result">This is the output for the command after execution.</param>
         /// <param name="errors">This is the output for any errors during execution.</param>
         /// <returns>bool - Whether or not the command was successfully executed.</returns>
-        public static bool ExecuteSvnCommand( string command, string arguments, out string result, out string errors )
+        public static bool ExecuteSvnCommand(string command, string arguments, out string result, out string errors)
         {
             bool retval = false;
             string output = string.Empty;
             string errorLines = string.Empty;
             Process svnCommand = null;
-            var psi = new ProcessStartInfo( command );
+            var psi = new ProcessStartInfo(command)
+                {
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
 
-            psi.RedirectStandardOutput = true;
-            psi.RedirectStandardError = true;
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            psi.UseShellExecute = false;
-            psi.CreateNoWindow = true;
 
             try
             {
-                Process.Start( psi );
+                Process.Start(psi);
                 psi.Arguments = arguments;
-                svnCommand = Process.Start( psi );
+                svnCommand = Process.Start(psi);
 
                 StreamReader myOutput = svnCommand.StandardOutput;
                 StreamReader myErrors = svnCommand.StandardError;
                 svnCommand.WaitForExit();
 
-                if ( svnCommand.HasExited )
+                if (svnCommand.HasExited)
                 {
                     output = myOutput.ReadToEnd();
                     errorLines = myErrors.ReadToEnd();
                 }
 
                 // Check for errors
-                if ( errorLines.Trim().Length == 0 )
+                if (errorLines.Trim().Length == 0)
                 {
                     retval = true;
                 }
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
                 string msg = ex.Message;
                 errorLines += Environment.NewLine + msg;
@@ -185,12 +199,12 @@ namespace SVNManagerLib
         /// <param name="destinationFile">This is the file that this command will write output to.</param>
         /// <param name="errors">This is the output for any errors during execution.</param>
         /// <returns>bool - Whether or not the command was successfully executed.</returns>
-        public static bool ExecuteWritesToDiskSvnCommand( string command, string arguments, string destinationFile, out string errors )
+        public static bool ExecuteWritesToDiskSvnCommand(string command, string arguments, string destinationFile, out string errors)
         {
             bool retval = false;
             string errorLines = string.Empty;
             Process svnCommand = null;
-            var psi = new ProcessStartInfo( command );
+            var psi = new ProcessStartInfo(command);
 
             psi.RedirectStandardOutput = true;
             psi.RedirectStandardError = true;
@@ -200,36 +214,36 @@ namespace SVNManagerLib
 
             try
             {
-                Process.Start( psi );
+                Process.Start(psi);
                 psi.Arguments = arguments;
-                svnCommand = Process.Start( psi );
+                svnCommand = Process.Start(psi);
 
                 StreamReader myOutput = svnCommand.StandardOutput;
                 StreamReader myErrors = svnCommand.StandardError;
-                
-                File.AppendAllText( destinationFile, myOutput.ReadToEnd() );
-                svnCommand.WaitForExit();
-                File.AppendAllText( destinationFile, myOutput.ReadToEnd() );
 
-                if ( svnCommand.HasExited )
+                File.AppendAllText(destinationFile, myOutput.ReadToEnd());
+                svnCommand.WaitForExit();
+                File.AppendAllText(destinationFile, myOutput.ReadToEnd());
+
+                if (svnCommand.HasExited)
                 {
                     errorLines = myErrors.ReadToEnd();
                 }
 
                 // Check for errors
-                if ( errorLines.Trim().Length == 0 )
+                if (errorLines.Trim().Length == 0)
                 {
                     retval = true;
                 }
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
                 string msg = ex.Message;
                 errorLines += Environment.NewLine + msg;
             }
             finally
             {
-                if ( svnCommand != null )
+                if (svnCommand != null)
                 {
                     svnCommand.Close();
                 }
@@ -250,26 +264,28 @@ namespace SVNManagerLib
         /// <param name="result">This is the output for the command after execution.</param>
         /// <param name="errors">This is the output for any errors during execution.</param>
         /// <returns>bool - Whether or not the command was successfully executed.</returns>
-        public static bool ExecuteSvnCommandWithFileInput( string command, string arguments, string filePath, out string result, out string errors )
+        public static bool ExecuteSvnCommandWithFileInput(string command, string arguments, string filePath, out string result, out string errors)
         {
             bool retval = false;
             string output = string.Empty;
             string errorLines = string.Empty;
             Process svnCommand = null;
-            var psi = new ProcessStartInfo( command );
+            var psi = new ProcessStartInfo(command)
+                {
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
 
-            psi.RedirectStandardInput = true;
-            psi.RedirectStandardOutput = true;
-            psi.RedirectStandardError = true;
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            psi.UseShellExecute = false;
-            psi.CreateNoWindow = true;
 
             try
             {
-                Process.Start( psi );
+                Process.Start(psi);
                 psi.Arguments = arguments;
-                svnCommand = Process.Start( psi );
+                svnCommand = Process.Start(psi);
 
                 var file = new FileInfo(filePath);
                 StreamReader reader = file.OpenText();
@@ -288,12 +304,12 @@ namespace SVNManagerLib
                 errorLines = myErrors.ReadToEnd();
 
                 // Check for errors
-                if ( errorLines.Trim().Length == 0 )
+                if (errorLines.Trim().Length == 0)
                 {
                     retval = true;
                 }
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
                 string msg = ex.Message;
                 errorLines += Environment.NewLine + msg;
@@ -320,31 +336,31 @@ namespace SVNManagerLib
         /// was used for the parameter. The keys are the file/directory name without a path, the value
         /// is the full path to this directory or file.</returns>
         /// <param name="serverCmdPath">Path to where the Subversion command folder resides.</param>
-        public static Hashtable GetFileList( string currentDirectory, string serverCmdPath )
+        public static Hashtable GetFileList(string currentDirectory, string serverCmdPath)
         {
             string lines;
             string errors;
             var fileList = new Hashtable();
-            string fullCmdPath = Path.Combine( serverCmdPath, "svn" );
-            string parsedDir = PathToFileUrl( currentDirectory );
-            bool cmdResult = ExecuteSvnCommand( fullCmdPath, "list " + parsedDir, out lines, out errors );
+            string fullCmdPath = Path.Combine(serverCmdPath, "svn");
+            string parsedDir = PathToFileUrl(currentDirectory);
+            bool cmdResult = ExecuteSvnCommand(fullCmdPath, "list " + parsedDir, out lines, out errors);
 
-            if ( cmdResult )
+            if (cmdResult)
             {
-                string[] files = ParseOutputIntoLines( lines );
+                string[] files = ParseOutputIntoLines(lines);
 
                 string fullPath = currentDirectory;
 
-                if ( !fullPath.EndsWith( Path.DirectorySeparatorChar.ToString() ) )
+                if (!fullPath.EndsWith(Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture)))
                 {
-                    fullPath += Path.DirectorySeparatorChar.ToString();
+                    fullPath += Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture);
                 }
 
-                if ( files != null )
+                if (files != null)
                 {
-                    foreach ( string file in files )
+                    foreach (string file in files)
                     {
-                        fileList.Add( file, fullPath + file );
+                        fileList.Add(file, fullPath + file);
                     }
                 }
             }
@@ -357,21 +373,20 @@ namespace SVNManagerLib
         /// </summary>
         /// <param name="consoleOutput">The raw output from a Subversion command.</param>
         /// <returns>A string array containing the parsed Subversion command output.</returns>
-        public static string[] ParseOutputIntoLines( string consoleOutput )
+        public static string[] ParseOutputIntoLines(string consoleOutput)
         {
             string[] retval = null;
 
-            if ( consoleOutput.Trim().Length > 0 )
+            if (consoleOutput.Trim().Length > 0)
             {
-                string output;
-                output = consoleOutput.Replace( Environment.NewLine, "\n" );
+                string output = consoleOutput.Replace(Environment.NewLine, "\n");
 
-                if ( output.EndsWith( "\n" ) )
+                if (output.EndsWith("\n"))
                 {
-                    output = output.Substring( 0, output.Length - 1 );
+                    output = output.Substring(0, output.Length - 1);
                 }
 
-                retval = output.Split( '\n' );
+                retval = output.Split('\n');
             }
 
             return retval;
@@ -381,50 +396,59 @@ namespace SVNManagerLib
         /// Converts a path to a "file:///" format.
         /// </summary>
         /// <param name="pathToConvert">That full path that will be converted to a file url.</param>
-        /// <returns></returns>
-        public static string PathToFileUrl( string pathToConvert )
+        /// <returns>A fully qualified url to a file.</returns>
+        public static string PathToFileUrl(string pathToConvert)
         {
-            string fileURL = "";
-            bool isUNC;
-            UriBuilder fileURI = null;
+            string fileUrl = string.Empty;
+            bool isUnc;
+            UriBuilder fileUri = null;
 
             // This is to capture whether the incoming path is
             // an UNC path or not.
-            if ( pathToConvert.StartsWith( @"\\" ) )
+            if (pathToConvert.StartsWith(@"\\"))
             {
-                isUNC = true;
+                isUnc = true;
             }
             else
             {
-                isUNC = false;
+                isUnc = false;
             }
 
             try
             {
-                fileURI = new UriBuilder( pathToConvert );
+                fileUri = new UriBuilder(pathToConvert);
             }
-            catch( UriFormatException )
-            {}
-
-            if ( isUNC )
+            catch (UriFormatException)
             {
-                if ( fileURI != null ) fileURL = fileURI.ToString();
+            }
+
+            if (isUnc)
+            {
+                if (fileUri != null)
+                {
+                    fileUrl = fileUri.ToString();
+                }
             }
             else
             {
-                if ( fileURI != null ) fileURL = fileURI.ToString().Replace( "file://", "file:///" );
+                if (fileUri != null)
+                {
+                    fileUrl = fileUri.ToString().Replace("file://", "file:///");
+                }
             }
 
-            return fileURL;
+            return fileUrl;
         }
 
         /// <summary>
         /// Scans a directory and subdirectories and removes any read-only attributes that it
         /// finds in any file under the root directory.
         /// </summary>
-        /// <param name="rootDirectory"></param>
-        /// <returns></returns>
-        public static bool SafeDelete( FileSystemInfo rootDirectory )
+        /// <param name="rootDirectory">The directory from whence to start deleting.</param>
+        /// <returns>
+        /// True if the operation was successful, false if it was not.
+        /// </returns>
+        public static bool SafeDelete(FileSystemInfo rootDirectory)
         {
             bool retval;
 
@@ -436,16 +460,18 @@ namespace SVNManagerLib
                 if (di != null)
                 {
                     foreach (var dirInfo in di.GetFileSystemInfos())
-                        SafeDelete( dirInfo );
+                    {
+                        SafeDelete(dirInfo);
+                    }
                 }
 
                 rootDirectory.Delete();
 
                 retval = true;
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
-                Console.WriteLine( ex.Message );
+                Console.WriteLine(ex.Message);
                 retval = false;
             }
 
