@@ -5,21 +5,42 @@
 // Date:			11/29/2008
 //**********************************************************
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.IO;
-using System.Text;
-
 namespace SVNManagerLib
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.Design;
+    using System.IO;
+    using System.Text;
+
     /// <summary>
     /// Represents a basic Subversion repository.
     /// </summary>
     public class SubversionRepositoryBase : Component, ISubversionRepository
     {
+        #region Member Variables
+
+        private string name = string.Empty;
+        private Hashtable files = new Hashtable();
+        private bool filesLoaded;
+        private List<SVNFileSystemEntity> entities = new List<SVNFileSystemEntity>();
+        private RepositoryHooks repoHooks;
+
+        protected internal bool UsersLoaded;
+        protected internal SVNRepoConfig _repositoryConfiguration;
+        protected internal SVNUserCollection _users = new SVNUserCollection();
+        protected internal readonly StringBuilder _NewConfFile = new StringBuilder();
+        protected internal string _firstUserName = string.Empty;
+        protected internal string _firstUserPassword = string.Empty;
+        protected internal string _serverCommandsPath = string.Empty;
+        protected internal string _fullPath = string.Empty;
+        protected internal RepositoryTypes _createRepoType;
+        protected internal string _realm = string.Empty;
+
+        #endregion
+
         #region IComponent Members
 
         public override ISite Site
@@ -35,27 +56,6 @@ namespace SVNManagerLib
 
         #endregion
 
-        #region Member Variables
-
-        private string _name = string.Empty;
-        private Hashtable _files = new Hashtable();
-        private bool _filesLoaded;
-        private List<SVNFileSystemEntity> _entities = new List<SVNFileSystemEntity>();
-        private RepositoryHooks _repoHooks;
-
-        protected internal bool _usersLoaded;
-        protected internal SVNRepoConfig _repositoryConfiguration;
-        protected internal SVNUserCollection _users = new SVNUserCollection();
-        protected internal readonly StringBuilder _NewConfFile = new StringBuilder();
-        protected internal string _firstUserName = string.Empty;
-        protected internal string _firstUserPassword = string.Empty;
-        protected internal string _serverCommandsPath = string.Empty;
-        protected internal string _fullPath = string.Empty;
-        protected internal RepositoryTypes _createRepoType;
-        protected internal string _realm = string.Empty;
-
-        #endregion
-
         #region Subversion Command Structs
 
         /// <summary>
@@ -68,6 +68,7 @@ namespace SVNManagerLib
             /// uses one of the types in <see cref="RepositoryTypes"/>.
             /// </summary>
             public RepositoryTypes RepositoryType;
+
             /// <summary>
             /// The name of the new repository. This will also be the folder
             /// name under the repository root folder.
@@ -85,18 +86,22 @@ namespace SVNManagerLib
             /// a range in the X:Y format.
             /// </summary>
             public string RevisionArg;
+
             /// <summary>
             /// The name that will be given to this dump file.
             /// </summary>
             public string DumpFileName;
+
             /// <summary>
             /// Whether or not to use an incremental dump.
             /// </summary>
             public bool UseIncremental;
+
             /// <summary>
             /// Whether or not to show progress. Also known as verbose.
             /// </summary>
             public bool UseQuiet;
+
             /// <summary>
             /// The name of the new repository. This will also be the folder
             /// name under the repository root folder.
@@ -113,6 +118,7 @@ namespace SVNManagerLib
             /// The destination folder for the hot copy.
             /// </summary>
             public string DestinationPath;
+
             /// <summary>
             /// Whether or not to remove the redundant log files
             /// from the source repository. This only works for
@@ -121,19 +127,21 @@ namespace SVNManagerLib
             public bool UseCleanLogs;
         }
 
-        ///<summary>
+        /// <summary>
         /// Arguments for the "svnadmin load" command.
-        ///</summary>
+        /// </summary>
         public struct LoadDumpFileArgs
         {
             /// <summary>
             /// The path to the dump file.
             /// </summary>
             public string DumpFilePath;
+
             /// <summary>
             /// The destination folder where the dump file will be loaded into.
             /// </summary>
             public string DestinationPath;
+
             /// <summary>
             /// This is used when the user wants to load the dump file
             /// into another path other than the reporitory's root path.
@@ -172,20 +180,20 @@ namespace SVNManagerLib
         {
             get
             {
-                if ( Equals( _repoHooks, null ) )
+                if ( Equals( this.repoHooks, null ) )
                 {
                     if ( !Equals( _repositoryConfiguration, null ) )
                     {
-                        _repoHooks = new RepositoryHooks( _repositoryConfiguration.RepositoryRootDirectory );
+                        this.repoHooks = new RepositoryHooks( _repositoryConfiguration.RepositoryRootDirectory );
                     }
                 }
 
-                if ( Equals( _repoHooks, null ) )
+                if ( Equals( this.repoHooks, null ) )
                 {
                     return null;
                 }
 
-                return _repoHooks.HookFiles;
+                return this.repoHooks.HookFiles;
             }
         }
 
@@ -244,11 +252,11 @@ namespace SVNManagerLib
         {
             get
             {
-                return _name;
+                return this.name;
             }
             set
             {
-                _name = value;
+                this.name = value;
             }
         }
 
@@ -285,11 +293,11 @@ namespace SVNManagerLib
         {
             get
             {
-                return _entities;
+                return this.entities;
             }
             set
             {
-                _entities = value;
+                this.entities = value;
             }
         }
 
@@ -364,13 +372,13 @@ namespace SVNManagerLib
         {
             get
             {
-                if ( !_filesLoaded )
+                if ( !this.filesLoaded )
                 {
                     LoadFiles();
-                    _filesLoaded = true;
+                    this.filesLoaded = true;
                 }
 
-                return _files;
+                return this.files;
             }
         }
 
@@ -777,7 +785,7 @@ namespace SVNManagerLib
             {
                 string rootDir = _repositoryConfiguration.RepositoryRootDirectory;
 
-                _files = Common.GetFileList( rootDir, _serverCommandsPath );
+                this.files = Common.GetFileList( rootDir, _serverCommandsPath );
             }
         }
 
@@ -788,14 +796,14 @@ namespace SVNManagerLib
 
         private void LoadFileEntities()
         {
-            foreach ( object pkey in _files.Keys )
+            foreach ( object pkey in this.files.Keys )
             {
                 string fileName = pkey.ToString();
-                string filePath = _files[pkey].ToString();
+                string filePath = this.files[pkey].ToString();
 
                 var entity = new SVNFileSystemEntity( _serverCommandsPath, filePath, fileName );
 
-                _entities.Add( entity );
+                this.entities.Add( entity );
             }
         }
 
